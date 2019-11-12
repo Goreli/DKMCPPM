@@ -1,5 +1,8 @@
 all: 2d-convex-hull inp-file.csv
 
+run: 2d-convex-hull inp-file.csv
+	./2d-convex-hull
+
 2d-convex-hull: \
 	ch2d-main.cpp ch2d-alg.cpp ch2d-data-point.cpp \
 	ch2d-alg.hpp ch2d-data-point.hpp
@@ -35,6 +38,3 @@ data10M:
 clean:
 	rm -f 2d-convex-hull
 	rm -f inp-file.csv
-
-run:
-	./2d-convex-hull
