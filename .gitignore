@@ -30,3 +30,9 @@
 *.exe
 *.out
 *.app
+
+# Other
+.vscode/
+.vs/
+x64/
+*.aps

@@ -25,7 +25,7 @@ bool readInpFile(const string& inpFileName, DataContainer& container) noexcept {
             container.push_back(point);
         }
         inpFile.close();
-        return true;
+            return true;
     }
     else
         return false;
@@ -46,6 +46,7 @@ int main () {
     }
 
     DataPoint centroid;
+    calculateCentroid(dataStore, centroid);
     prepareData(dataStore, centroid);
 
     //debugOutput(dataStore, centroid);

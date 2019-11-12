@@ -43,12 +43,14 @@ static void removeExtraPointsWithEqualAngles(DataContainer& dataStore) {
 }
 
 // Public interface functions.
-void ch2d::prepareData(DataContainer& dataStore, DataPoint& centroid) noexcept {
-
+void ch2d::calculateCentroid(const DataContainer& dataStore, DataPoint& centroid) noexcept {
+    centroid.x = 0.0;
+    centroid.y = 0.0;
     for(const auto& point: dataStore)
         centroid += point;
     centroid /= dataStore.size();
-
+}
+void ch2d::prepareData(DataContainer& dataStore, DataPoint& centroid) noexcept {
     // Calculate lengths of the vectors relative to the centroid.
     // We don't really need the actual lengths. Squared lenghts
     // will suffice as that will save us some compute time.
