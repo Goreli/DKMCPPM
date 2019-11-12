@@ -28,6 +28,10 @@ data1M:
 	rm -f inp-file.csv
 	./gen-inp-file.sh 1000000 inp-file.csv
 
+data10M:
+	rm -f inp-file.csv
+	./gen-inp-file.sh 10000000 inp-file.csv
+
 clean:
 	rm -f 2d-convex-hull
 	rm -f inp-file.csv
