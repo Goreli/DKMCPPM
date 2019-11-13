@@ -1,4 +1,4 @@
-/* ch2d-data-point.cpp
+/* ch_data_point2d.cpp
 This module defines the ch2d::DataPoint data structure
 along with its overloaded operators and member functions
 required in this implementation of the 2D Convex Hull algorithm.
@@ -12,7 +12,7 @@ Modification history:
 #include <algorithm>
 #include <sstream>
 #include <cmath>
-#include "ch2d-data-point.hpp"
+#include "ch_data_point2d.hpp"
 
 using namespace std;
 using namespace dk;

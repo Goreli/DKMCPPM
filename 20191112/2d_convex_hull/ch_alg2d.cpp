@@ -1,4 +1,4 @@
-/* ch2d-alg.cpp
+/* ch_alg2d.cpp
 This module implements the actual 2D Convex Hull algorithm.
 
 Copyright(c) 2019 David Krikheli
@@ -8,7 +8,7 @@ Modification history:
 */
 
 #include <algorithm>
-#include "ch2d-alg.hpp"
+#include "ch_alg2d.hpp"
 
 using namespace std;
 using namespace dk;

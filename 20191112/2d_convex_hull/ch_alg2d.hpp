@@ -1,4 +1,4 @@
-/* ch2d-alg.hpp
+/* ch_alg2d.hpp
 This module declares facilities required for
 executing the 2D Convex Hull algorithm.
 
@@ -9,11 +9,11 @@ Modification history:
 */
 
 
-#ifndef ch2d_alg_hpp
-#define ch2d_alg_hpp
+#ifndef ch_alg2d_hpp
+#define ch_alg2d_hpp
 
 #include <vector>
-#include "ch2d-data-point.hpp"
+#include "ch_data_point2d.hpp"
 
 namespace dk {
     typedef std::vector<DataPoint2D> DataContainer;

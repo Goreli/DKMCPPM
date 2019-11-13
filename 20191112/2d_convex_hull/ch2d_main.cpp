@@ -1,4 +1,4 @@
-/* ch2d-main.cpp
+/* ch2d_main.cpp
 The main entry point of this implementation
 of the 2D Convex Hull algorithm.
 
@@ -10,7 +10,7 @@ Modification history:
 
 #include <iostream>
 #include <fstream>
-#include "ch2d-alg.hpp"
+#include "ch_alg2d.hpp"
 
 using namespace std;
 using namespace dk;
@@ -36,12 +36,18 @@ void debugOutput(const DataContainer& container, const DataPoint2D& centroid) {
     cout << "Centroid: " << centroid.x << " " << centroid.y << endl;
 }
 
-int main () {
-    string inpFileName = "inp-file.csv";
-    DataContainer dataStore;
+int main (int argc, char* argv[]) {
+    if(argc <= 1) {
+        cout << "2D convex hull calculator" << endl;
+        cout << "Copyright (c) 2019 David Krikheli" << endl;
+        cout << "Usage: ch2d [input file path]" << endl;
+        return 0;
+    }
 
-    if(!readInpFile(inpFileName, dataStore)) {
-        cerr << "Unable to read file " << inpFileName;
+    string inpFilePath {argv[1]};
+    DataContainer dataStore;
+    if(!readInpFile(inpFilePath, dataStore)) {
+        cerr << "Unable to read file " << inpFilePath;
         return 1;
     }
 
