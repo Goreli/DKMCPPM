@@ -13,13 +13,13 @@ Modification history:
 #include "ch2d-alg.hpp"
 
 using namespace std;
-using namespace ch2d;
+using namespace dk;
 
 bool readInpFile(const string& inpFileName, DataContainer& container) noexcept {
     ifstream inpFile (inpFileName);
     if (inpFile.is_open()) {
         string inpLine;
-        DataPoint point;
+        DataPoint2D point;
         while ( getline (inpFile, inpLine) ){
             point.parse(inpLine);
             container.push_back(point);
@@ -30,7 +30,7 @@ bool readInpFile(const string& inpFileName, DataContainer& container) noexcept {
     else
         return false;
 }
-void debugOutput(const DataContainer& container, const DataPoint& centroid) {
+void debugOutput(const DataContainer& container, const DataPoint2D& centroid) {
     for(const auto& point: container)
         cout << point.x << "," << point.y << "," << point.alpha << "," << point.lengthSqr << endl;
     cout << "Centroid: " << centroid.x << " " << centroid.y << endl;
@@ -45,7 +45,7 @@ int main () {
         return 1;
     }
 
-    DataPoint centroid;
+    DataPoint2D centroid;
     calculateCentroid(dataStore, centroid);
     prepareData(dataStore, centroid);
 

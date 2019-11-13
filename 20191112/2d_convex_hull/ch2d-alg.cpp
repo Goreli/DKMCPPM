@@ -11,14 +11,14 @@ Modification history:
 #include "ch2d-alg.hpp"
 
 using namespace std;
-using namespace ch2d;
+using namespace dk;
 
 const double constPi = 3.141592653589793238463;
 const double impossiblyLargeAngle = 7.0;
 
-static DataPoint getTipOfLongestVector(const DataContainer& container) noexcept {
+static DataPoint2D getTipOfLongestVector(const DataContainer& container) noexcept {
     double maxDistanceSqr {0.0};
-    DataPoint tip = container[0];
+    DataPoint2D tip = container[0];
     for(const auto& point: container) {
         if(point.lengthSqr > maxDistanceSqr) {
             maxDistanceSqr = point.lengthSqr;
@@ -27,14 +27,14 @@ static DataPoint getTipOfLongestVector(const DataContainer& container) noexcept 
     }
     return tip;
 }
-static bool compFunc4Sort(const DataPoint& p1, const DataPoint& p2) {
+static bool compFunc4Sort(const DataPoint2D& p1, const DataPoint2D& p2) {
     if(p1.alpha < p2.alpha)
         return true;
     if(p1.alpha > p2.alpha)
         return false;
     return (p1.lengthSqr > p2.lengthSqr);
 }
-static bool compFunc4Unique(const DataPoint& p1, const DataPoint& p2) {
+static bool compFunc4Unique(const DataPoint2D& p1, const DataPoint2D& p2) {
     return p1.alpha == p2.alpha;
 }
 static void removeExtraPointsWithEqualAngles(DataContainer& dataStore) {
@@ -43,21 +43,25 @@ static void removeExtraPointsWithEqualAngles(DataContainer& dataStore) {
 }
 
 // Public interface functions.
-void ch2d::calculateCentroid(const DataContainer& dataStore, DataPoint& centroid) noexcept {
+void dk::calculateCentroid(const DataContainer& dataStore, DataPoint2D& centroid, const size_t subSampleSize) noexcept {
     centroid.x = 0.0;
     centroid.y = 0.0;
-    for(const auto& point: dataStore)
-        centroid += point;
-    centroid /= dataStore.size();
+
+    size_t effectvSubSampleSize = subSampleSize? min(subSampleSize, dataStore.size()) : dataStore.size();
+    size_t inx { 0 };
+    
+    while(inx < effectvSubSampleSize)
+        centroid += dataStore[inx++];
+    centroid /= inx;
 }
-void ch2d::prepareData(DataContainer& dataStore, DataPoint& centroid) noexcept {
+void dk::prepareData(DataContainer& dataStore, DataPoint2D& centroid) noexcept {
     // Calculate lengths of the vectors relative to the centroid.
     // We don't really need the actual lengths. Squared lenghts
     // will suffice as that will save us some compute time.
     for(auto& point: dataStore)
         point.calcLenSqr(centroid);
 
-    DataPoint tipOfLongestVector = getTipOfLongestVector(dataStore);
+    DataPoint2D tipOfLongestVector = getTipOfLongestVector(dataStore);
     for(auto& point: dataStore)
         point.calcAlpha(tipOfLongestVector, centroid);
 
@@ -68,9 +72,9 @@ void ch2d::prepareData(DataContainer& dataStore, DataPoint& centroid) noexcept {
     // to make sure the algorithm delivers a closed line loop.
     dataStore.push_back(dataStore[0]);
 }
-void ch2d::calcConvexHull2D(DataContainer& convexHull2D, const DataContainer& dataStore, const DataPoint& centroid) noexcept {
-    DataPoint lastVertexPoint;
-    DataPoint lastVertexVector;
+void dk::calcConvexHull2D(DataContainer& convexHull2D, const DataContainer& dataStore, const DataPoint2D& centroid) noexcept {
+    DataPoint2D lastVertexPoint;
+    DataPoint2D lastVertexVector;
 
     size_t insertionIndex = 0;
     bool bKeepGoing = true;
@@ -88,11 +92,11 @@ void ch2d::calcConvexHull2D(DataContainer& convexHull2D, const DataContainer& da
 
         double minAngle{impossiblyLargeAngle};
         for(size_t inx = insertionIndex+1; inx < dataStore.size()-offset; inx++) {
-            DataPoint vertexPoint = dataStore[inx];
-            DataPoint vertexVector = vertexPoint - centroid;
+            DataPoint2D vertexPoint = dataStore[inx];
+            DataPoint2D vertexVector = vertexPoint - centroid;
 
-            DataPoint deltaVector = vertexVector - lastVertexVector;
-            double angle = DataPoint::calcAngle(deltaVector, lastVertexVector);
+            DataPoint2D deltaVector = vertexVector - lastVertexVector;
+            double angle = DataPoint2D::calcAngle(deltaVector, lastVertexVector);
 
             if(angle < minAngle) {
                 minAngle = angle;

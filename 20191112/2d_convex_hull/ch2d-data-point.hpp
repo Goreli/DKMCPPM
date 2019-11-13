@@ -14,11 +14,12 @@ Modification history:
 
 #include <string>
 
-namespace ch2d {
+namespace dk {
 
-    struct DataPoint{
+    struct DataPoint2D{
         double x {0};
         double y {0};
+        
         // Angle between the following two vectors:
         //  - A vector with the tip at this point and origin at the centroid;
         //  - The longest vector in the input space of vectors relative to the centroid.
@@ -32,32 +33,32 @@ namespace ch2d {
 
         // Updates x and y in (*this) object.
         // Does not impact any other members.
-        DataPoint& operator += (const DataPoint& point) noexcept;
+        DataPoint2D& operator += (const DataPoint2D& point) noexcept;
 
         // Divides x and y by the scalar. Helps to find a centroid of a cluster of points.
         // Does not impact any other members.
-        DataPoint& operator /= (size_t integralScalar);
+        DataPoint2D& operator /= (size_t integralScalar);
 
         // Populates lengthSqr with distance between (*this)
         // and point represented by the argument squared.
         // Does not impact any other members.
-        void calcLenSqr(const DataPoint&) noexcept;
+        void calcLenSqr(const DataPoint2D&) noexcept;
 
         // Returns a result of subtraction of the point represented
         // by the argument from (*this) point. Only calculates x and y.
         // Does not impact any other members.
-        DataPoint  operator - (const DataPoint&) const noexcept;
+        DataPoint2D  operator - (const DataPoint2D&) const noexcept;
 
         // Calculates an angle betweeen the following two vectors:
         //  - ((*this) - origin);
         //  - (tip - origin).
-        void calcAlpha(const DataPoint& tip, const DataPoint& origin) noexcept;
+        void calcAlpha(const DataPoint2D& tip, const DataPoint2D& origin) noexcept;
 
         // Calculates an angle between the first and second vector represented
         // by the function arguments.
-        static double calcAngle(const DataPoint&, const DataPoint&) noexcept;
+        static double calcAngle(const DataPoint2D&, const DataPoint2D&) noexcept;
     };
 
-};   // namespace ch2d
+};   // namespace dk
 
 #endif // ch2d_data_point_hpp
