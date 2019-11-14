@@ -19,11 +19,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\perm_gen_base.cpp" />
     <ClCompile Include="..\..\str_perm_gen.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\perm_gen_base.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\perm_gen_base.inl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

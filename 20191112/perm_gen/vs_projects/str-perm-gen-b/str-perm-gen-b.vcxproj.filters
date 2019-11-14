@@ -18,13 +18,15 @@
     <ClCompile Include="..\..\str_perm_gen_b.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\perm_gen_base.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\perm_gen_base.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\perm_gen_base.inl">
+      <Filter>Header Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
