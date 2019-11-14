@@ -11,6 +11,7 @@ Modification history:
 #include <fstream>
 #include <string>
 #include <algorithm>
+#include <utility>
 #include "perm_gen_base.hpp"
 
 using namespace std;
@@ -41,9 +42,9 @@ private:
 };
 
 struct CLIParser {
-	string inputString;
-	size_t maxNumPerm;
-	string filePath;
+	string inputString{""};
+	size_t maxNumPerm{0};
+	string filePath{""};
 
 	bool parse(int argc, char* argv[]) {
 		if (argc <= 1 || argc > 4)
