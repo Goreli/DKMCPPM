@@ -1,4 +1,4 @@
-/* str_perm_gen_main.cpp
+/* str_perm_gen.cpp
 The main entry point of the String Permutation application.
 
 Copyright(c) 2019 David Krikheli
@@ -10,13 +10,13 @@ Modification history:
 #include <iostream>
 #include <string>
 #include <utility>
-#include "perm_gen.hpp"
+#include "perm_gen_base.hpp"
 
 using namespace std;
 using namespace dk;
 
-class StringPermutationPrinter : public StringPermutationGenerator {
-    virtual bool process(const std::vector<char>& permutation) {
+class StringPermutationGenerator : public PermutationGeneratorBase {
+    virtual bool process_(const PermutationContainer& permutation) {
         std::string strPermutation(permutation.begin(), permutation.end());
         cout << strPermutation << endl;
         return true;
@@ -32,10 +32,10 @@ int main (int argc, char* argv[]) {
     }
 
     string strInput {argv[1]};
-    CharContainer vocabulary(strInput.begin(), strInput.end());
+    VocabularyContainer vocabulary(strInput.begin(), strInput.end());
 
-    StringPermutationPrinter spp;
-    spp.generate(vocabulary);
+	StringPermutationGenerator spg;
+    spg.generate(vocabulary);
 
     return 0;
 }

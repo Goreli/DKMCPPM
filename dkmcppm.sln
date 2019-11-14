@@ -1,0 +1,62 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29411.108
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "20191112", "20191112", "{D07650A1-46B7-48CC-AD4F-31F28FCB1089}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CD1D24E3-6FCD-41DF-BC55-8815F1B322AE}"
+	ProjectSection(SolutionItems) = preProject
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "str-perm-gen", "20191112\perm_gen\vs_projects\str-perm-gen\str-perm-gen.vcxproj", "{01DB436C-9D5A-431E-BD4F-6E04ACCBAD4C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "perm_gen", "perm_gen", "{EA04DCBA-B3C0-4087-AB03-54E652213FB1}"
+	ProjectSection(SolutionItems) = preProject
+		20191112\perm_gen\Makefile = 20191112\perm_gen\Makefile
+		20191112\perm_gen\README.md = 20191112\perm_gen\README.md
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "str-perm-gen-b", "20191112\perm_gen\vs_projects\str-perm-gen-b\str-perm-gen-b.vcxproj", "{CFE6F37B-438F-468C-915E-2499A9B9896A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{01DB436C-9D5A-431E-BD4F-6E04ACCBAD4C}.Debug|x64.ActiveCfg = Debug|x64
+		{01DB436C-9D5A-431E-BD4F-6E04ACCBAD4C}.Debug|x64.Build.0 = Debug|x64
+		{01DB436C-9D5A-431E-BD4F-6E04ACCBAD4C}.Debug|x86.ActiveCfg = Debug|Win32
+		{01DB436C-9D5A-431E-BD4F-6E04ACCBAD4C}.Debug|x86.Build.0 = Debug|Win32
+		{01DB436C-9D5A-431E-BD4F-6E04ACCBAD4C}.Release|x64.ActiveCfg = Release|x64
+		{01DB436C-9D5A-431E-BD4F-6E04ACCBAD4C}.Release|x64.Build.0 = Release|x64
+		{01DB436C-9D5A-431E-BD4F-6E04ACCBAD4C}.Release|x86.ActiveCfg = Release|Win32
+		{01DB436C-9D5A-431E-BD4F-6E04ACCBAD4C}.Release|x86.Build.0 = Release|Win32
+		{CFE6F37B-438F-468C-915E-2499A9B9896A}.Debug|x64.ActiveCfg = Debug|x64
+		{CFE6F37B-438F-468C-915E-2499A9B9896A}.Debug|x64.Build.0 = Debug|x64
+		{CFE6F37B-438F-468C-915E-2499A9B9896A}.Debug|x86.ActiveCfg = Debug|Win32
+		{CFE6F37B-438F-468C-915E-2499A9B9896A}.Debug|x86.Build.0 = Debug|Win32
+		{CFE6F37B-438F-468C-915E-2499A9B9896A}.Release|x64.ActiveCfg = Release|x64
+		{CFE6F37B-438F-468C-915E-2499A9B9896A}.Release|x64.Build.0 = Release|x64
+		{CFE6F37B-438F-468C-915E-2499A9B9896A}.Release|x86.ActiveCfg = Release|Win32
+		{CFE6F37B-438F-468C-915E-2499A9B9896A}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{01DB436C-9D5A-431E-BD4F-6E04ACCBAD4C} = {EA04DCBA-B3C0-4087-AB03-54E652213FB1}
+		{EA04DCBA-B3C0-4087-AB03-54E652213FB1} = {D07650A1-46B7-48CC-AD4F-31F28FCB1089}
+		{CFE6F37B-438F-468C-915E-2499A9B9896A} = {EA04DCBA-B3C0-4087-AB03-54E652213FB1}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2BE0949B-3F3C-422A-AE9E-C4775E6F82CD}
+	EndGlobalSection
+EndGlobal
