@@ -93,15 +93,17 @@ int main (int argc, char* argv[]) {
 		return 0;
     }
 
-	string strInput {argv[1]};
-	std::vector<char> vocabulary(strInput.begin(), strInput.end());
-
 	ofstream outputStream;
 	if (parser.filePath.size())
 		outputStream.open(parser.filePath);
 
-	StringPermutationGenerator spg(parser.filePath.size()? outputStream : cout, parser.maxNumPerm);
-    spg.generate(vocabulary);
+	StringPermutationGenerator spg(
+		parser.filePath.size()? outputStream : cout, 
+		parser.maxNumPerm
+	);
+
+	std::vector<char> vocabulary(parser.inputString.begin(), parser.inputString.end());
+	spg.generate(vocabulary);
 
 	if(parser.filePath.size())
 		outputStream.close();
