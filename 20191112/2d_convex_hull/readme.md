@@ -44,7 +44,7 @@ Navigate to the [2d_convex_hull](https://github.com/Goreli/DKMCPPM/tree/master/2
 * make data1M [Enter] -   ... 1,000,000 data points;
 * make data10M [Enter] -  ... 10,000,000 data points.
 
-To build a Windows executable open the dkmccpm.sln solution file located in the root folder of the repository and navigate to this project in the Solution Explorer panel. The actual binaries are created in ../../x64. Here is the project configuration log:
+To build a Windows executable open the dkmccpm.sln solution file located in the root directory of the repository and navigate to this project in the Solution Explorer panel. The actual binaries are created in ../../x64. Here is the project configuration log:
 1. Set the language standard to c++17;
 2. Let the c++ compiler know the locations of include areas: ../..
 3. Switch precompiled headers off.

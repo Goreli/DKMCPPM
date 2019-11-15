@@ -82,7 +82,7 @@ Navigate to the [perm_gen](https://github.com/Goreli/DKMCPPM/tree/master/2019111
  * make benchmark [Enter] - benchmarks the permutation engine using the string "Hello World";
  * make release [Enter] - builds both applications and copies them to the ../../elf/release directory.
 
-To build Windows executables open the dkmccpm.sln solution file located in the root folder of the repository and navigate to this project in the Solution Explorer panel. The actual binaries are created in ../../x64. Here is the project configuration log:
+To build Windows executables open the dkmccpm.sln solution file located in the root directory of the repository and navigate to this project in the Solution Explorer panel. The actual binaries are created in ../../x64. Here is the project configuration log:
 1. Set the language standard to c++17;
 2. Let the c++ compiler know the locations of include areas: ../..
 3. Switch precompiled headers off;
