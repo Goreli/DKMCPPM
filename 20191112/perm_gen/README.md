@@ -1,9 +1,9 @@
-# PERM_GEN - Permutation Generator
-<p align="center">Melbourne C++ Meetup Materials</p>
+# Generic Permutation Generator
+<p align="center">Harmonious Discord of the Seemingly Distinct</p>
 
 ___
 
-## Table of Contents
+# Table of Contents
 1. [Introduction](#introduction)
 2. [Content Overview](#content-overview)
 3. [Command Line Interface](#command-line-interface)
@@ -12,7 +12,7 @@ ___
 
 ## Introduction
 
-This folder contains C++ source code written to address the String Permutation Generator challenge discussed at the Melbourne C++ Meetup Olympiad on 12/Nov/2019. A reusable C++ template header file has been developed that allows to calculate permutations of arbitrary trivial type sequences. Also, two applications have been developed that specialise the permutation engine specifically for the purpose of string permutation and provide command line interfaces to drive their respective functions.
+This directory contains C++ source code written to address the String Permutation Generator challenge discussed at the Melbourne C++ Meetup Olympiad on 12/Nov/2019. A reusable C++ template header file has been developed that allows to calculate permutations of arbitrary trivial type sequences. Also, two applications have been developed that specialise the permutation engine specifically for the purpose of string permutation and provide command line interfaces to drive their respective functions.
 
 Application **str-perm-gen-b** has been designed to dry run the permutation engine for benchmarking purposes. Given an input string the appication prints summary level information about how many permutations have been generated, how many test cycles have been executed and what the average execution time per test cycle is.
 
@@ -70,16 +70,17 @@ The application generates all the 362,880 possible permutations. It redirects th
 
 ## Build Notes
 
-The project provides build artefacts for two platforms. There is a Makefile that compiles the source code on the Linux platform using the clang++ compiler. There are also Visual Studio 2019 project files in the [vs_projects](https://github.com/Goreli/DKMCPPM/tree/master/20191112/perm_gen/vs_projects) subdirectory.
+The project provides build artefacts for two platforms. There is a Makefile in the [perm_gen](https://github.com/Goreli/DKMCPPM/tree/master/20191112/perm_gen) directory that compiles the source code on the Linux platform using the clang++ compiler. There are also Visual Studio 2019 project files in the [vs_projects](https://github.com/Goreli/DKMCPPM/tree/master/20191112/perm_gen/vs_projects) subdirectory.
 
-The Linux Makefile provides support for the following targets:
+Navigate to the [perm_gen](https://github.com/Goreli/DKMCPPM/tree/master/20191112/perm_gen) directory and type "make [Enter]" to build binary executables on the Linux platform. Type "make test [Enter]" and "make benchmark [Enter]" to test-run the applications. Here is a summary of the Linux Makefile targets:
+
  * make all [Enter] (same as make [Enter]) - build both applications in the project directory;
  * make str-perm-gen-b [Enter] - build str-perm-gen-b;
  * make str-perm-gen [Enter] - build str-perm-gen;
  * make clean [Enter] - remove both applications from the project directory;
  * make test [Enter] - prints permutations of the string "Car";
  * make benchmark [Enter] - benchmarks the permutation engine using the string "Hello World";
- * make release [Enter] - builds both applications and copies them to the ../../elf/release subdirectory.
+ * make release [Enter] - builds both applications and copies them to the ../../elf/release directory.
 
 To build Windows executables open the dkmccpm.sln solution file located in the root folder of the repository and navigate to this project in the Solution Explorer panel. The actual binaries are created in ../../x64. Here is the project configuration log:
 1. Set the language standard to c++17;
