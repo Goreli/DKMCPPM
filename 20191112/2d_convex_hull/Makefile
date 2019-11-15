@@ -15,6 +15,15 @@ clean:
 	rm -f ch2d
 	rm -f inp_file2d.csv
 
+release: clean \
+	../../elf/release/ch2d \
+	../../elf/release/gen-inp-file2d.sh
+	mkdir -p ../../elf/release
+	cp ch2d ../../elf/release
+	cp gen-inp-file2d.sh ../../elf/release
+
+../../elf/release/ch2d: ch2d
+
 data100:
 	rm -f inp_file2d.csv
 	./gen-inp-file2d.sh 100 inp_file2d.csv

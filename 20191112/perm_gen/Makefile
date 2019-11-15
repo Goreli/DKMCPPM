@@ -21,13 +21,13 @@ test: str-perm-gen
 benchmark: str-perm-gen-b
 	./str-perm-gen-b "Hello World" 10
 
-release: clean \
-	../../elf/release/str-perm-gen	\
+release: ../../elf/release/str-perm-gen	\
 	../../elf/release/str-perm-gen-b
-	mkdir -p ../../elf/release
-	cp str-perm-gen ../../elf/release
-	cp str-perm-gen-b ../../elf/release
 
 ../../elf/release/str-perm-gen: str-perm-gen
+	mkdir -p ../../elf/release
+	cp str-perm-gen ../../elf/release
 
 ../../elf/release/str-perm-gen-b: str-perm-gen-b
+	mkdir -p ../../elf/release
+	cp str-perm-gen-b ../../elf/release

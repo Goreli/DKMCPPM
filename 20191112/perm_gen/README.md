@@ -6,8 +6,9 @@ ___
 ## Table of Contents
 1. [Introduction](#introduction)
 2. [Content Overview](#content-overview)
-3. [Build Notes](#build-notes)
-4. [Links](#links)
+3. [Command Line Interface](#command-line-interface)
+4. [Build Notes](#build-notes)
+5. [Links](#links)
 
 ## Introduction
 
@@ -31,7 +32,7 @@ The project source code consists of the following components located in the [per
  * str_perm_gen_b.cpp - this is the main entry module of the str-perm-gen-b application. It implements a command line interface to the permutation engine adapted to the char data type. The purpose is to benchmark performance of the string permutation process;
  * str_perm_gen.cpp - the main entry module of the str-perm-gen application. It has its own command line interface to the permutation engine adapted to the char data type. The purpose is to provide a command line tool that efficiently delivers string permutations.
   
-## Command Line Interface (CLI)
+## Command Line Interface
  
 ### CLI for str-perm-gen-b
 str-perm-gen-b [input_string] [number_of_test_cycles]
@@ -48,7 +49,7 @@ In this example the application executes 10 cycles each generating 39,916,800 pe
 ### CLI for str-perm-gen
 str-perm-gen [input_string] [max_num_perm]
  * input_string - the string to generate permutations of;
- * max_num_perm - the maximum number of permutations to generate and output. If this parameter is not specified then the application will generate and output all possible permutations.
+ * max_num_perm - the maximum number of permutations to generate and output. If this parameter is not specified then the application generates and outputs all possible permutations.
 
 If there are no command line arguments specified then the application prints its usage instructions.
 
