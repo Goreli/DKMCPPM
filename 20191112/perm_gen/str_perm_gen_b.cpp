@@ -78,7 +78,7 @@ int main (int argc, char* argv[]) {
 		cout << endl;
 	}
 
-	cout << "Average time per test cycle in seconds: " << totalElapsed.count() / numCycles << endl;
+	cout << "Average time per test cycle in seconds: " << totalElapsed.count() / numCycles << endl << endl;
 
     return 0;
 }

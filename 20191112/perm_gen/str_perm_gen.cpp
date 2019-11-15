@@ -8,10 +8,7 @@ Modification history:
 */
 
 #include <iostream>
-#include <fstream>
 #include <string>
-#include <algorithm>
-#include <utility>
 #include "perm_gen_base.hpp"
 
 using namespace std;
@@ -19,19 +16,24 @@ using namespace dk;
 
 class StringPermutationGenerator : public PermutationGeneratorBase<char> {
 public:
-	StringPermutationGenerator(ostream& outputStream, size_t maxNumPerm)
-		: outputStream_(outputStream), maxNumPerm_(maxNumPerm), counter_{ 0 } {
+	StringPermutationGenerator(size_t maxNumPerm)
+		: maxNumPerm_(maxNumPerm), counter_{ 0 } {
 	}
 private:
-	ostream& outputStream_;
 	size_t maxNumPerm_;
 	size_t counter_;
 
     virtual bool process_(const vector<char>& permutation) {
+		// Turn the permutation into a string and print it.
         std::string strPermutation(permutation.begin(), permutation.end());
-		outputStream_ << strPermutation << endl;
+		cout << strPermutation << endl;
 
 		bool bKeepGoing = true;
+		// If maxNumPerm_ is greater than zero then it must have been
+		// specified on the command line. Apply the counting logic in this
+		// case. 
+		// Otherwise, if maxNumPerm_ equals zero, it must have been ommited
+		/// on the command line. Do not apply the counting logic in this case.
 		if(maxNumPerm_ > 0) {
 			counter_++;
 			if (counter_ == maxNumPerm_)
@@ -41,73 +43,31 @@ private:
     }
 };
 
-struct CLIParser {
-	string inputString{""};
-	size_t maxNumPerm{0};
-	string filePath{""};
-
-	bool parse(int argc, char* argv[]) {
-		if (argc <= 1 || argc > 4)
-			return false;
-
-		inputString = string(argv[1]);
-		if (argc > 2)
-			if (!parseOption(argv[2]))
-				return false;
-		if (argc > 3)
-			if (!parseOption(argv[3]))
-				return false;
-		return true;
-	}
-	bool parseOption(string strOption) {
-		std::string strMax("--max=");
-		if (strOption.find(strMax) == 0) {
-			string strNum(strOption.begin() + 6, strOption.end());
-			maxNumPerm = stoi(strNum);
-			return true;
-		}
-		std::string strOut("--out=");
-		if (strOption.find(strOut) == 0) {
-			filePath = string(strOption.begin() + 6, strOption.end());
-			return true;
-		}
-		return false;
-	}
-};
-
 void printUsage() {
 	cout << "String Permutation Generator" << endl;
-	cout << "Displays a specified number of permutations of a specified string or, optionally, writes them to a specified file." << endl;
+	cout << "Prints permutations of a specified string. Optionally limits the size of the printed output." << endl;
 	cout << "Copyright (c) 2019 David Krikheli" << endl;
-	cout << "Usage: str-perm-gen [input_string] [--max=max_num_perm] [--out=output_file]" << endl;
+	cout << "Usage: str-perm-gen [input_string] [max_num_perm]"<< endl;
 	cout << "\tinput_string -\tthe string to generate permutations of;" << endl;
 	cout << "\tmax_num_perm -\tthe maximum number of permutations to generate. This is to help ensure" << endl;
-	cout << "\t\t\tthat the process completes normally within a reasonable period of time;" << endl;
-	cout << "\toutput_file -\ta path to a file to write the generated permutations to. Note that the writing" << endl;
-	cout << "\t\t\tto a file works significantly faster than printing on the screen." << endl;
+	cout << "\t\t\tthat the process completes normally within a reasonable period of time." << endl;
 }
 
 int main (int argc, char* argv[]) {
-	CLIParser parser;
-    if(!parser.parse(argc, argv)) {
+    if(argc <= 1 || argc > 3) {
 		printUsage();
-		return 0;
+        return 0;
     }
 
-	ofstream outputStream;
-	if (parser.filePath.size())
-		outputStream.open(parser.filePath);
+	string inputString{ argv[1] };
+	std::vector<char> vocabulary(inputString.begin(), inputString.end());
 
-	StringPermutationGenerator spg(
-		parser.filePath.size()? outputStream : cout, 
-		parser.maxNumPerm
-	);
+	size_t maxNumPerm = 0;
+	if (argc == 3)
+		maxNumPerm = atoi(argv[2]);
+	StringPermutationGenerator spg(maxNumPerm);
 
-	std::vector<char> vocabulary(parser.inputString.begin(), parser.inputString.end());
 	spg.generate(vocabulary);
-
-	if(parser.filePath.size())
-		outputStream.close();
 
 	return 0;
 }
