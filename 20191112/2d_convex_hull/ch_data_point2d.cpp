@@ -19,16 +19,21 @@ using namespace dk;
 
 const double constPi = 3.141592653589793238463;
 
-void ltrim(string &s) noexcept {
-    s.erase(s.begin(), find_if(s.begin(), s.end(), not1(ptr_fun<int, int>(isspace))));
+std::string& ltrim(std::string& str, const std::string& chars = "\t\n\v\f\r ")
+{
+	str.erase(0, str.find_first_not_of(chars));
+	return str;
 }
-void rtrim(string &s) noexcept {
-    s.erase(find_if(s.rbegin(), s.rend(), not1(ptr_fun<int, int>(isspace))).base(), s.end());
+std::string& rtrim(std::string& str, const std::string& chars = "\t\n\v\f\r ")
+{
+	str.erase(str.find_last_not_of(chars) + 1);
+	return str;
 }
-void trim(string &s) noexcept {
-    ltrim(s);
-    rtrim(s);
+std::string& trim(std::string& str, const std::string& chars = "\t\n\v\f\r ")
+{
+	return ltrim(rtrim(str, chars), chars);
 }
+
 void DataPoint2D::parse(const string& str) noexcept {
     stringstream ss(str);
     string token;

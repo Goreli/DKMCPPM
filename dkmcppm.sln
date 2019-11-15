@@ -23,6 +23,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "perm_gen", "perm_gen", "{EA
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "str-perm-gen-b", "20191112\perm_gen\vs_projects\str-perm-gen-b\str-perm-gen-b.vcxproj", "{CFE6F37B-438F-468C-915E-2499A9B9896A}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ch2d", "20191112\2d_convex_hull\vs_projects\ch2d\ch2d.vcxproj", "{53FB8638-3DA7-406D-8B9D-009ACBDFE093}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2d_convex_hull", "2d_convex_hull", "{4B57CFA9-BD93-4D39-9FC8-4FC301C3684D}"
+	ProjectSection(SolutionItems) = preProject
+		20191112\2d_convex_hull\Makefile = 20191112\2d_convex_hull\Makefile
+		20191112\2d_convex_hull\readme.md = 20191112\2d_convex_hull\readme.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -47,6 +55,14 @@ Global
 		{CFE6F37B-438F-468C-915E-2499A9B9896A}.Release|x64.Build.0 = Release|x64
 		{CFE6F37B-438F-468C-915E-2499A9B9896A}.Release|x86.ActiveCfg = Release|Win32
 		{CFE6F37B-438F-468C-915E-2499A9B9896A}.Release|x86.Build.0 = Release|Win32
+		{53FB8638-3DA7-406D-8B9D-009ACBDFE093}.Debug|x64.ActiveCfg = Debug|x64
+		{53FB8638-3DA7-406D-8B9D-009ACBDFE093}.Debug|x64.Build.0 = Debug|x64
+		{53FB8638-3DA7-406D-8B9D-009ACBDFE093}.Debug|x86.ActiveCfg = Debug|Win32
+		{53FB8638-3DA7-406D-8B9D-009ACBDFE093}.Debug|x86.Build.0 = Debug|Win32
+		{53FB8638-3DA7-406D-8B9D-009ACBDFE093}.Release|x64.ActiveCfg = Release|x64
+		{53FB8638-3DA7-406D-8B9D-009ACBDFE093}.Release|x64.Build.0 = Release|x64
+		{53FB8638-3DA7-406D-8B9D-009ACBDFE093}.Release|x86.ActiveCfg = Release|Win32
+		{53FB8638-3DA7-406D-8B9D-009ACBDFE093}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -55,6 +71,8 @@ Global
 		{01DB436C-9D5A-431E-BD4F-6E04ACCBAD4C} = {EA04DCBA-B3C0-4087-AB03-54E652213FB1}
 		{EA04DCBA-B3C0-4087-AB03-54E652213FB1} = {D07650A1-46B7-48CC-AD4F-31F28FCB1089}
 		{CFE6F37B-438F-468C-915E-2499A9B9896A} = {EA04DCBA-B3C0-4087-AB03-54E652213FB1}
+		{53FB8638-3DA7-406D-8B9D-009ACBDFE093} = {4B57CFA9-BD93-4D39-9FC8-4FC301C3684D}
+		{4B57CFA9-BD93-4D39-9FC8-4FC301C3684D} = {D07650A1-46B7-48CC-AD4F-31F28FCB1089}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2BE0949B-3F3C-422A-AE9E-C4775E6F82CD}
