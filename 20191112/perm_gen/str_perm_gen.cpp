@@ -10,62 +10,67 @@ Modification history:
 #include <iostream>
 #include <string>
 #include "perm_gen_base.hpp"
+#include "str_perm_gen_cli.hpp"
 
 using namespace std;
 using namespace dk;
 
 class StringPermutationGenerator : public PermutationGeneratorBase<char> {
 public:
-	StringPermutationGenerator(size_t maxNumPerm)
-		: maxNumPerm_(maxNumPerm), counter_{ 0 } {
+	StringPermutationGenerator(size_t iStartNum, size_t iCount, bool bPrintNumbers)
+		: iStartNum_(iStartNum), iCount_{ iCount }, bPrintNumbers_{ bPrintNumbers }, iCounter_{ 0 }, iTop_{ 0 }{
+		iTop_ = iStartNum_ + iCount_;
 	}
 private:
-	size_t maxNumPerm_;
-	size_t counter_;
+	size_t iStartNum_;
+	size_t iCount_;
+	bool bPrintNumbers_;
+	size_t iCounter_;
+	size_t iTop_;
 
     virtual bool process_(const vector<char>& permutation) {
-		// Turn the permutation into a string and print it.
-        std::string strPermutation(permutation.begin(), permutation.end());
-		cout << strPermutation << endl;
+		iCounter_++;
 
-		bool bKeepGoing = true;
-		// If maxNumPerm_ is greater than zero then it must have been
-		// specified on the command line. Apply the counting logic in this
-		// case. 
-		// Otherwise, if maxNumPerm_ equals zero, it must have been ommited
-		/// on the command line. Do not apply the counting logic in this case.
-		if(maxNumPerm_ > 0) {
-			counter_++;
-			if (counter_ == maxNumPerm_)
-				bKeepGoing = false;
+		// Too early to start printing?
+		if (iCounter_ < iStartNum_)
+			// Yes. Get the next permutation.
+			return true;
+
+		// Should print this one?
+		if (iCount_ == 0 || iCounter_ < iTop_) {
+			// Yes. Keep printing.
+			if (bPrintNumbers_)
+				cout << iCounter_ << " ";
+
+			// Convert the permutation format from the vector into string.
+			std::string strPermutation(permutation.begin(), permutation.end());
+			cout << strPermutation << endl;
+			return true;
 		}
-		return bKeepGoing;
+
+		// Finished printing the expected number of permutations. Stop the permutation generator.
+		return false;
     }
 };
 
-void printUsage() {
-	cout << "String Permutation Generator" << endl;
-	cout << "Prints permutations of a specified string. Optionally limits the size of the printed output." << endl;
-	cout << "Copyright (c) 2019 David Krikheli" << endl;
-	cout << "Usage: str-perm-gen [input_string] [max_num_perm]"<< endl;
-	cout << "\tinput_string -\tthe string to generate permutations of;" << endl;
-	cout << "\tmax_num_perm -\tthe maximum number of permutations to generate. This is to help ensure" << endl;
-	cout << "\t\t\tthat the process completes normally within a reasonable period of time." << endl;
-}
-
 int main (int argc, char* argv[]) {
-    if(argc <= 1 || argc > 3) {
-		printUsage();
+	StrPermGenCLI parser;
+	if(!parser.parse(argc, argv)) {
+		cout << "String Permutation Generator v1.0" << endl;
+		cout << "Prints permutations of a specified string. Optionally limits the size of the printed output." << endl;
+		cout << "Copyright (c) 2019 David Krikheli" << endl;
+		parser.printUsage();
         return 0;
     }
 
-	string inputString{ argv[1] };
+	string& inputString = parser.getInputString();
 	std::vector<char> vocabulary(inputString.begin(), inputString.end());
 
-	size_t maxNumPerm = 0;
-	if (argc == 3)
-		maxNumPerm = atoi(argv[2]);
-	StringPermutationGenerator spg(maxNumPerm);
+	StringPermutationGenerator spg(
+		parser.getStartNumber(),
+		parser.getCount(),
+		parser.printPermutationNumbers()
+	);
 
 	spg.generate(vocabulary);
 

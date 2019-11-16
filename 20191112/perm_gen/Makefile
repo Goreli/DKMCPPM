@@ -2,9 +2,11 @@ all: str-perm-gen str-perm-gen-b
 
 str-perm-gen: \
 	str_perm_gen.cpp \
+	str_perm_gen_cli.hpp \
+	str_perm_gen_cli.cpp \
 	perm_gen_base.hpp \
 	perm_gen_base.inl
-	clang++ -O3 -std=c++17 str_perm_gen.cpp -o str-perm-gen
+	clang++ -O3 -std=c++17 str_perm_gen.cpp str_perm_gen_cli.cpp -o str-perm-gen
 
 str-perm-gen-b: \
 	str_perm_gen_b.cpp \

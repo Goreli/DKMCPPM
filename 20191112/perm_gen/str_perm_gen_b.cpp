@@ -40,7 +40,7 @@ void forceThousandsSeparators() {
 }
 
 void printUsage() {
-	cout << "String Permutation Generator Benchmarking Application" << endl;
+	cout << "String Permutation Generator Benchmarking Application v1.0" << endl;
 	cout << "Executes the specified number of test cycles and reports the average time." << endl;
 	cout << "Copyright (c) 2019 David Krikheli" << endl;
 	cout << "Usage: str-perm-gen-b [input_string] [number_of_test_cycles]" << endl;

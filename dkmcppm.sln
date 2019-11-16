@@ -18,7 +18,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "perm_gen", "perm_gen", "{EA04DCBA-B3C0-4087-AB03-54E652213FB1}"
 	ProjectSection(SolutionItems) = preProject
 		20191112\perm_gen\Makefile = 20191112\perm_gen\Makefile
-		20191112\perm_gen\README.md = 20191112\perm_gen\README.md
+		20191112\perm_gen\readme.md = 20191112\perm_gen\readme.md
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "str-perm-gen-b", "20191112\perm_gen\vs_projects\str-perm-gen-b\str-perm-gen-b.vcxproj", "{CFE6F37B-438F-468C-915E-2499A9B9896A}"
