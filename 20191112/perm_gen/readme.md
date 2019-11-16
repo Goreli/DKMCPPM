@@ -56,7 +56,8 @@ str-perm-gen [input_string] [options]
 The input_string parameter specifies the string to print permutations of. The following options are supported:
  * **+number** - start printing at the specified permutation number. The permutation number is not a 0 based index, it's a 1 based number. If this parameter is not specified then the application generates and outputs all possible permutations;
  * **-c count**  - the count of permutations to print;
- * **-n** - print permutation numbers (1 based).
+ * **-n** - print permutation numbers (1 based);
+ * **-o** - output file path.
 
 If there are no command line arguments specified then the application prints its usage instructions.
 
@@ -84,6 +85,11 @@ Same as the previous example. The difference is the application will print permu
 ./str-perm-gen "Hi there!" +1300 -c 100 -n > permuted_greetings.txt
 
 The application skips the first 1,299 permutations and starts printing beginning with permutation #1,300. It only prints 100 out of 362,880 possible permutations. Permutation numbers are printed at the start of each line. The output is redirected to the permuted_greetings.txt file, so nothing is actually displayed on the screen and all the output is saved in the disk file. Note that the redirection of standard output to the disk file improves performance of the process.
+
+#### Example 6
+./str-perm-gen "Hi there!" +1300 -c 100 -n -o permuted_greetings.txt
+
+Similar to example 5. Note the -o option used to specify the output file.
 
 ## Build Notes
 

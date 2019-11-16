@@ -76,7 +76,8 @@ void StrPermGenCLI::printUsage() const noexcept {
 	cout << "Usage: "<< "str-perm-gen [input_string] [options]" << '\n';
 	cout << "  +number   - start printing at the specified permutation number (1-based);" << '\n';
 	cout << "  -c count  - the count of permutations to print;" << '\n';
-	cout << "  -n        - print permutation numbers." << '\n';
+	cout << "  -n        - print permutation numbers;" << '\n';
+	cout << "  -o        - output file path." << '\n';
 }
 
 const string& StrPermGenCLI::getInputString() const noexcept {
