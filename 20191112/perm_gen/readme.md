@@ -34,7 +34,7 @@ The project source code consists of the following components located in the [per
  * str_perm_gen.cpp - the main entry module of the str-perm-gen application. It has its own command line interface to the permutation engine adapted to the char data type. The purpose is to provide a command line tool that efficiently delivers string permutations. The following two modules implement the command line interface for this application;
  * str_perm_gen_cli.hpp - declaration of a command line parser class for the str-perm-gen application;
  * str_perm_gen_cli.cpp - definition of the command line parser class for the str-perm-gen application;
- * time_hello_world.sh - Bash script that times the following command: ./str-perm-gen "Hello World" > hello_world.txt
+ * time-hello-world.sh - Bash script that times the following command: ./str-perm-gen "Hello World" > hello_world.txt
   
 ## Command Line Interface
  
