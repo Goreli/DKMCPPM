@@ -7,6 +7,7 @@ Modification history:
     14/Nov/2019 - David Krikheli created the module.
 */
 
+#include <fstream>
 #include <iostream>
 #include <string>
 #include "perm_gen_base.hpp"
@@ -17,8 +18,11 @@ using namespace dk;
 
 class StringPermutationGenerator : public PermutationGeneratorBase<char> {
 public:
-	StringPermutationGenerator(size_t iStartNum, size_t iCount, bool bPrintNumbers)
-		: iStartNum_(iStartNum), iCount_{ iCount }, bPrintNumbers_{ bPrintNumbers }, iCounter_{ 0 }, iTop_{ 0 }{
+	StringPermutationGenerator(size_t iStartNum, size_t iCount, bool bPrintNumbers,
+		ostream& outStream) 
+	: iStartNum_(iStartNum), iCount_{ iCount }, bPrintNumbers_{ bPrintNumbers },
+		iCounter_{ 0 }, iTop_{ 0 }, outStream_{ outStream }
+	{
 		iTop_ = iStartNum_ + iCount_;
 	}
 private:
@@ -27,6 +31,7 @@ private:
 	bool bPrintNumbers_;
 	size_t iCounter_;
 	size_t iTop_;
+	ostream& outStream_;
 
     virtual bool process_(const vector<char>& permutation) {
 		iCounter_++;
@@ -40,11 +45,11 @@ private:
 		if (iCount_ == 0 || iCounter_ < iTop_) {
 			// Yes. Keep printing.
 			if (bPrintNumbers_)
-				cout << iCounter_ << " ";
+				outStream_ << iCounter_ << " ";
 
 			// Convert the permutation format from the vector into string.
 			std::string strPermutation(permutation.begin(), permutation.end());
-			cout << strPermutation << '\n';
+			outStream_ << strPermutation << '\n';
 			return true;
 		}
 
@@ -63,16 +68,30 @@ int main (int argc, char* argv[]) {
         return 0;
     }
 
-	string& inputString = parser.getInputString();
+	const string& inputString = parser.getInputString();
 	std::vector<char> vocabulary(inputString.begin(), inputString.end());
+
+	ofstream fout;
+	bool bUseOutputFile = parser.getOutFilePath().size() ? true : false;
+	if (bUseOutputFile)
+	{
+		fout.open(parser.getOutFilePath());
+		if (!fout) {
+			cerr << "Error: unable to open the output file. Exiting with error code 1." << '\n';
+			return 1;
+		}
+	}
 
 	StringPermutationGenerator spg(
 		parser.getStartNumber(),
 		parser.getCount(),
-		parser.printPermutationNumbers()
+		parser.printPermutationNumbers(),
+		bUseOutputFile? fout : cout
 	);
 
 	spg.generate(vocabulary);
 
+	if(bUseOutputFile)
+		fout.close();
 	return 0;
 }

@@ -17,7 +17,7 @@ str-perm-gen-b: \
 clean:
 	rm -f str-perm-gen
 	rm -f str-perm-gen-b
-	rm -f hello_world.txt
+	rm -f hello_world*.txt
 
 test: str-perm-gen
 	./str-perm-gen Car

@@ -107,8 +107,8 @@ To build Windows executables open the dkmccpm.sln solution file located in the r
 
 ## Roadmap
 
-1. Design and implement support for regex based filters;
-2. Explore ways to use concurrency or async to boost performance (refer https://stackoverflow.com/questions/21126950/asynchronously-writing-to-a-file-in-c-unix).
+1. Design and implement support for regex based filters. It is the output stream that appears to be the performance bottleneck, so it should be possible to manage the regex overhead by using a multithreading based approach;
+2. Explore ways to use concurrency or async (or plain C io) to boost performance of the output stream (refer https://stackoverflow.com/questions/21126950/asynchronously-writing-to-a-file-in-c-unix).
 
 ## Links
 
