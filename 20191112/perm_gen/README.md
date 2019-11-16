@@ -33,7 +33,8 @@ The project source code consists of the following components located in the [per
  * str_perm_gen_b.cpp - this is the main entry module of the str-perm-gen-b application. It implements a command line interface to the permutation engine adapted to the char data type. The purpose is to benchmark performance of the string permutation process. The command line interface is very simple and has been implemented inside this module;
  * str_perm_gen.cpp - the main entry module of the str-perm-gen application. It has its own command line interface to the permutation engine adapted to the char data type. The purpose is to provide a command line tool that efficiently delivers string permutations. The following two modules implement the command line interface for this application;
  * str_perm_gen_cli.hpp - declaration of a command line parser class for the str-perm-gen application;
- * str_perm_gen_cli.cpp - definition of the command line parser class for the str-perm-gen application.
+ * str_perm_gen_cli.cpp - definition of the command line parser class for the str-perm-gen application;
+ * time_hello_world.sh - Bash script that times the following command: ./str-perm-gen "Hello World" > hello_world.txt
   
 ## Command Line Interface
  
@@ -107,7 +108,7 @@ To build Windows executables open the dkmccpm.sln solution file located in the r
 ## Roadmap
 
 1. Design and implement support for regex based filters;
-2. Explore ways to use concurrency to boost performance.
+2. Explore ways to use concurrency or async to boost performance (refer https://stackoverflow.com/questions/21126950/asynchronously-writing-to-a-file-in-c-unix).
 
 ## Links
 

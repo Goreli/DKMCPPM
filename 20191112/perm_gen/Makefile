@@ -15,7 +15,9 @@ str-perm-gen-b: \
 	clang++ -O3 -std=c++17 str_perm_gen_b.cpp -o str-perm-gen-b
 
 clean:
-	rm -f str-perm-gen str-perm-gen-b
+	rm -f str-perm-gen
+	rm -f str-perm-gen-b
+	rm -f hello_world.txt
 
 test: str-perm-gen
 	./str-perm-gen Car
