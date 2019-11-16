@@ -32,15 +32,15 @@ bool readInpFile(const string& inpFileName, DataContainer& container) noexcept {
 }
 void debugOutput(const DataContainer& container, const DataPoint2D& centroid) {
     for(const auto& point: container)
-        cout << point.x << "," << point.y << "," << point.alpha << "," << point.lengthSqr << endl;
-    cout << "Centroid: " << centroid.x << " " << centroid.y << endl;
+        cout << point.x << "," << point.y << "," << point.alpha << "," << point.lengthSqr << '\n';
+    cout << "Centroid: " << centroid.x << " " << centroid.y << '\n';
 }
 
 int main (int argc, char* argv[]) {
     if(argc <= 1) {
-        cout << "2D convex hull calculator" << endl;
-        cout << "Copyright (c) 2019 David Krikheli" << endl;
-        cout << "Usage: ch2d [input file path]" << endl;
+        cout << "2D convex hull calculator" << '\n';
+        cout << "Copyright (c) 2019 David Krikheli" << '\n';
+        cout << "Usage: ch2d [input file path]" << '\n';
         return 0;
     }
 
@@ -63,10 +63,10 @@ int main (int argc, char* argv[]) {
     else
         calcConvexHull2D(convexHull2D, dataStore, centroid);
 
-    cout << "Original count of data points: " << dataStore.size()-1 << endl;
-    cout << "Closed line loop of the convex hull consisting of " << convexHull2D.size() << " points:" << endl;
+    cout << "Original count of data points: " << dataStore.size()-1 << '\n';
+    cout << "Closed line loop of the convex hull consisting of " << convexHull2D.size() << " points:" << '\n';
     for (const auto& point : convexHull2D)
-        cout << point.x << "," << point.y << endl;
+        cout << point.x << "," << point.y << '\n';
 
     return 0;
 }

@@ -44,7 +44,7 @@ private:
 
 			// Convert the permutation format from the vector into string.
 			std::string strPermutation(permutation.begin(), permutation.end());
-			cout << strPermutation << endl;
+			cout << strPermutation << '\n';
 			return true;
 		}
 
@@ -56,9 +56,9 @@ private:
 int main (int argc, char* argv[]) {
 	StrPermGenCLI parser;
 	if(!parser.parse(argc, argv)) {
-		cout << "String Permutation Generator v1.0" << endl;
-		cout << "Prints permutations of a specified string. Optionally limits the size of the printed output." << endl;
-		cout << "Copyright (c) 2019 David Krikheli" << endl;
+		cout << "String Permutation Generator v1.0" << '\n';
+		cout << "Prints permutations of a specified string. Optionally limits the size of the printed output." << '\n';
+		cout << "Copyright (c) 2019 David Krikheli" << '\n';
 		parser.printUsage();
         return 0;
     }

@@ -40,10 +40,10 @@ void forceThousandsSeparators() {
 }
 
 void printUsage() {
-	cout << "String Permutation Generator Benchmarking Application v1.0" << endl;
-	cout << "Executes the specified number of test cycles and reports the average time." << endl;
-	cout << "Copyright (c) 2019 David Krikheli" << endl;
-	cout << "Usage: str-perm-gen-b [input_string] [number_of_test_cycles]" << endl;
+	cout << "String Permutation Generator Benchmarking Application v1.0" << '\n';
+	cout << "Executes the specified number of test cycles and reports the average time." << '\n';
+	cout << "Copyright (c) 2019 David Krikheli" << '\n';
+	cout << "Usage: str-perm-gen-b [input_string] [number_of_test_cycles]" << '\n';
 }
 
 int main (int argc, char* argv[]) {
@@ -67,18 +67,18 @@ int main (int argc, char* argv[]) {
 	for (size_t cycleCounter = 0; cycleCounter < numCycles; cycleCounter++) {
 		cout << "Test cycle #" << cycleCounter+1 << endl;
 
-		cout << "\tRunning the permutation generator for \"" << inputString << "\"." << endl;
+		cout << "\tRunning the permutation generator for \"" << inputString << "\"." << '\n';
 		spg.resetPermutationCounter();
 		auto start = std::chrono::high_resolution_clock::now();
 		spg.generate(vocabulary);
 		auto finish = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<double> elapsed = finish - start;
-		cout << "\t" << spg.getPermutationCounter() << " permutations generated in " << elapsed.count() << " seconds." << endl;
+		cout << "\t" << spg.getPermutationCounter() << " permutations generated in " << elapsed.count() << " seconds." << '\n';
 		totalElapsed += elapsed;
-		cout << endl;
+		cout << '\n';
 	}
 
-	cout << "Average time per test cycle in seconds: " << totalElapsed.count() / numCycles << endl << endl;
+	cout << "Average time per test cycle in seconds: " << totalElapsed.count() / numCycles << '\n' << '\n';
 
     return 0;
 }

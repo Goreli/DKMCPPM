@@ -61,10 +61,10 @@ bool StrPermGenCLI::parse(int argc, char* argv[]) {
 	return true;
 }
 void StrPermGenCLI::printUsage() {
-	cout << "Usage: "<< "str-perm-gen [input_string] [options]" << endl;
-	cout << "  +number   - start printing at the specified permutation number (1-based);" << endl;
-	cout << "  -c count  - the count of permutations to print;" << endl;
-	cout << "  -n        - print permutation numbers." << endl;
+	cout << "Usage: "<< "str-perm-gen [input_string] [options]" << '\n';
+	cout << "  +number   - start printing at the specified permutation number (1-based);" << '\n';
+	cout << "  -c count  - the count of permutations to print;" << '\n';
+	cout << "  -n        - print permutation numbers." << '\n';
 }
 
 string& StrPermGenCLI::getInputString() {
