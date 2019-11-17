@@ -45,7 +45,7 @@ namespace dk {
 		bool generate(const std::vector<T>&);
 
 	private:
-		void generate_();
+		void generate_(size_t iPos);
 
 		// The permutation engine delivers permutations through this function.
 		// Every time a new permutation is generated it is passed into this
@@ -68,13 +68,10 @@ namespace dk {
 		// Holds the current permutation.
 		std::vector<char> permutation_;
 
-		// Current position in the permutation container.
-		size_t iPermPos_;
-
-		bool bContinue_;
-
 		// Holds the sequence of input symbols to generate permutations of.
 		std::vector<char> vocabulary_;
+
+		bool bContinue_;
 	};
 };  // namespace dk
 

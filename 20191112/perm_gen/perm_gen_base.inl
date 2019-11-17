@@ -18,36 +18,29 @@ namespace dk {
 	template <class T>
 	bool PermutationGeneratorBase<T>::generate(const std::vector<T>& vocabulary) {
 		permutation_.resize(vocabulary.size());
-		iPermPos_ = 0;
 		bContinue_ = true;
 		vocabulary_ = vocabulary;
-		generate_();
+		generate_(0);
 		return bContinue_;
 	}
 	template <class T>
-	void PermutationGeneratorBase<T>::generate_() {
+	void PermutationGeneratorBase<T>::generate_(size_t iPos) {
 		size_t vocSize = vocabulary_.size();
 
-		for(size_t inx = 0; inx < vocSize; inx++)
+		for(size_t inx = 0; inx < vocSize && bContinue_; inx++)
 		{
-			permutation_[iPermPos_] = vocabulary_[inx];
+			permutation_[iPos] = vocabulary_[inx];
 
 			// If the call stack has hit the bottom of the recursion tree then
 			// process the permutation and move on to the next recursion cycle.
 			// Otherwise just keep drilling down.
 			if (vocSize == 1)
-			{
 				bContinue_ = process_(permutation_);
-				if (!bContinue_)
-					return;
-			}
 			else
 			{
 				vocabulary_.erase(vocabulary_.begin() + inx);
-				iPermPos_++;
-				generate_();
-				--iPermPos_;
-				vocabulary_.insert(vocabulary_.begin() + inx, permutation_[iPermPos_]);
+				generate_(iPos+1);
+				vocabulary_.insert(vocabulary_.begin() + inx, permutation_[iPos]);
 			}
 		}
 	}
