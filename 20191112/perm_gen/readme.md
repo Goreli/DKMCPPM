@@ -40,8 +40,8 @@ The project source code consists of the following components located in the [per
  
 ### CLI for str-perm-gen-b
 str-perm-gen-b [input_string] [number_of_test_cycles]
- * input_string - the string to generate permutations of;
- * number_of_test_cycles - the number of test cycles to execute before calculating the average duration per cycle.
+ * **input_string** - the string to generate permutations of;
+ * **number_of_test_cycles** - the number of test cycles to execute before calculating the average duration per cycle.
 
 If there are no command line arguments specified then the application prints its usage instructions.
 
@@ -63,7 +63,7 @@ The input_string parameter specifies the string to print permutations of. The fo
 
 The **-e** and **-i** options are mutually exclusive. They provide light-weight support for regular expression based filtering and are expected to comply with the ECMAScript standard. The specification of the ECMAScript standard can be found here: http://www.cplusplus.com/reference/regex/ECMAScript/.
 
-Note that not all regular expressions can be used interchangeably on Windows and Linux command lines. This is because the different platforms use different escape characters and, in general, different command line syntax rules. This may cause unexpected behaviour of regular expressions when migrated to a different platform. Part of the roadmap for this application is to develop a text file based regex filter in order to offer platform independent interpretation of regex expressions as well as an advanced filtering facility.
+Note that not all regular expressions can be used interchangeably on Windows and Linux command lines. This is because the different platforms use different escape characters and, in general, different command line syntax rules. This may cause unexpected behaviour of regular expressions when migrating them between the platforms. Part of the roadmap for this application is to develop a text file based regex filter in order to offer platform independent interpretation of regex expressions as well as an advanced filtering facility.
 
 If there are no command line arguments specified then the application prints its usage instructions.
 

@@ -68,6 +68,9 @@ namespace dk {
 		// Holds the current permutation.
 		std::vector<char> permutation_;
 
+		// Current position in the permutation container.
+		size_t iPermPos_;
+
 		// Holds the sequence of input symbols to generate permutations of.
 		std::vector<char> vocabulary_;
 	};
