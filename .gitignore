@@ -37,3 +37,6 @@
 x64/
 elf/
 *.aps
+
+# Use this folder name to capture temp misc notes not worth keeping in git.
+_temp_misc_
