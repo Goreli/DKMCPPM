@@ -54,10 +54,16 @@ In this example the application executes 10 cycles each generating 39,916,800 pe
 str-perm-gen [input_string] [options]
 
 The input_string parameter specifies the string to print permutations of. The following options are supported:
- * **+number** - start printing at the specified permutation number. The permutation number is not a 0 based index, it's a 1 based number. If this parameter is not specified then the application generates and outputs all possible permutations;
+ * **+number** - start printing at the specified permutation number. The permutation number is a 1 based number, not a 0 based index. If this parameter is not specified then the application generates and prints all possible permutations;
  * **-c count**  - the count of permutations to print;
- * **-n** - print permutation numbers (1 based);
- * **-o** - output file path.
+ * **-e regex**  - excluding regex. Don't print permutations that match the regular expression;
+ * **-i regex**  - including regex. Only print permutations that match the regular expression;
+ * **-n** - print permutation numbers (1 based numbers, not 0 based indices);
+ * **-o path** - output file path.
+
+The **-e** and **-i** options are mutually exclusive. They provide light-weight support for regular expression based filtering and are expected to comply with the ECMAScript standard. The specification of the ECMAScript standard can be found here: http://www.cplusplus.com/reference/regex/ECMAScript/.
+
+Note that not all regular expressions can be used interchangeably on Windows and Linux command lines. This is because the different platforms use different escape characters and, in general, different command line syntax rules. This may cause unexpected behaviour of regular expressions when migrated to a different platform. Part of the roadmap for this application is to develop a text file based regex filter in order to offer platform independent interpretation of regex expressions as well as an advanced filtering facility.
 
 If there are no command line arguments specified then the application prints its usage instructions.
 
@@ -79,7 +85,7 @@ The application skips the first two permutations. It starts printing beginning w
 #### Example 4
 ./str-perm-gen Car +3 -c 2 -n 
 
-Same as the previous example. The difference is the application will print permutation numbers at the start of each line.
+Same as the previous example. The difference is the application prints permutation numbers at the start of each line.
 
 #### Example 5
 ./str-perm-gen "Hi there!" +1300 -c 100 -n > permuted_greetings.txt
@@ -90,6 +96,11 @@ The application skips the first 1,299 permutations and starts printing beginning
 ./str-perm-gen "Hi there!" +1300 -c 100 -n -o permuted_greetings.txt
 
 Similar to example 5. Note the -o option used to specify the output file.
+
+#### Example 7
+str-perm-gen "Hello World" -n -i " Hello$"
+
+The inclusion type regex is used. The application only prints permutations that end with " Hello". Permutation numbers are printed at the start of each line.
 
 ## Build Notes
 
@@ -113,7 +124,7 @@ To build Windows executables open the dkmccpm.sln solution file located in the r
 
 ## Roadmap
 
-1. Design and implement support for regex based filters. It is the output stream that appears to be the performance bottleneck, so it should be possible to manage the regex overhead by using a multithreading based approach;
+1. Develop a text file based regex filter in order to offer platform independent interpretation of regex expressions as well as an advanced filtering facility. In this application performance bottleneck is caused by the output stream, so it should be possible to manage the regex overhead by taking a multithreading based approach;
 2. Explore ways to use concurrency or async (or plain C io) to boost performance of the output stream (refer https://stackoverflow.com/questions/21126950/asynchronously-writing-to-a-file-in-c-unix).
 
 ## Links

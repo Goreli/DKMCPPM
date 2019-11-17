@@ -16,11 +16,11 @@ using namespace std;
 
 StrPermGenCLI::StrPermGenCLI()
 	: strInput_{ "" }, iStartNum_{ 0 }, iCount_{ 0 }, bPrintNumbers_{ false },
-	  outFile_{ "" }
+	strOutFile_{ "" }, bExclusionRegex_{ false }, strRegex_{""}
 {
 }
 bool StrPermGenCLI::parse(int argc, char* argv[]) noexcept {
-	if (argc < 2 || argc > 8)
+	if (argc < 2 || argc > 10)
 		return false;
 
 	strInput_ = string(argv[1]);
@@ -54,11 +54,27 @@ bool StrPermGenCLI::parse(int argc, char* argv[]) noexcept {
 			if (strOption[1] == 'o') {
 				if (++inx == argc)
 					return false;
-				outFile_ = string(argv[inx]);
-				if (outFile_[0] == '-') {
-					outFile_ = string("");
+				strOutFile_ = string(argv[inx]);
+				if (strOutFile_[0] == '-') {
+					strOutFile_ = string("");
 					return false;
 				}
+				continue;
+			}
+			// Exclusion regex.
+			if (strOption[1] == 'e') {
+				if (++inx == argc || strRegex_.size() > 0)
+					return false;
+				bExclusionRegex_ = true;
+				strRegex_ = string(argv[inx]);
+				continue;
+			}
+			// Inclusion regex.
+			if (strOption[1] == 'i') {
+				if (++inx == argc || strRegex_.size() > 0)
+					return false;
+				bExclusionRegex_ = false;
+				strRegex_ = string(argv[inx]);
 				continue;
 			}
 			// Print permutation numbers.
@@ -76,8 +92,10 @@ void StrPermGenCLI::printUsage() const noexcept {
 	cout << "Usage: "<< "str-perm-gen [input_string] [options]" << '\n';
 	cout << "  +number   - start printing at the specified permutation number (1-based);" << '\n';
 	cout << "  -c count  - the count of permutations to print;" << '\n';
+	cout << "  -e regex  - exclusion regex (-e and -i don\'t go together);" << '\n';
+	cout << "  -i regex  - inclusion regex (-i and -e don\'t go together);" << '\n';
 	cout << "  -n        - print permutation numbers;" << '\n';
-	cout << "  -o        - output file path." << '\n';
+	cout << "  -o path   - output file path." << '\n';
 }
 
 const string& StrPermGenCLI::getInputString() const noexcept {
@@ -89,9 +107,15 @@ size_t StrPermGenCLI::getStartNumber() const noexcept {
 size_t StrPermGenCLI::getCount() const noexcept {
 	return iCount_;
 }
-bool StrPermGenCLI::printPermutationNumbers()  const noexcept {
+bool StrPermGenCLI::printPermutationNumbers() const noexcept {
 	return bPrintNumbers_;
 }
-const string& StrPermGenCLI::getOutFilePath() const noexcept {
-	return outFile_;
+const string& StrPermGenCLI::getOutFilePathStr() const noexcept {
+	return strOutFile_;
+}
+bool StrPermGenCLI::isExclusionRegex() const noexcept {
+	return bExclusionRegex_;
+}
+const string& StrPermGenCLI::getRegexStr() const noexcept {
+	return strRegex_;
 }

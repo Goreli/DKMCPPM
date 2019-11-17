@@ -10,6 +10,7 @@ Modification history:
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <regex>
 #include "perm_gen_base.hpp"
 #include "str_perm_gen_cli.hpp"
 
@@ -21,9 +22,15 @@ public:
 	StringPermutationGenerator(size_t iStartNum, size_t iCount, bool bPrintNumbers,
 		ostream& outStream) 
 	: iStartNum_(iStartNum), iCount_{ iCount }, bPrintNumbers_{ bPrintNumbers },
-		iCounter_{ 0 }, iTop_{ 0 }, outStream_{ outStream }
+		iCounter_{ 0 }, iTop_{ 0 }, outStream_{ outStream },
+		bUseCLIRegex_{ false }, bExclusionRegex_{ false }, regexObj_()
 	{
 		iTop_ = iStartNum_ + iCount_;
+	}
+	void assignRegex(const string& strRegex, bool bExclusionRegex) {
+		bUseCLIRegex_ = true;
+		regexObj_.assign(strRegex);
+		bExclusionRegex_ = bExclusionRegex;
 	}
 private:
 	size_t iStartNum_;
@@ -32,7 +39,24 @@ private:
 	size_t iCounter_;
 	size_t iTop_;
 	ostream& outStream_;
+	// Regex.
+	bool bUseCLIRegex_;
+	bool bExclusionRegex_;
+	regex regexObj_;
 
+	inline bool checkWithRegex_(const string& strPermutation) {
+		bool bMatched = regex_search(strPermutation, regexObj_, regex_constants::match_any);
+		if (
+			// Inclusion regex was requested and there is a matching permutation.
+			(!bExclusionRegex_ && bMatched)
+			||
+			// Exclusion regex was requested and there is a no matching permutation.
+			(bExclusionRegex_ && !bMatched)
+			)
+			return true;
+		else
+			return false;
+	}
     virtual bool process_(const vector<char>& permutation) {
 		iCounter_++;
 
@@ -41,19 +65,26 @@ private:
 			// Yes. Get the next permutation.
 			return true;
 
-		// Should print this one?
+		// Should consider this permutation for printing?
 		if (iCount_ == 0 || iCounter_ < iTop_) {
-			// Yes. Keep printing.
-			if (bPrintNumbers_)
-				outStream_ << iCounter_ << " ";
-
-			// Convert the permutation format from the vector into string.
+			// Yes. Consider this permutation for printing.
+			// Convert the permutation format from vector to string.
 			std::string strPermutation(permutation.begin(), permutation.end());
-			outStream_ << strPermutation << '\n';
+
+			bool bPrint{ true };
+			if (bUseCLIRegex_)
+				bPrint = checkWithRegex_(strPermutation);
+
+			if (bPrint) {
+				if (bPrintNumbers_)
+					outStream_ << iCounter_ << " ";
+				outStream_ << strPermutation << '\n';
+			}
+
 			return true;
 		}
 
-		// Finished printing the expected number of permutations. Stop the permutation generator.
+		// Finished printing all the required permutations. Stop the permutation generator.
 		return false;
     }
 };
@@ -72,10 +103,10 @@ int main (int argc, char* argv[]) {
 	std::vector<char> vocabulary(inputString.begin(), inputString.end());
 
 	ofstream fout;
-	bool bUseOutputFile = parser.getOutFilePath().size() ? true : false;
+	bool bUseOutputFile = parser.getOutFilePathStr().size() ? true : false;
 	if (bUseOutputFile)
 	{
-		fout.open(parser.getOutFilePath());
+		fout.open(parser.getOutFilePathStr());
 		if (!fout) {
 			cerr << "Error: unable to open the output file. Exiting with error code 1." << '\n';
 			return 1;
@@ -88,6 +119,9 @@ int main (int argc, char* argv[]) {
 		parser.printPermutationNumbers(),
 		bUseOutputFile? fout : cout
 	);
+
+	if (parser.getRegexStr().size())
+		spg.assignRegex(parser.getRegexStr(), parser.isExclusionRegex());
 
 	spg.generate(vocabulary);
 

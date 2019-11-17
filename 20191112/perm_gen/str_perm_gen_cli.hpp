@@ -22,14 +22,21 @@ public:
 	size_t getStartNumber() const noexcept;
 	size_t getCount() const noexcept;
 	bool printPermutationNumbers() const noexcept;
-	const std::string& getOutFilePath() const noexcept;
+	const std::string& getOutFilePathStr() const noexcept;
+
+	bool isExclusionRegex() const noexcept;
+	const std::string& getRegexStr() const noexcept;
 
 private:
 	std::string strInput_;
 	size_t iStartNum_;
 	size_t iCount_;
 	bool bPrintNumbers_;
-	std::string outFile_;
+	std::string strOutFile_;
+
+	// Command line regex.
+	bool bExclusionRegex_;
+	std::string strRegex_;
 };	// class StrPermGenCLI
 
 #endif //	str_perm_gen_cli_hpp
