@@ -22,9 +22,8 @@ public:
 	void resetPermutationCounter() { permutationCounter_ = 0; }
 	size_t getPermutationCounter() { return permutationCounter_; }
 private:
-	virtual bool process_(const std::vector<char>& permutation) {
+	virtual void process_(const std::vector<char>& permutation) {
 		permutationCounter_++;
-		return true;
 	}
 	size_t permutationCounter_{ 0 };
 };

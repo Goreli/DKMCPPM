@@ -35,14 +35,19 @@ namespace dk {
 		// into the process_() function as an argument. A derived class is
 		// required that would override the process_() virtual function to
 		// provide the application specific treatment of permutations.
+		//
+		// The overriden process_() virtual function can call the stop()
+		// function to stop the permutation generator.
 		// 
-		// If the permutation generator was stopped due the overriden
-		// process_() function returning 'false' then the generate() function
-		// in turn will return 'false' to the calling application. Otherwise,
-		// if the permutation generator was stopped because it exhausted all
-		// the permutation possibilities then the generate() function will
-		// return 'true' to the calling application.
+		// If the permutation generator was stopped due to the overriden
+		// process_() function calling the stop() function then the generate()
+		// function will return 'true' to the calling application. Otherwise,
+		// if the permutation generator stopped by itself because it exhausted
+		// all the possibilities then the generate() function will return 'false'
+		// to the calling application.
 		bool generate(const std::vector<T>&);
+
+		void stop() noexcept;
 
 	private:
 		void generate_(size_t iPos);
@@ -53,17 +58,14 @@ namespace dk {
 		// this function to provide application specific treatment of the 
 		// permutations.
 		//
-		// The overriding function implemented in the derived class should
-		// return 'true' if the derived class wants the permutation engine to
-		// continue generating new permutations. Otherwise, if the derived
-		// class wants to stop generating new permutations, this function
-		// should return 'false'.
-		// Example scenarios of the derived class wanting to stop permutations
+		// If the derived class wants to stop generating permutations then
+		// the overriden process_() function should call the stop() function.
+		// Example scenarios of the derived class wanting to stop generating
 		// permutations are:
 		//  - Only need to find a permutation that satisfies a particular
 		//    condition and then stop;
 		//  - Need to generate only a small number of permutations.
-		virtual bool process_(const std::vector<T>&) = 0;
+		virtual void process_(const std::vector<T>&) = 0;
 
 		// Holds the current permutation.
 		std::vector<char> permutation_;
@@ -71,7 +73,9 @@ namespace dk {
 		// Holds the sequence of input symbols to generate permutations of.
 		std::vector<char> vocabulary_;
 
-		bool bContinue_;
+		// Normally 'false'. If the derived class calls the stop function then
+		// this member is set to 'true'.
+		bool bStop_;
 	};
 };  // namespace dk
 

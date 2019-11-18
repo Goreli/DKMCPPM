@@ -43,21 +43,23 @@ inline bool StringPermutationGenerator::checkWithRegex_(const string& strPermuta
 	else
 		return false;
 }
-bool StringPermutationGenerator::process_(const vector<char>& permutation) {
+void StringPermutationGenerator::process_(const vector<char>& permutation) {
 	iPermutationNumber_++;
 
 	// Too early to start printing?
 	if (iPermutationNumber_ < iStartNum_)
 		// Yes. Get the next permutation.
-		return true;
+		return;
 
 	// Already printed all the required permutations?
-	if (0 < iPrintCount_ && iPrintCount_ <= iPrintCounter_)
+	if (0 < iPrintCount_ && iPrintCount_ <= iPrintCounter_) {
 		// Yes. Ok to stop the permutation generator.
-		return false;
+		stop();
+		return;
+	}
 
 	// There are more permutations to print.
-	// Convert the permutation format from vector to string.
+	// Convert the permutation from the generic vector format to string.
 	std::string strPermutation(permutation.begin(), permutation.end());
 
 	bool bPrint{ true };
@@ -72,6 +74,4 @@ bool StringPermutationGenerator::process_(const vector<char>& permutation) {
 
 		iPrintCounter_++;
 	}
-
-	return true;
 }

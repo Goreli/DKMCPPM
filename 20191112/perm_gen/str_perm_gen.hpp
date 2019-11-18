@@ -40,7 +40,7 @@ private:
 	size_t iPrintCounter_;
 
 	inline bool checkWithRegex_(const std::string& strPermutation);
-	virtual bool process_(const std::vector<char>& permutation);
+	virtual void process_(const std::vector<char>& permutation);
 };
 
 #endif // str_perm_gen_hpp
