@@ -31,10 +31,10 @@ The [2d_convex_hull](https://github.com/Goreli/DKMCPPM/tree/master/20191112/2d_c
 
 The project provides build artefacts for two platforms. There is a Makefile in the [2d_convex_hull](https://github.com/Goreli/DKMCPPM/tree/master/20191112/2d_convex_hull) directory that compiles the source code on the Linux platform using the clang++ compiler. There is also a Visual Studio 2019 project file in the [vs_projects](https://github.com/Goreli/DKMCPPM/tree/master/20191112/2d_convex_hull/vs_projects) subdirectory.
 
-Navigate to the [2d_convex_hull](https://github.com/Goreli/DKMCPPM/tree/master/20191112/2d_convex_hull) directory and type "make [Enter]" to build a binary executable and create an input CSV data file on the Linux platform. By default the build process creates a CSV data file that contains 100 data points. Type "make run [Enter]" to execute the application. Here is a summary of the Linux Makefile targets:
+Navigate to the [2d_convex_hull](https://github.com/Goreli/DKMCPPM/tree/master/20191112/2d_convex_hull) directory and type "make [Enter]" to build a binary executable and create an input CSV data file on the Linux platform. By default the build process creates a CSV data file that contains 100 data points. Type "make test [Enter]" to test-run the application. Here is a summary of the Linux Makefile targets:
 
 * make all [Enter] - Same as just "make [Enter]" - builds a binary executable and creates an input CSV data file containing 100 data points;
-* make run [Enter] - Executes the application;
+* make test [Enter] - test-runs the application;
 * make clean [Enter] - Deletes the binary executable and input CSV data file;
 * make release [Enter] - builds the application and copies it to the ../../elf/release directory;
 * make data100 [Enter] -  creates an input CSV data file containing 100 data points;

@@ -1,6 +1,6 @@
 all: ch2d inp_file2d.csv
 
-run: ch2d inp_file2d.csv
+test: ch2d inp_file2d.csv
 	./ch2d inp_file2d.csv
 
 ch2d: \
