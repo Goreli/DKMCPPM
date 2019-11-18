@@ -21,12 +21,18 @@
     <ClCompile Include="..\..\str_perm_gen_cli.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\str_perm_gen_main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\perm_gen_base.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\str_perm_gen_cli.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\str_perm_gen.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

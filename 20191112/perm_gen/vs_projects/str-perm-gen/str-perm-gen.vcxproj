@@ -21,9 +21,11 @@
   <ItemGroup>
     <ClCompile Include="..\..\str_perm_gen.cpp" />
     <ClCompile Include="..\..\str_perm_gen_cli.cpp" />
+    <ClCompile Include="..\..\str_perm_gen_main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\perm_gen_base.hpp" />
+    <ClInclude Include="..\..\str_perm_gen.hpp" />
     <ClInclude Include="..\..\str_perm_gen_cli.hpp" />
   </ItemGroup>
   <ItemGroup>
