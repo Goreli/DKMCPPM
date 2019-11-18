@@ -20,7 +20,7 @@ public:
 
 	const std::string& getInputString() const noexcept;
 	size_t getStartNumber() const noexcept;
-	size_t getCount() const noexcept;
+	size_t getPrintCount() const noexcept;
 	bool printPermutationNumbers() const noexcept;
 	const std::string& getOutFilePathStr() const noexcept;
 
@@ -30,7 +30,7 @@ public:
 private:
 	std::string strInput_;
 	size_t iStartNum_;
-	size_t iCount_;
+	size_t iPrintCount_;
 	bool bPrintNumbers_;
 	std::string strOutFile_;
 

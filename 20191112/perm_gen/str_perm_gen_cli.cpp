@@ -15,7 +15,7 @@ Modification history:
 using namespace std;
 
 StrPermGenCLI::StrPermGenCLI()
-	: strInput_{ "" }, iStartNum_{ 0 }, iCount_{ 0 }, bPrintNumbers_{ false },
+	: strInput_{ "" }, iStartNum_{ 0 }, iPrintCount_{ 0 }, bPrintNumbers_{ false },
 	strOutFile_{ "" }, bExclusionRegex_{ false }, strRegex_{""}
 {
 }
@@ -47,7 +47,7 @@ bool StrPermGenCLI::parse(int argc, char* argv[]) noexcept {
 				if (!isdigit(strNum[0]))
 					return false;
 				std::istringstream iss(strNum);
-				iss >> iCount_;
+				iss >> iPrintCount_;
 				continue;
 			}
 			// Output file.
@@ -104,8 +104,8 @@ const string& StrPermGenCLI::getInputString() const noexcept {
 size_t StrPermGenCLI::getStartNumber() const noexcept {
 	return iStartNum_;
 }
-size_t StrPermGenCLI::getCount() const noexcept {
-	return iCount_;
+size_t StrPermGenCLI::getPrintCount() const noexcept {
+	return iPrintCount_;
 }
 bool StrPermGenCLI::printPermutationNumbers() const noexcept {
 	return bPrintNumbers_;

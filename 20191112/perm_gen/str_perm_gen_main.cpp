@@ -44,7 +44,7 @@ int main (int argc, char* argv[]) {
 
 	StringPermutationGenerator spg(
 		parser.getStartNumber(),
-		parser.getCount(),
+		parser.getPrintCount(),
 		parser.printPermutationNumbers(),
 		bUseOutputFile? fout : cout
 	);
