@@ -27,6 +27,9 @@ public:
 	bool isExclusionRegex() const noexcept;
 	const std::string& getRegexStr() const noexcept;
 
+	bool presort() const noexcept;
+	bool ascending() const noexcept;
+
 private:
 	std::string strInput_;
 	size_t iStartNum_;
@@ -37,6 +40,9 @@ private:
 	// Command line regex.
 	bool bExclusionRegex_;
 	std::string strRegex_;
+
+	bool bPresort_;
+	bool bAscending_;
 };	// class StrPermGenCLI
 
 #endif //	str_perm_gen_cli_hpp

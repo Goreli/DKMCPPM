@@ -16,11 +16,12 @@ using namespace std;
 
 StrPermGenCLI::StrPermGenCLI()
 	: strInput_{ "" }, iStartNum_{ 0 }, iPrintCount_{ 0 }, bPrintNumbers_{ false },
-	strOutFile_{ "" }, bExclusionRegex_{ false }, strRegex_{""}
+	strOutFile_{ "" }, bExclusionRegex_{ false }, strRegex_{ "" }, 
+	bPresort_{ false }, bAscending_{false}
 {
 }
 bool StrPermGenCLI::parse(int argc, char* argv[]) noexcept {
-	if (argc < 2 || argc > 10)
+	if (argc < 2 || argc > 12)
 		return false;
 
 	strInput_ = string(argv[1]);
@@ -82,6 +83,17 @@ bool StrPermGenCLI::parse(int argc, char* argv[]) noexcept {
 				bPrintNumbers_ = true;
 				continue;
 			}
+			// Presort the input string.
+			if (strOption[1] == 'p') {
+				if (++inx == argc)
+					return false;
+				if(argv[inx][0] != 'a' && argv[inx][0] != 'd')
+					return false;
+				bPresort_ = true;
+				bAscending_ = (argv[inx][0] == 'a') ? true : false;
+				continue;
+			}
+
 			return false;
 		}
 		return false;
@@ -95,7 +107,8 @@ void StrPermGenCLI::printUsage() const noexcept {
 	cout << "  -e regex  - exclusion regex (-e and -i don\'t go together);" << '\n';
 	cout << "  -i regex  - inclusion regex (-i and -e don\'t go together);" << '\n';
 	cout << "  -n        - print permutation numbers;" << '\n';
-	cout << "  -o path   - output file path." << '\n';
+	cout << "  -o path   - output file path;" << '\n';
+	cout << "  -p order  - pre-sort the input string in ascending (a) or descending (d) order." << '\n';
 }
 
 const string& StrPermGenCLI::getInputString() const noexcept {
@@ -119,3 +132,10 @@ bool StrPermGenCLI::isExclusionRegex() const noexcept {
 const string& StrPermGenCLI::getRegexStr() const noexcept {
 	return strRegex_;
 }
+bool StrPermGenCLI::presort() const noexcept {
+	return bPresort_;
+}
+bool StrPermGenCLI::ascending() const noexcept {
+	return bAscending_;
+}
+

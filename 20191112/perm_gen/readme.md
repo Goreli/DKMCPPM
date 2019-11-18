@@ -61,7 +61,7 @@ The input_string parameter specifies the string to print permutations of. The fo
  * **-e regex**  - excluding regex. Don't print permutations that match the regular expression;
  * **-i regex**  - including regex. Only print permutations that match the regular expression;
  * **-n** - print permutation numbers (1 based numbers, not 0 based indices);
- * **-o path** - output file path.
+ * **-p order** - pre-sort the input string in ascending (**a**) or descending (**d**) order. The 'order' parameter can be any word as long as the first letter is either an **a** for ascending or a **d** for descending. These are valid examples: **-p a**, **-p asc**, **-p ascend**, **-p ascending**, **-p d**, **-p desc**.
 
 The **-e** and **-i** options are mutually exclusive. They provide light-weight support for regular expression based filtering and are expected to comply with the ECMAScript standard. The specification of the ECMAScript standard can be found here: http://www.cplusplus.com/reference/regex/ECMAScript/.
 

@@ -30,6 +30,12 @@ int main (int argc, char* argv[]) {
 
 	const string& inputString = parser.getInputString();
 	std::vector<char> vocabulary(inputString.begin(), inputString.end());
+	if (parser.presort()) {
+		if (parser.ascending())
+			sort(vocabulary.begin(), vocabulary.end());
+		else
+			sort(vocabulary.rbegin(), vocabulary.rend());
+	}
 
 	ofstream fout;
 	bool bUseOutputFile = parser.getOutFilePathStr().size() ? true : false;
