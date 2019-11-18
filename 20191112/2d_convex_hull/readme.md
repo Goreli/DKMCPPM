@@ -44,7 +44,11 @@ Navigate to the [2d_convex_hull](https://github.com/Goreli/DKMCPPM/tree/master/2
 * make data1M [Enter] -   ... 1,000,000 data points;
 * make data10M [Enter] -  ... 10,000,000 data points.
 
-To build a Windows executable open the dkmccpm.sln solution file located in the root directory of the repository and navigate to this project in the Solution Explorer panel. The actual binaries are created in ../../x64. Here is the project configuration log:
+To build Windows executables open the dkmccpm.sln solution file located in the root directory of the original repository and navigate to this project in the VS 2019 Solution Explorer panel. The actual binaries are created in ../../x64.
+
+Alternatively, add the project file(s) located in the [vs_projects](https://github.com/Goreli/DKMCPPM/tree/master/20191112/2d_convex_hull/vs_projects) subdirectory to your existing VS 2019 solution.
+
+Here is the Visual Studio project configuration log:
 1. Set the language standard to c++17;
 2. Let the c++ compiler know the locations of include areas: ../..
 3. Switch precompiled headers off.
