@@ -61,12 +61,12 @@ int main (int argc, char* argv[]) {
 
 	try {
 		if (parser.lexicographic())
-			spg.generate_l(vocabulary, parser.forward());
+			spg.generate_l(vocabulary, parser.ascending());
 		else {
 			if(parser.random())
 				spg.generate_r(vocabulary, parser.random());
 			else
-				spg.generate(vocabulary, parser.duplicatesAllowed());
+				spg.generate(vocabulary, parser.allowDups());
 		}
 	}
 	catch (const PermutationGeneratorStopSignal&) {

@@ -31,9 +31,8 @@ public:
 	bool ascending() const noexcept;
 
 	bool lexicographic() const noexcept;
-	bool forward() const noexcept;
 
-	bool duplicatesAllowed() const noexcept;
+	bool allowDups() const noexcept;
 
 	unsigned random() const noexcept;
 
@@ -52,9 +51,8 @@ private:
 	bool bAscending_;
 
 	bool bLexicographicOrder_;
-	bool bForward_;
 
-	bool bDuplicatesAllowed_;
+	bool bAllowDups_;
 
 	unsigned iRandom_;
 };	// class StrPermGenCLI

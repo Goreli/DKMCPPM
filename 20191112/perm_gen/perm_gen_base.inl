@@ -127,10 +127,10 @@ namespace dk {
 		}
 	}
 	template <class T>
-	void PermutationGeneratorBase<T>::generate_l(const std::vector<T>& vocabulary, bool bForward) {
+	void PermutationGeneratorBase<T>::generate_l(const std::vector<T>& vocabulary, bool bAscending) {
 		permutation_ = vocabulary;
 
-		if (bForward)
+		if (bAscending)
 			do process_(permutation_);
 			while (std::next_permutation(permutation_.begin(), permutation_.end()));
 		else

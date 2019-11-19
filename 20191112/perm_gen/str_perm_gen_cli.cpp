@@ -18,7 +18,7 @@ StrPermGenCLI::StrPermGenCLI()
 	: strInput_{ "" }, iStartNum_{ 0 }, iPrintCount_{ 0 }, bPrintNumbers_{ false },
 	strOutFile_{ "" }, bExclusionRegex_{ false }, strRegex_{ "" }, 
 	bPresort_{ false }, bAscending_{ false }, bLexicographicOrder_{ false },
-	bForward_{ true }, bDuplicatesAllowed_{ false }, iRandom_ { 0 }
+	bAllowDups_{ false }, iRandom_ { 0 }
 {
 }
 bool StrPermGenCLI::parse(int argc, char* argv[]) noexcept {
@@ -96,8 +96,8 @@ bool StrPermGenCLI::parse(int argc, char* argv[]) noexcept {
 				continue;
 			}
 			// Duplicates are allowed.
-			if (strOption[1] == 'd') {
-				bDuplicatesAllowed_ = true;
+			if (strOption[1] == 'a') {
+				bAllowDups_ = true;
 				continue;
 			}
 			// Presort the input string.
@@ -114,10 +114,10 @@ bool StrPermGenCLI::parse(int argc, char* argv[]) noexcept {
 			if (strOption[1] == 'l') {
 				if (++inx == argc)
 					return false;
-				if (argv[inx][0] != 'f' && argv[inx][0] != 'b')
+				if (argv[inx][0] != 'a' && argv[inx][0] != 'd')
 					return false;
 				bLexicographicOrder_ = true;
-				bForward_ = (argv[inx][0] == 'f') ? true : false;
+				bAscending_ = (argv[inx][0] == 'a') ? true : false;
 				continue;
 			}
 
@@ -130,15 +130,15 @@ bool StrPermGenCLI::parse(int argc, char* argv[]) noexcept {
 void StrPermGenCLI::printUsage() const noexcept {
 	cout << "Usage: "<< "str-perm-gen [input_string] [options]" << '\n';
 	cout << "  +number   - start printing at the specified permutation number (1-based);" << '\n';
+	cout << "  -a        - allow duplicates (-a and -l don\'t go together);" << '\n';
 	cout << "  -c count  - the count of permutations to print;" << '\n';
-	cout << "  -d        - duplicates are allowed (-d and -l don\'t go together);" << '\n';
 	cout << "  -e regex  - exclusion regex (-e and -i don\'t go together);" << '\n';
 	cout << "  -i regex  - inclusion regex (-i and -e don\'t go together);" << '\n';
-	cout << "  -l dir    - lexicographic sequence. Forward (f) or backward (b) direction;" << '\n';
+	cout << "  -l order  - (a)scending or (d)escending lexicographic order;" << '\n';
 	cout << "  -n        - print permutation numbers;" << '\n';
 	cout << "  -o path   - output file path;" << '\n';
 	cout << "  -p order  - pre-sort the input string in (a)scending or (d)escending order;" << '\n';
-	cout << "  -r gsize  - randomly pick one per consecutive group (invalidates -d, -l, -p)." << '\n';
+	cout << "  -r gsize  - randomly pick one per consecutive group (invalidates -a, -l, -p)." << '\n';
 }
 
 const string& StrPermGenCLI::getInputString() const noexcept {
@@ -171,11 +171,8 @@ bool StrPermGenCLI::ascending() const noexcept {
 bool StrPermGenCLI::lexicographic() const noexcept {
 	return bLexicographicOrder_;
 }
-bool StrPermGenCLI::forward() const noexcept {
-	return bForward_;
-}
-bool StrPermGenCLI::duplicatesAllowed() const noexcept {
-	return bDuplicatesAllowed_;
+bool StrPermGenCLI::allowDups() const noexcept {
+	return bAllowDups_;
 }
 unsigned StrPermGenCLI::random() const noexcept {
 	return iRandom_;
