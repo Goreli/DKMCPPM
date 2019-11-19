@@ -7,6 +7,7 @@ Modification history:
     14/Nov/2019 - David Krikheli created the module.
 */
 
+#include <algorithm>
 #include <exception>
 
 namespace dk {
@@ -34,10 +35,6 @@ namespace dk {
 		return bStop_;
 	}
 	template <class T>
-	void PermutationGeneratorBase<T>::stop() noexcept {
-		bStop_ = true;
-	}
-	template <class T>
 	void PermutationGeneratorBase<T>::generate_(size_t iPos) {
 		size_t vocSize = vocabulary_.size();
 
@@ -62,5 +59,35 @@ namespace dk {
 				it = vocabulary_.insert(it, permutation_[iPos]);
 			}
 		}
+	}
+	template <class T>
+	bool PermutationGeneratorBase<T>::generate_l(const std::vector<T>& vocabulary, bool bForward) {
+		permutation_ = vocabulary;
+		bStop_ = false;
+		try {
+			if (bForward)
+				do {
+					process_(permutation_);
+					if (bStop_)
+						// The derived class has called the stop() function. Stop.
+						throw PermutationGeneratorStopSignal();
+				} while (std::next_permutation(permutation_.begin(), permutation_.end()));
+			else
+				do {
+					process_(permutation_);
+					if (bStop_)
+						// The derived class has called the stop() function. Stop.
+						throw PermutationGeneratorStopSignal();
+				} while (std::prev_permutation(permutation_.begin(), permutation_.end()));
+		}
+		catch (const PermutationGeneratorStopSignal&) {
+			// Derived class requested to stop and made generate_() throw
+			// an exception.
+		}
+		return bStop_;
+	}
+	template <class T>
+	void PermutationGeneratorBase<T>::stop() noexcept {
+		bStop_ = true;
 	}
 };  // namespace dk

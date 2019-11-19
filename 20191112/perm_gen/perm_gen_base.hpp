@@ -28,6 +28,7 @@ namespace dk {
 		PermutationGeneratorBase();
 		virtual ~PermutationGeneratorBase();
 
+		// Executes the default permutation engine.
 		// Populate std::vector<T> with the input sequence and pass it into
 		// the generate() function to start generating permutations of the
 		// sequence. This will result in the process_() function triggering
@@ -47,10 +48,25 @@ namespace dk {
 		// to the calling application.
 		bool generate(const std::vector<T>&);
 
+		// Executes the lexicographic permutation engine.
+		// This function is similar to generate(....). The difference is it
+		// picks each subsequent permutation (or previous permutation depending
+		// on the second parameter) arranged in a strictly lexicographic order.
+		// Therefore, if the elements of the input vector are not sorted the function
+		// will not print all the possible permutations. It will only print
+		// permutations remaining before the end of the lexicographic sequence of
+		// permutations.
+		// The function drops duplicate permutations.
+		// 
+		// Set the bForward parameter to 'true' to move towards the end of
+		// the lexicographic sequence. 
+		// Set the bForward parameter to 'false' to move towards the start. 
+		bool generate_l(const std::vector<T>&, bool bForward);
+
 		void stop() noexcept;
 
 	private:
-		void generate_(size_t iPos);
+		void generate_(size_t);
 
 		// The permutation engine delivers permutations through this function.
 		// Every time a new permutation is generated it is passed into this

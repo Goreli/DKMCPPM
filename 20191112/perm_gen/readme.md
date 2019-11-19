@@ -56,16 +56,17 @@ In this example the application executes 10 cycles each generating 39,916,800 pe
 str-perm-gen [input_string] [options]
 
 The input_string parameter specifies the string to print permutations of. The following options are supported:
- * **+number** - start printing at the specified permutation number. The permutation number is a 1 based number, not a 0 based index. If this parameter is not specified then the application generates and prints all possible permutations;
+ * **+number** - start printing at the specified permutation number. The permutation number is a 1 based number, not a 0 based index;
  * **-c count**  - the count of permutations to print;
  * **-e regex**  - excluding regex. Don't print permutations that match the regular expression;
  * **-i regex**  - including regex. Only print permutations that match the regular expression;
- * **-n** - print permutation numbers (1 based numbers, not 0 based indices);
- * **-p order** - pre-sort the input string in ascending (**a**) or descending (**d**) order. The 'order' parameter can be any word as long as the first letter is either an **a** for ascending or a **d** for descending. These are valid examples: **-p a**, **-p asc**, **-p ascend**, **-p ascending**, **-p d**, **-p desc**.
+ * **-l dir**    - generate permutations arranged into a forward moving (f) or backward moving (b) lexicographic sequence. The 'dir' parameter can be any word as long as the first letter is either an **f** for forward or a **b** for backward. This option automatically eliminates duplicate permutations;
+ * **-n** - print permutation numbers (1 based numbers, not 0 based indices). By default no permutation numbers are printed;
+ * **-p order** - pre-sort the input string in ascending (**a**) or descending (**d**) order. The 'order' parameter can be any word as long as the first letter is either an **a** for ascending or a **d** for descending. These are valid examples: **-p a**, **-p asc**, **-p ascend**, **-p ascending**, **-p d**, **-p desc**. By default the input string is not pre-sorted.
 
 The **-e** and **-i** options are mutually exclusive. They provide light-weight support for regular expression based filtering and are expected to comply with the ECMAScript standard. The specification of the ECMAScript standard can be found here: http://www.cplusplus.com/reference/regex/ECMAScript/.
 
-Note that not all regular expressions can be used interchangeably on Windows and Linux command lines. This is because the different platforms use different escape characters and, in general, different command line syntax rules. This may cause unexpected behaviour of regular expressions when migrating them between the platforms. Part of the roadmap for this application is to develop a text file based regex filter in order to offer platform independent interpretation of regex expressions as well as an advanced filtering facility.
+Note that not all regular expressions can be used interchangeably on Windows and Linux command lines. This is because the different platforms use different escape characters and, in general, different command line syntax rules. This may cause unexpected behaviour of regular expressions when migrating them between the platforms. Part of the roadmap for this application is to develop a text file based regex filter in order to offer platform independent interpretation of regex expressions as well as an advanced filtering facility. Meanwhile the full power of regex expressions can be applied via the -i and -e options that may or may not be portable when migrated from one platform to another.
 
 If there are no command line arguments specified then the application prints its usage instructions.
 

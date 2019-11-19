@@ -30,6 +30,9 @@ public:
 	bool presort() const noexcept;
 	bool ascending() const noexcept;
 
+	bool lexicographic() const noexcept;
+	bool forward() const noexcept;
+
 private:
 	std::string strInput_;
 	size_t iStartNum_;
@@ -43,6 +46,9 @@ private:
 
 	bool bPresort_;
 	bool bAscending_;
+
+	bool bLexicographicOrder_;
+	bool bForward_;
 };	// class StrPermGenCLI
 
 #endif //	str_perm_gen_cli_hpp

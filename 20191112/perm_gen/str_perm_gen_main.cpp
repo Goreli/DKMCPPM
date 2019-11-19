@@ -22,8 +22,9 @@ int main (int argc, char* argv[]) {
 	StrPermGenCLI parser;
 	if(!parser.parse(argc, argv)) {
 		cout << "String Permutation Generator v1.0" << '\n';
-		cout << "Prints permutations of a specified string. Optionally limits the size of the printed output." << '\n';
 		cout << "Copyright (c) 2019 David Krikheli" << '\n';
+		cout << "Refer the following link for comprehensive help information:" << '\n';
+		cout << "  " << "https://github.com/Goreli/DKMCPPM/blob/master/20191112/perm_gen/readme.md" << '\n';
 		parser.printUsage();
         return 0;
     }
@@ -58,7 +59,10 @@ int main (int argc, char* argv[]) {
 	if (parser.getRegexStr().size())
 		spg.assignRegex(parser.getRegexStr(), parser.isExclusionRegex());
 
-	spg.generate(vocabulary);
+	if (parser.lexicographic())
+		spg.generate_l(vocabulary, parser.forward());
+	else
+		spg.generate(vocabulary);
 
 	if(bUseOutputFile)
 		fout.close();
