@@ -62,8 +62,12 @@ int main (int argc, char* argv[]) {
 	try {
 		if (parser.lexicographic())
 			spg.generate_l(vocabulary, parser.forward());
-		else
-			spg.generate(vocabulary, parser.duplicatesAllowed());
+		else {
+			if(parser.random())
+				spg.generate_r(vocabulary, parser.random());
+			else
+				spg.generate(vocabulary, parser.duplicatesAllowed());
+		}
 	}
 	catch (const PermutationGeneratorStopSignal&) {
 		// The user defined override of process_(....) must have requested

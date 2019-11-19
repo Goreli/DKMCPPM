@@ -35,6 +35,8 @@ public:
 
 	bool duplicatesAllowed() const noexcept;
 
+	unsigned random() const noexcept;
+
 private:
 	std::string strInput_;
 	size_t iStartNum_;
@@ -53,6 +55,8 @@ private:
 	bool bForward_;
 
 	bool bDuplicatesAllowed_;
+
+	unsigned iRandom_;
 };	// class StrPermGenCLI
 
 #endif //	str_perm_gen_cli_hpp
