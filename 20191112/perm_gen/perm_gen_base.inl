@@ -8,31 +8,20 @@ Modification history:
 */
 
 #include <algorithm>
-#include <exception>
 
 namespace dk {
 
-	class PermutationGeneratorStopSignal : public std::exception {};
-
 	template <class T>
-	PermutationGeneratorBase<T>::PermutationGeneratorBase() : bStop_{ false } {
+	PermutationGeneratorBase<T>::PermutationGeneratorBase() {
 	}
 	template <class T>
 	PermutationGeneratorBase<T>::~PermutationGeneratorBase() {
 	}
 	template <class T>
-	bool PermutationGeneratorBase<T>::generate(const std::vector<T>& vocabulary) {
+	void PermutationGeneratorBase<T>::generate(const std::vector<T>& vocabulary) {
 		permutation_.resize(vocabulary.size());
-		bStop_ = false;
 		vocabulary_ = vocabulary;
-		try {
-			generate_(0);
-		}
-		catch (const PermutationGeneratorStopSignal&) {
-			// Derived class requested to stop and made generate_() throw
-			// an exception.
-		}
-		return bStop_;
+		generate_(0);
 	}
 	template <class T>
 	void PermutationGeneratorBase<T>::generate_(size_t iPos) {
@@ -46,12 +35,7 @@ namespace dk {
 			// process the permutation and move on to the next recursion cycle.
 			// Otherwise just keep drilling down.
 			if (vocSize == 1)
-			{
 				process_(permutation_);
-				if (bStop_)
-					// The derived class has called the stop() function. Stop.
-					throw PermutationGeneratorStopSignal();
-			}
 			else
 			{
 				it = vocabulary_.erase(it);
@@ -61,33 +45,14 @@ namespace dk {
 		}
 	}
 	template <class T>
-	bool PermutationGeneratorBase<T>::generate_l(const std::vector<T>& vocabulary, bool bForward) {
+	void PermutationGeneratorBase<T>::generate_l(const std::vector<T>& vocabulary, bool bForward) {
 		permutation_ = vocabulary;
-		bStop_ = false;
-		try {
-			if (bForward)
-				do {
-					process_(permutation_);
-					if (bStop_)
-						// The derived class has called the stop() function. Stop.
-						throw PermutationGeneratorStopSignal();
-				} while (std::next_permutation(permutation_.begin(), permutation_.end()));
-			else
-				do {
-					process_(permutation_);
-					if (bStop_)
-						// The derived class has called the stop() function. Stop.
-						throw PermutationGeneratorStopSignal();
-				} while (std::prev_permutation(permutation_.begin(), permutation_.end()));
-		}
-		catch (const PermutationGeneratorStopSignal&) {
-			// Derived class requested to stop and made generate_() throw
-			// an exception.
-		}
-		return bStop_;
-	}
-	template <class T>
-	void PermutationGeneratorBase<T>::stop() noexcept {
-		bStop_ = true;
+
+		if (bForward)
+			do process_(permutation_);
+			while (std::next_permutation(permutation_.begin(), permutation_.end()));
+		else
+			do process_(permutation_);
+			while (std::prev_permutation(permutation_.begin(), permutation_.end()));
 	}
 };  // namespace dk

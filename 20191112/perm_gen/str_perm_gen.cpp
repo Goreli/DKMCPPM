@@ -17,6 +17,9 @@ Modification history:
 using namespace std;
 using namespace dk;
 
+PermutationGeneratorStopSignal::PermutationGeneratorStopSignal()
+	: exception() {}
+
 StringPermutationGenerator::StringPermutationGenerator(size_t iStartNum, 
 	size_t iPrintCount, bool bPrintNumbers, ostream& outStream)
 : iStartNum_(iStartNum), iPrintCount_{ iPrintCount }, bPrintNumbers_{ bPrintNumbers },
@@ -52,11 +55,12 @@ void StringPermutationGenerator::process_(const vector<char>& permutation) {
 		return;
 
 	// Already printed all the required permutations?
-	if (0 < iPrintCount_ && iPrintCount_ <= iPrintCounter_) {
+	if (0 < iPrintCount_ && iPrintCount_ <= iPrintCounter_)
 		// Yes. Ok to stop the permutation generator.
-		stop();
-		return;
-	}
+		// Make sure to catch this exception in the piece of
+		// code that started the permutation generator using
+		// either generate(....) or generate_l(....).
+		throw PermutationGeneratorStopSignal();
 
 	// There are more permutations to print.
 	// Convert the permutation from the generic vector format to string.

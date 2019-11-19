@@ -59,10 +59,16 @@ int main (int argc, char* argv[]) {
 	if (parser.getRegexStr().size())
 		spg.assignRegex(parser.getRegexStr(), parser.isExclusionRegex());
 
-	if (parser.lexicographic())
-		spg.generate_l(vocabulary, parser.forward());
-	else
-		spg.generate(vocabulary);
+	try {
+		if (parser.lexicographic())
+			spg.generate_l(vocabulary, parser.forward());
+		else
+			spg.generate(vocabulary);
+	}
+	catch (const PermutationGeneratorStopSignal&) {
+		// The user defined override of process_(....) must have requested
+		// to stop the permutation generator. All good. Do nothing.
+	}
 
 	if(bUseOutputFile)
 		fout.close();

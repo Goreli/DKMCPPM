@@ -14,7 +14,13 @@ Modification history:
 #include <string>
 #include <vector>
 #include <regex>
+#include <exception>
 #include "perm_gen_base.hpp"
+
+class PermutationGeneratorStopSignal : public std::exception {
+public:
+	PermutationGeneratorStopSignal();
+};
 
 class StringPermutationGenerator : public dk::PermutationGeneratorBase<char> {
 public:
