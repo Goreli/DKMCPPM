@@ -42,7 +42,11 @@ namespace dk {
 		// completion of the process. Call the generate(....) function from within
 		// a try block of the exception handling code to preclude propagation of the
 		// exception back into the user space.
-		void generate(const std::vector<T>&);
+		// 
+		// The second parameter, if 'true', allows to generate duplicate permutations.
+		// With the second parameter set to 'false' the permutation generator does not
+		// generate duplicate permutations.
+		void generate(const std::vector<T>&, bool);
 
 		// Executes the lexicographic permutation engine.
 		// This function is similar to generate(....). The difference is it
@@ -61,6 +65,7 @@ namespace dk {
 
 	private:
 		void generate_(size_t);
+		void generate_nodups_(size_t);
 
 		// The permutation engine delivers permutations through this function.
 		// Every time a new permutation is generated it is passed into this

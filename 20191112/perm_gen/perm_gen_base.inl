@@ -18,10 +18,13 @@ namespace dk {
 	PermutationGeneratorBase<T>::~PermutationGeneratorBase() {
 	}
 	template <class T>
-	void PermutationGeneratorBase<T>::generate(const std::vector<T>& vocabulary) {
+	void PermutationGeneratorBase<T>::generate(const std::vector<T>& vocabulary, bool bDuplicatesAllowed) {
 		permutation_.resize(vocabulary.size());
 		vocabulary_ = vocabulary;
-		generate_(0);
+		if(bDuplicatesAllowed)
+			generate_(0);
+		else
+			generate_nodups_(0);
 	}
 	template <class T>
 	void PermutationGeneratorBase<T>::generate_(size_t iPos) {
@@ -40,6 +43,32 @@ namespace dk {
 			{
 				it = vocabulary_.erase(it);
 				generate_(iPos + 1);
+				it = vocabulary_.insert(it, permutation_[iPos]);
+			}
+		}
+	}
+	template <class T>
+	void PermutationGeneratorBase<T>::generate_nodups_(size_t iPos) {
+		size_t vocSize = vocabulary_.size();
+
+		for (auto it = vocabulary_.begin(); it < vocabulary_.end(); it++)
+		{
+			// Ignore this symbol if it's already in the permutation.
+			auto findIt = find(vocabulary_.begin(), it, *it);
+			if (findIt != it)
+				continue;
+
+			permutation_[iPos] = *it;
+
+			// If the call stack has hit the bottom of the recursion tree then
+			// process the permutation and move on to the next recursion cycle.
+			// Otherwise just keep drilling down.
+			if (vocSize == 1)
+				process_(permutation_);
+			else
+			{
+				it = vocabulary_.erase(it);
+				generate_nodups_(iPos + 1);
 				it = vocabulary_.insert(it, permutation_[iPos]);
 			}
 		}

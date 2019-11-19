@@ -33,6 +33,8 @@ public:
 	bool lexicographic() const noexcept;
 	bool forward() const noexcept;
 
+	bool duplicatesAllowed() const noexcept;
+
 private:
 	std::string strInput_;
 	size_t iStartNum_;
@@ -49,6 +51,8 @@ private:
 
 	bool bLexicographicOrder_;
 	bool bForward_;
+
+	bool bDuplicatesAllowed_;
 };	// class StrPermGenCLI
 
 #endif //	str_perm_gen_cli_hpp
