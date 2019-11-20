@@ -8,16 +8,12 @@ Modification history:
 */
 
 #include <algorithm>
-#include <chrono>
 
 namespace dk {
 
 	template <class T>
-	PermutationGeneratorBase<T>::PermutationGeneratorBase()
-		: iCounter_{ 0 }, iNextInGroup_{ 0 }, randGen_(), dist_()
-	{
+	PermutationGeneratorBase<T>::PermutationGeneratorBase() {
 	}
-
 	template <class T>
 	PermutationGeneratorBase<T>::~PermutationGeneratorBase() {
 	}
@@ -47,55 +43,6 @@ namespace dk {
 			{
 				it = vocabulary_.erase(it);
 				generate_(iPos + 1);
-				it = vocabulary_.insert(it, permutation_[iPos]);
-			}
-		}
-	}
-	template <class T>
-	void PermutationGeneratorBase<T>::generate_r(const std::vector<T>& vocabulary, unsigned iGroupSize) {
-		permutation_.resize(vocabulary.size());
-		vocabulary_ = vocabulary;
-
-		// iCounter_{ 0 }, iNextInGroup_{ 0 }, std::mt19937 randGen_, std::uniform_int_distribution<unsigned> dist_
-		
-		try {
-			auto iSeed = std::random_device{}();
-			randGen_.seed(iSeed);
-		}
-		catch (...) {
-			auto iSeed = std::chrono::system_clock::now().time_since_epoch().count();
-			randGen_.seed(iSeed);
-		}
-		dist_.param(std::uniform_int_distribution<unsigned>::param_type(1, iGroupSize));
-		iNextInGroup_ = dist_(randGen_);
-		iCounter_ = 0;
-
-		generate_r_(0);
-	}
-	template <class T>
-	void PermutationGeneratorBase<T>::generate_r_(size_t iPos) {
-		size_t vocSize = vocabulary_.size();
-
-		for (auto it = vocabulary_.begin(); it < vocabulary_.end(); it++)
-		{
-			permutation_[iPos] = *it;
-
-			// If the call stack has hit the bottom of recursion tree and
-			// the random index is right then process the permutation and move
-			// on to the next recursion cycle. Otherwise just keep drilling down.
-			if (vocSize == 1) {
-				iCounter_++;
-				if(iCounter_ == iNextInGroup_)
-					process_(permutation_);
-				if (iCounter_ == dist_.b()) {
-					iCounter_ = 0;
-					iNextInGroup_ = dist_(randGen_);
-				}
-			}
-			else
-			{
-				it = vocabulary_.erase(it);
-				generate_r_(iPos + 1);
 				it = vocabulary_.insert(it, permutation_[iPos]);
 			}
 		}

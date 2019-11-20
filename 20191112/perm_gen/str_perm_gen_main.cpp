@@ -59,15 +59,13 @@ int main (int argc, char* argv[]) {
 	if (parser.getRegexStr().size())
 		spg.assignRegex(parser.getRegexStr(), parser.isExclusionRegex());
 
+	spg.setGroupSize(parser.getGroupSize());
+
 	try {
 		if (parser.lexicographic())
 			spg.generate_l(vocabulary, parser.ascending());
-		else {
-			if(parser.random())
-				spg.generate_r(vocabulary, parser.random());
-			else
-				spg.generate(vocabulary, parser.allowDups());
-		}
+		else
+			spg.generate(vocabulary, parser.allowDups());
 	}
 	catch (const PermutationGeneratorStopSignal&) {
 		// The user defined override of process_(....) must have requested

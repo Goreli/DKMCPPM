@@ -18,7 +18,7 @@ StrPermGenCLI::StrPermGenCLI()
 	: strInput_{ "" }, iStartNum_{ 0 }, iPrintCount_{ 0 }, bPrintNumbers_{ false },
 	strOutFile_{ "" }, bExclusionRegex_{ false }, strRegex_{ "" }, 
 	bPresort_{ false }, bAscending_{ false }, bLexicographicOrder_{ false },
-	bAllowDups_{ false }, iRandom_ { 0 }
+	bAllowDups_{ false }, iGroupSize_ { 0 }
 {
 }
 bool StrPermGenCLI::parse(int argc, char* argv[]) noexcept {
@@ -52,15 +52,15 @@ bool StrPermGenCLI::parse(int argc, char* argv[]) noexcept {
 				iss >> iPrintCount_;
 				continue;
 			}
-			// The size of the groups to randomly pick permutations from.
-			if (strOption[1] == 'r') {
+			// The size of consecutive groups to randomly pick permutations from.
+			if (strOption[1] == 'g') {
 				if (++inx == argc)
 					return false;
 				string strNum(argv[inx]);
 				if (!isdigit(strNum[0]))
 					return false;
 				std::istringstream iss(strNum);
-				iss >> iRandom_;
+				iss >> iGroupSize_;
 				continue;
 			}
 			// Output file.
@@ -133,12 +133,12 @@ void StrPermGenCLI::printUsage() const noexcept {
 	cout << "  -a        - allow duplicates (-a and -l don\'t go together);" << '\n';
 	cout << "  -c count  - the count of permutations to print;" << '\n';
 	cout << "  -e regex  - exclusion regex (-e and -i don\'t go together);" << '\n';
+	cout << "  -g size   - randomly pick one permutation per consecutive group;" << '\n';
 	cout << "  -i regex  - inclusion regex (-i and -e don\'t go together);" << '\n';
 	cout << "  -l order  - (a)scending or (d)escending lexicographic order;" << '\n';
 	cout << "  -n        - print permutation numbers;" << '\n';
 	cout << "  -o path   - output file path;" << '\n';
-	cout << "  -p order  - pre-sort the input string in (a)scending or (d)escending order;" << '\n';
-	cout << "  -r gsize  - randomly pick one per consecutive group (invalidates -a, -l, -p)." << '\n';
+	cout << "  -p order  - pre-sort the input string in (a)scending or (d)escending order." << '\n';
 }
 
 const string& StrPermGenCLI::getInputString() const noexcept {
@@ -174,6 +174,6 @@ bool StrPermGenCLI::lexicographic() const noexcept {
 bool StrPermGenCLI::allowDups() const noexcept {
 	return bAllowDups_;
 }
-unsigned StrPermGenCLI::random() const noexcept {
-	return iRandom_;
+size_t StrPermGenCLI::getGroupSize() const noexcept {
+	return iGroupSize_;
 }

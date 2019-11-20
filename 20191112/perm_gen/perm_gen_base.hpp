@@ -11,7 +11,7 @@ Modification history:
 #define perm_gen_base_hpp
 
 #include <vector>
-#include <random>
+//#include <random>
 
 namespace dk {
 
@@ -64,16 +64,6 @@ namespace dk {
 		// Set the bForward parameter to 'false' to move backward towards the start.
 		void generate_l(const std::vector<T>&, bool bForward);
 
-		// Executes the default permutation generator.
-		// This function is similar to generate(....). The difference is it
-		// generates consecutive groups of permutations and randomly picks one
-		// from each group. It doesn't remove duplicate permutations, so it's
-		// the user's responsibility to specify a proper input string that
-		// doesn't result in duplicate permutations (if that's the requirement).
-		// 
-		// The second parameter specifies the size of the groups.
-		void generate_r(const std::vector<T>&, unsigned);
-
 	private:
 		void generate_(size_t);
 		void generate_nodups_(size_t);
@@ -101,13 +91,6 @@ namespace dk {
 
 		// Holds the sequence of input symbols to generate permutations of.
 		std::vector<char> vocabulary_;
-
-
-		void generate_r_(size_t);
-		unsigned iCounter_;
-		unsigned iNextInGroup_ = 0;
-		std::mt19937_64 randGen_;
-		std::uniform_int_distribution<unsigned> dist_;
 	};
 };  // namespace dk
 

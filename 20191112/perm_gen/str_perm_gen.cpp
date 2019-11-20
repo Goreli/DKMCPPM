@@ -11,6 +11,7 @@ Modification history:
 #include <iostream>
 #include <string>
 #include <regex>
+#include <chrono>
 #include "str_perm_gen.hpp"
 #include "str_perm_gen_cli.hpp"
 
@@ -24,7 +25,8 @@ StringPermutationGenerator::StringPermutationGenerator(size_t iStartNum,
 	size_t iPrintCount, bool bPrintNumbers, ostream& outStream)
 : iStartNum_(iStartNum), iPrintCount_{ iPrintCount }, bPrintNumbers_{ bPrintNumbers },
 outStream_{ outStream }, bUseCLIRegex_{ false }, bExclusionRegex_{ false },
-objRegex_(), iPermutationNumber_{ 0 }, iPrintCounter_{ 0 }
+objRegex_(), iPermutationNumber_{ 0 }, iPrintCounter_{ 0 },
+iGroupSize_{ 0 }, iNextInGroup_{ 0 }, randGen_(), dist_()
 {
 }
 void StringPermutationGenerator::assignRegex(const string& strRegex, bool bExclusionRegex) {
@@ -32,7 +34,24 @@ void StringPermutationGenerator::assignRegex(const string& strRegex, bool bExclu
 	objRegex_.assign(strRegex);
 	bExclusionRegex_ = bExclusionRegex;
 }
+void StringPermutationGenerator::setGroupSize(size_t iGroupSize) {
+	if (iGroupSize < 2) {
+		iGroupSize_ = 0;
+		return;
+	}
 
+	iGroupSize_ = iGroupSize;
+	try {
+		auto iSeed = std::random_device{}();
+		randGen_.seed(iSeed);
+	}
+	catch (...) {
+		auto iSeed = std::chrono::system_clock::now().time_since_epoch().count();
+		randGen_.seed(iSeed);
+	}
+	dist_.param(std::uniform_int_distribution<size_t>::param_type(0, iGroupSize-1));
+	iNextInGroup_ = dist_(randGen_);
+}
 inline bool StringPermutationGenerator::checkWithRegex_(const string& strPermutation) {
 	bool bMatched = regex_search(strPermutation, objRegex_, regex_constants::match_any);
 	if (
@@ -57,25 +76,38 @@ void StringPermutationGenerator::process_(const vector<char>& permutation) {
 	// Already printed all the required permutations?
 	if (0 < iPrintCount_ && iPrintCount_ <= iPrintCounter_)
 		// Yes. Ok to stop the permutation generator.
-		// Make sure to catch this exception in the piece of
-		// code that started the permutation generator using
-		// either generate(....) or generate_l(....).
+		// Make sure to catch this exception in the piece of code that started the
+		// permutation generator using either generate(....) or generate_l(....).
 		throw PermutationGeneratorStopSignal();
 
 	// There are more permutations to print.
 	// Convert the permutation from the generic vector format to string.
 	std::string strPermutation(permutation.begin(), permutation.end());
 
-	bool bPrint{ true };
-	if (bUseCLIRegex_)
-		bPrint = checkWithRegex_(strPermutation);
+	// Apply the regex filter if so requested by the user.
+	if (bUseCLIRegex_ && !checkWithRegex_(strPermutation))
+		return;
 
-	if (bPrint) {
-		if (bPrintNumbers_)
-			outStream_ << iPermutationNumber_ << " " << strPermutation << '\n';
-		else
-			outStream_ << strPermutation << '\n';
+	// Check if the random selection from groups is expected
+	// to happen and make it happen if it is.
+	if (iGroupSize_) {
+		size_t mod = iPermutationNumber_ % iGroupSize_;
+		bool bPrint = false;
 
-		iPrintCounter_++;
+		if (mod == iNextInGroup_)
+			bPrint = true;
+
+		if (mod == 0)
+			iNextInGroup_ = dist_(randGen_);
+
+		if (!bPrint)
+			return;
 	}
+
+	// Print at last and remember to update the counter of printed permutations.
+	if (bPrintNumbers_)
+		outStream_ << iPermutationNumber_ << " " << strPermutation << '\n';
+	else
+		outStream_ << strPermutation << '\n';
+	iPrintCounter_++;
 }

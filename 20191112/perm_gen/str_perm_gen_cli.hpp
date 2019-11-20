@@ -34,7 +34,7 @@ public:
 
 	bool allowDups() const noexcept;
 
-	unsigned random() const noexcept;
+	size_t getGroupSize() const noexcept;
 
 private:
 	std::string strInput_;
@@ -54,7 +54,7 @@ private:
 
 	bool bAllowDups_;
 
-	unsigned iRandom_;
+	size_t iGroupSize_;
 };	// class StrPermGenCLI
 
 #endif //	str_perm_gen_cli_hpp

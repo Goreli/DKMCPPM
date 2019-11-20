@@ -15,6 +15,8 @@ Modification history:
 #include <vector>
 #include <regex>
 #include <exception>
+#include <random>
+
 #include "perm_gen_base.hpp"
 
 class PermutationGeneratorStopSignal : public std::exception {
@@ -28,6 +30,7 @@ public:
 		std::ostream& outStream);
 
 	void assignRegex(const std::string& strRegex, bool bExclusionRegex);
+	void setGroupSize(size_t iGroupSize);
 
 private:
 	// These are copies of the constructor arguments.
@@ -47,6 +50,13 @@ private:
 
 	inline bool checkWithRegex_(const std::string& strPermutation);
 	virtual void process_(const std::vector<char>& permutation);
+
+	// These are used for randomly selecting a permutation from each
+	// consecutive group.
+	size_t iGroupSize_;
+	size_t iNextInGroup_;
+	std::mt19937_64 randGen_;
+	std::uniform_int_distribution<size_t> dist_;
 };
 
 #endif // str_perm_gen_hpp
