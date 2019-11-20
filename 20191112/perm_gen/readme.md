@@ -57,7 +57,7 @@ str-perm-gen [input_string] [options]
 
 The input_string parameter specifies the string to print permutations of. The following options are supported:
  * **+number** - start printing at the specified permutation number. The permutation number is a 1 based number, not a 0 based index;
- * **-a**  - allows the permutation generator to generate duplicate permutations. By default duplicate permutations are not allowed. This option is not compatible with the **-l** and **-r** options;
+ * **-a**  - allows the permutation generator to generate duplicate permutations. By default duplicate permutations are not allowed. This option is not compatible with the **-l** option;
  * **-c count**  - the count of permutations to print;
  * **-e regex**  - excluding regex. Don't print permutations that match the regular expression;
  * **-g size**  - randomly pick one permutation from each consecutive group generated. The size parameter specifies the size of the consecutive groups.
