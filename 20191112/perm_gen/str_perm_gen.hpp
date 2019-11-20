@@ -54,6 +54,7 @@ private:
 	// These are used for randomly selecting a permutation from each
 	// consecutive group.
 	size_t iGroupSize_;
+	size_t iIntraGroupCounter_;
 	size_t iNextInGroup_;
 	std::mt19937_64 randGen_;
 	std::uniform_int_distribution<size_t> dist_;

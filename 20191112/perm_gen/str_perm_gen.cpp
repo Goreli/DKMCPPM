@@ -26,7 +26,7 @@ StringPermutationGenerator::StringPermutationGenerator(size_t iStartNum,
 : iStartNum_(iStartNum), iPrintCount_{ iPrintCount }, bPrintNumbers_{ bPrintNumbers },
 outStream_{ outStream }, bUseCLIRegex_{ false }, bExclusionRegex_{ false },
 objRegex_(), iPermutationNumber_{ 0 }, iPrintCounter_{ 0 },
-iGroupSize_{ 0 }, iNextInGroup_{ 0 }, randGen_(), dist_()
+iGroupSize_{ 0 }, iIntraGroupCounter_{ 0 }, iNextInGroup_{ 0 }, randGen_(), dist_()
 {
 }
 void StringPermutationGenerator::assignRegex(const string& strRegex, bool bExclusionRegex) {
@@ -49,7 +49,7 @@ void StringPermutationGenerator::setGroupSize(size_t iGroupSize) {
 		auto iSeed = std::chrono::system_clock::now().time_since_epoch().count();
 		randGen_.seed(iSeed);
 	}
-	dist_.param(std::uniform_int_distribution<size_t>::param_type(0, iGroupSize-1));
+	dist_.param(std::uniform_int_distribution<size_t>::param_type(1, iGroupSize));
 	iNextInGroup_ = dist_(randGen_);
 }
 inline bool StringPermutationGenerator::checkWithRegex_(const string& strPermutation) {
@@ -91,16 +91,18 @@ void StringPermutationGenerator::process_(const vector<char>& permutation) {
 	// Check if the random selection from groups is expected
 	// to happen and make it happen if it is.
 	if (iGroupSize_) {
-		size_t mod = iPermutationNumber_ % iGroupSize_;
-		bool bPrint = false;
+		iIntraGroupCounter_++;
 
-		if (mod == iNextInGroup_)
-			bPrint = true;
+		bool bSkip = true;
+		if (iIntraGroupCounter_ == iNextInGroup_)
+			bSkip = false;
 
-		if (mod == 0)
+		if (iIntraGroupCounter_ == iGroupSize_) {
 			iNextInGroup_ = dist_(randGen_);
+			iIntraGroupCounter_ = 0;
+		}
 
-		if (!bPrint)
+		if (bSkip)
 			return;
 	}
 
