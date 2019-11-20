@@ -60,7 +60,7 @@ The input_string parameter specifies the string to print permutations of. The fo
  * **-a**  - allows the permutation generator to generate duplicate permutations. By default duplicate permutations are not allowed. This option is not compatible with the **-l** option;
  * **-c count**  - the count of permutations to print;
  * **-e regex**  - excluding regex. Don't print permutations that match the regular expression;
- * **-g size**  - randomly pick one permutation from each consecutive group generated. The size parameter specifies the size of the consecutive groups.
+ * **-g size**  - randomly pick one permutation from each consecutive group generated. The size parameter specifies the size of the consecutive groups;
  * **-i regex**  - including regex. Only print permutations that match the regular expression;
  * **-l order**    - generate permutations arranged lexicographically in an ascending (a) or descending (d) order. The 'order' parameter can be any word as long as the first letter is either an **a** for ascending or a **d** for descending. This option automatically eliminates duplicate permutations;
  * **-n** - print permutation numbers (1 based numbers, not 0 based indices). By default no permutation numbers are printed;
