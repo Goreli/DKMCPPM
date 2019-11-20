@@ -26,15 +26,15 @@ StringPermutationGenerator::StringPermutationGenerator(size_t iStartNum,
 : iStartNum_(iStartNum), iPrintCount_{ iPrintCount }, bPrintNumbers_{ bPrintNumbers },
 outStream_{ outStream }, bUseCLIRegex_{ false }, bExclusionRegex_{ false },
 objRegex_(), iPermutationNumber_{ 0 }, iPrintCounter_{ 0 },
-iGroupSize_{ 0 }, iIntraGroupCounter_{ 0 }, iNextInGroup_{ 0 }, randGen_(), dist_()
+iGroupSize_{ 0 }, iIntraGroupCounter_{ 0 }, iNextInGroup_{ 0 }, randGen_(), dist_(), bSilent_(false)
 {
 }
-void StringPermutationGenerator::assignRegex(const string& strRegex, bool bExclusionRegex) {
+void StringPermutationGenerator::assignRegex(const string& strRegex, bool bExclusionRegex) noexcept {
 	bUseCLIRegex_ = true;
 	objRegex_.assign(strRegex);
 	bExclusionRegex_ = bExclusionRegex;
 }
-void StringPermutationGenerator::setGroupSize(size_t iGroupSize) {
+void StringPermutationGenerator::setGroupSize(size_t iGroupSize) noexcept {
 	if (iGroupSize < 2) {
 		iGroupSize_ = 0;
 		return;
@@ -52,7 +52,10 @@ void StringPermutationGenerator::setGroupSize(size_t iGroupSize) {
 	dist_.param(std::uniform_int_distribution<size_t>::param_type(1, iGroupSize));
 	iNextInGroup_ = dist_(randGen_);
 }
-inline bool StringPermutationGenerator::checkWithRegex_(const string& strPermutation) {
+void StringPermutationGenerator::setSilent() noexcept {
+	bSilent_ = true;
+}
+inline bool StringPermutationGenerator::checkWithRegex_(const string& strPermutation) noexcept {
 	bool bMatched = regex_search(strPermutation, objRegex_, regex_constants::match_any);
 	if (
 		// Inclusion regex was requested and there is a matching permutation.
@@ -107,9 +110,14 @@ void StringPermutationGenerator::process_(const vector<char>& permutation) {
 	}
 
 	// Print at last and remember to update the counter of printed permutations.
-	if (bPrintNumbers_)
-		outStream_ << iPermutationNumber_ << " " << strPermutation << '\n';
-	else
-		outStream_ << strPermutation << '\n';
+	if (!bSilent_) {
+		if (bPrintNumbers_)
+			outStream_ << iPermutationNumber_ << " " << strPermutation << '\n';
+		else
+			outStream_ << strPermutation << '\n';
+	}
 	iPrintCounter_++;
+}
+size_t StringPermutationGenerator::getPermutationCount() noexcept {
+	return iPrintCounter_;
 }

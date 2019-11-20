@@ -30,9 +30,9 @@ namespace dk {
 	void PermutationGeneratorBase<T>::generate_(size_t iPos) {
 		size_t vocSize = vocabulary_.size();
 
-		for (auto it = vocabulary_.begin(); it < vocabulary_.end(); it++)
+		for (size_t inx = 0; inx < vocabulary_.size(); inx++)
 		{
-			permutation_[iPos] = *it;
+			permutation_[iPos] = vocabulary_[inx];
 
 			// If the call stack has hit the bottom of recursion tree then
 			// process the permutation and move on to the next recursion cycle.
@@ -41,9 +41,9 @@ namespace dk {
 				process_(permutation_);
 			else
 			{
-				it = vocabulary_.erase(it);
+				vocabulary_.erase(vocabulary_.begin() + inx);
 				generate_(iPos + 1);
-				it = vocabulary_.insert(it, permutation_[iPos]);
+				vocabulary_.insert(vocabulary_.begin() + inx, permutation_[iPos]);
 			}
 		}
 	}
@@ -51,14 +51,13 @@ namespace dk {
 	void PermutationGeneratorBase<T>::generate_nodups_(size_t iPos) {
 		size_t vocSize = vocabulary_.size();
 
-		for (auto it = vocabulary_.begin(); it < vocabulary_.end(); it++)
+		for (size_t inx = 0; inx < vocabulary_.size(); inx++)
 		{
-			// Ignore this symbol if it's already in the permutation.
-			auto findIt = find(vocabulary_.begin(), it, *it);
-			if (findIt != it)
+			auto findIt = std::find(vocabulary_.begin(), vocabulary_.begin()+inx, vocabulary_[inx]);
+			if (findIt != vocabulary_.begin() + inx)
 				continue;
 
-			permutation_[iPos] = *it;
+			permutation_[iPos] = vocabulary_[inx];
 
 			// If the call stack has hit the bottom of recursion tree then
 			// process the permutation and move on to the next recursion cycle.
@@ -67,9 +66,9 @@ namespace dk {
 				process_(permutation_);
 			else
 			{
-				it = vocabulary_.erase(it);
+				vocabulary_.erase(vocabulary_.begin() + inx);
 				generate_nodups_(iPos + 1);
-				it = vocabulary_.insert(it, permutation_[iPos]);
+				vocabulary_.insert(vocabulary_.begin() + inx, permutation_[iPos]);
 			}
 		}
 	}

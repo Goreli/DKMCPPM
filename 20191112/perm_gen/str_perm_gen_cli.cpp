@@ -18,7 +18,7 @@ StrPermGenCLI::StrPermGenCLI()
 	: strInput_{ "" }, iStartNum_{ 0 }, iPrintCount_{ 0 }, bPrintNumbers_{ false },
 	strOutFile_{ "" }, bExclusionRegex_{ false }, strRegex_{ "" }, 
 	bPresort_{ false }, bAscending_{ false }, bLexicographicOrder_{ false },
-	bAllowDups_{ false }, iGroupSize_ { 0 }
+	bAllowDups_{ false }, iGroupSize_ { 0 }, iTaskRepeatCount_ { 1 }
 {
 }
 bool StrPermGenCLI::parse(int argc, char* argv[]) noexcept {
@@ -50,6 +50,19 @@ bool StrPermGenCLI::parse(int argc, char* argv[]) noexcept {
 					return false;
 				std::istringstream iss(strNum);
 				iss >> iPrintCount_;
+				continue;
+			}
+			// The time option. The task repeat count.
+			if (strOption[1] == 't') {
+				if (++inx == argc)
+					return false;
+				string strNum(argv[inx]);
+				if (!isdigit(strNum[0]))
+					return false;
+				std::istringstream iss(strNum);
+				iss >> iTaskRepeatCount_;
+				if (iTaskRepeatCount_ == 0)
+					return false;
 				continue;
 			}
 			// The size of consecutive groups to randomly pick permutations from.
@@ -131,14 +144,15 @@ void StrPermGenCLI::printUsage() const noexcept {
 	cout << "Usage: "<< "str-perm-gen [input_string] [options]" << '\n';
 	cout << "  +number   - start printing at the specified permutation number (1-based);" << '\n';
 	cout << "  -a        - allow duplicates (-a and -l don\'t go together);" << '\n';
-	cout << "  -c count  - the count of permutations to print;" << '\n';
+	cout << "  -c count  - the 'count' number of permutations to print;" << '\n';
 	cout << "  -e regex  - exclusion regex (-e and -i don\'t go together);" << '\n';
 	cout << "  -g size   - randomly pick one permutation per consecutive group;" << '\n';
 	cout << "  -i regex  - inclusion regex (-i and -e don\'t go together);" << '\n';
 	cout << "  -l order  - (a)scending or (d)escending lexicographic order;" << '\n';
 	cout << "  -n        - print permutation numbers;" << '\n';
 	cout << "  -o path   - output file path;" << '\n';
-	cout << "  -p order  - pre-sort the input string in (a)scending or (d)escending order." << '\n';
+	cout << "  -p order  - pre-sort the input string in (a)scending or (d)escending order;" << '\n';
+	cout << "  -t repeat - dry-run 'repeat' times and print average duration." << '\n';
 }
 
 const string& StrPermGenCLI::getInputString() const noexcept {
@@ -176,4 +190,7 @@ bool StrPermGenCLI::allowDups() const noexcept {
 }
 size_t StrPermGenCLI::getGroupSize() const noexcept {
 	return iGroupSize_;
+}
+size_t StrPermGenCLI::getTaskRepeatCount() const noexcept {
+	return iTaskRepeatCount_;
 }

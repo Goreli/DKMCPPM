@@ -36,6 +36,8 @@ public:
 
 	size_t getGroupSize() const noexcept;
 
+	size_t getTaskRepeatCount() const noexcept;
+
 private:
 	std::string strInput_;
 	size_t iStartNum_;
@@ -55,6 +57,8 @@ private:
 	bool bAllowDups_;
 
 	size_t iGroupSize_;
+
+	size_t iTaskRepeatCount_;
 };	// class StrPermGenCLI
 
 #endif //	str_perm_gen_cli_hpp

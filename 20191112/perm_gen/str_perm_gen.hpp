@@ -29,8 +29,14 @@ public:
 	StringPermutationGenerator(size_t iStartNum, size_t iPrintCount, bool bPrintNumbers,
 		std::ostream& outStream);
 
-	void assignRegex(const std::string& strRegex, bool bExclusionRegex);
-	void setGroupSize(size_t iGroupSize);
+	void assignRegex(const std::string& strRegex, bool bExclusionRegex) noexcept;
+	void setGroupSize(size_t iGroupSize) noexcept;
+
+	// Only generate. Don't output.
+	void setSilent() noexcept;
+
+	// The count of permutations intended for output.
+	size_t getPermutationCount() noexcept;
 
 private:
 	// These are copies of the constructor arguments.
@@ -48,7 +54,7 @@ private:
 	size_t iPermutationNumber_;
 	size_t iPrintCounter_;
 
-	inline bool checkWithRegex_(const std::string& strPermutation);
+	inline bool checkWithRegex_(const std::string& strPermutation) noexcept;
 	virtual void process_(const std::vector<char>& permutation);
 
 	// These are used for randomly selecting a permutation from each
@@ -58,6 +64,8 @@ private:
 	size_t iNextInGroup_;
 	std::mt19937_64 randGen_;
 	std::uniform_int_distribution<size_t> dist_;
+
+	bool bSilent_;
 };
 
 #endif // str_perm_gen_hpp
