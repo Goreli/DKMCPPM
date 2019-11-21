@@ -15,7 +15,6 @@ Modification history:
 #include <vector>
 #include <regex>
 #include <exception>
-#include <random>
 
 #include "perm_gen_base.hpp"
 
@@ -62,7 +61,6 @@ private:
 	size_t iGroupSize_;
 	size_t iIntraGroupCounter_;
 	size_t iNextInGroup_;
-	std::mt19937_64 randGen_;
 	std::uniform_int_distribution<size_t> dist_;
 
 	bool bSilent_;

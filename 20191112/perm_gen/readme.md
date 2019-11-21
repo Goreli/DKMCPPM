@@ -57,12 +57,13 @@ str-perm-gen [input_string] [options]
 
 The input_string parameter specifies the string to print permutations of. The following options are supported:
  * **+number** - start printing at the specified permutation number. The permutation number is a 1 based number, not a 0 based index;
- * **-a**  - allows the permutation generator to generate duplicate permutations. By default duplicate permutations are not allowed. This option is not compatible with the **-l** option;
+ * **-a**  - allows the permutation generator to generate duplicate permutations. By default duplicate permutations are not allowed. This option is not compatible with option **-l**;
  * **-c count**  - the count of permutations to print;
  * **-e regex**  - excluding regex. Don't print permutations that match the regular expression;
  * **-g size**  - randomly pick one permutation from each consecutive group generated. The size parameter specifies the size of the consecutive groups;
+ * **-h**  - print help information. This option overrides all other options. It allows to quickly request help information without deleting any of the other options that the user may have already typed on the command line;
  * **-i regex**  - including regex. Only print permutations that match the regular expression;
- * **-l order**    - generate permutations arranged lexicographically in an ascending (a) or descending (d) order. The 'order' parameter can be any word as long as the first letter is either an **a** for ascending or a **d** for descending. This option automatically eliminates duplicate permutations;
+ * **-l order**    - generate permutations arranged lexicographically in an ascending (a) or descending (d) order. The 'order' parameter can be any word as long as the first letter is either an **a** for ascending or a **d** for descending. This option is not compatible with option **-a**;
  * **-n** - print permutation numbers (1 based numbers, not 0 based indices). By default no permutation numbers are printed;
  * **-p order** - pre-sort the input string in ascending (**a**) or descending (**d**) order. The 'order' parameter can be any word as long as the first letter is either an **a** for ascending or a **d** for descending. These are valid examples: **-p a**, **-p asc**, **-p ascend**, **-p ascending**, **-p d**, **-p desc**. By default the input string is not pre-sorted;
  * **-t repeat**  - time the application. In this mode the application doesn't print any permutations. It just dry-runs the user defined task several times and outputs the average duration. The repeat parameter specifies how many times the user defined task should be executed in this mode before calculating the average duration. This parameter has no utility other than performance tuning of the application.

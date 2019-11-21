@@ -17,12 +17,12 @@ Modification history:
 using namespace std;
 using namespace dk;
 
-int execUserTask(const StrPermGenCLI& parser, size_t& iCount)
+int execUserTask(const StrPermGenCLIParser& parser, size_t& iCount)
 {
 	const string& inputString = parser.getInputString();
 	std::vector<char> vocabulary(inputString.begin(), inputString.end());
 	if (parser.presort()) {
-		if (parser.ascending())
+		if (parser.preOrderAscending())
 			sort(vocabulary.begin(), vocabulary.end());
 		else
 			sort(vocabulary.rbegin(), vocabulary.rend());
@@ -35,7 +35,7 @@ int execUserTask(const StrPermGenCLI& parser, size_t& iCount)
 		fout.open(parser.getOutFilePathStr());
 		if (!fout) {
 			cerr << "Error: unable to open the output file. Exiting with error code 1." << '\n';
-			return 1;
+			return 10;
 		}
 	}
 
@@ -48,13 +48,13 @@ int execUserTask(const StrPermGenCLI& parser, size_t& iCount)
 
 	if (parser.getRegexStr().size())
 		spg.assignRegex(parser.getRegexStr(), parser.isExclusionRegex());
-	if (parser.getTaskRepeatCount() > 1)
+	if (parser.dryRun())
 		spg.setSilent();
 	spg.setGroupSize(parser.getGroupSize());
 
 	try {
 		if (parser.lexicographic())
-			spg.generate_l(vocabulary, parser.ascending());
+			spg.generate_l(vocabulary, parser.lexOrderAscending());
 		else
 			spg.generate(vocabulary, parser.allowDups());
 	}
@@ -80,18 +80,28 @@ void forceThousandsSeparators() {
 }
 
 int main (int argc, char* argv[]) {
-	StrPermGenCLI parser;
-	if(!parser.parse(argc, argv)) {
-		cout << "String Permutation Generator v1.0" << '\n';
-		cout << "Copyright (c) 2019 David Krikheli" << '\n';
-		cout << "Refer the following link for comprehensive help information:" << '\n';
-		cout << "  " << "https://github.com/Goreli/DKMCPPM/blob/master/20191112/perm_gen/readme.md" << '\n';
+	StrPermGenCLIParser parser;
+	try { 
+		// Print usage instructions if there is nothing to do or help has been requested.
+		if (!parser.parse(argc, argv) || parser.help()) {
+			cout << "String Permutation Generator v1.0" << '\n';
+			cout << "Copyright (c) 2019 David Krikheli" << '\n';
+			cout << "Refer the following link for comprehensive help information:" << '\n';
+			cout << "  " << "https://github.com/Goreli/DKMCPPM/blob/master/20191112/perm_gen/readme.md" << '\n';
+			parser.printUsage();
+			return 0;
+		}
+	}
+	catch(const StrPermGenCLIParserException& e)
+	{
+		// Use ANSI escape characters to print the error message in white on red.
+		cerr << "\033[3;41;37m" << "str-perm-gen error: " << e.what() << "\033[0m" << '\n'	;
 		parser.printUsage();
-        return 0;
+		return 1;
     }
 
 	size_t iCount;
-	if(parser.getTaskRepeatCount() == 1)
+	if(!parser.dryRun())
 		return execUserTask(parser, iCount);
 
 	int iReturnValue{ 0 };

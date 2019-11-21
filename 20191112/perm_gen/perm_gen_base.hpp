@@ -11,7 +11,7 @@ Modification history:
 #define perm_gen_base_hpp
 
 #include <vector>
-//#include <random>
+#include <random>
 
 namespace dk {
 
@@ -91,6 +91,10 @@ namespace dk {
 
 		// Holds the sequence of input symbols to generate permutations of.
 		std::vector<char> vocabulary_;
+
+	protected:
+		// Random number generator.
+		std::mt19937_64 _randNumGen;
 	};
 };  // namespace dk
 

@@ -13,6 +13,14 @@ namespace dk {
 
 	template <class T>
 	PermutationGeneratorBase<T>::PermutationGeneratorBase() {
+		try {
+			auto iSeed = std::random_device{}();
+			_randNumGen.seed(iSeed);
+		}
+		catch (...) {
+			auto iSeed = std::chrono::system_clock::now().time_since_epoch().count();
+			_randNumGen.seed(iSeed);
+		}
 	}
 	template <class T>
 	PermutationGeneratorBase<T>::~PermutationGeneratorBase() {
@@ -53,11 +61,12 @@ namespace dk {
 
 		for (size_t inx = 0; inx < vocabulary_.size(); inx++)
 		{
-			auto findIt = std::find(vocabulary_.begin(), vocabulary_.begin()+inx, vocabulary_[inx]);
-			if (findIt != vocabulary_.begin() + inx)
+			auto it = vocabulary_.begin() + inx;
+			auto findIt = std::find(vocabulary_.begin(), it, *it);
+			if (findIt != it)
 				continue;
 
-			permutation_[iPos] = vocabulary_[inx];
+			permutation_[iPos] = *it;
 
 			// If the call stack has hit the bottom of recursion tree then
 			// process the permutation and move on to the next recursion cycle.
@@ -66,9 +75,18 @@ namespace dk {
 				process_(permutation_);
 			else
 			{
-				vocabulary_.erase(vocabulary_.begin() + inx);
+				vocabulary_.erase(it);
 				generate_nodups_(iPos + 1);
 				vocabulary_.insert(vocabulary_.begin() + inx, permutation_[iPos]);
+
+				// The following piece of code ran perfectly ok when compiled with clang++
+				// on the Ubuntu subsystem of Windows 10. It crashed when compiled with
+				// VS 2019 on Windows 10.
+				/*
+					it = vocabulary_.erase(it);
+					generate_nodups_(iPos + 1);
+					vocabulary_.insert(it, permutation_[iPos]);
+				*/
 			}
 		}
 	}

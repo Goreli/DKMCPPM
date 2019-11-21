@@ -26,7 +26,7 @@ StringPermutationGenerator::StringPermutationGenerator(size_t iStartNum,
 : iStartNum_(iStartNum), iPrintCount_{ iPrintCount }, bPrintNumbers_{ bPrintNumbers },
 outStream_{ outStream }, bUseCLIRegex_{ false }, bExclusionRegex_{ false },
 objRegex_(), iPermutationNumber_{ 0 }, iPrintCounter_{ 0 },
-iGroupSize_{ 0 }, iIntraGroupCounter_{ 0 }, iNextInGroup_{ 0 }, randGen_(), dist_(), bSilent_(false)
+iGroupSize_{ 0 }, iIntraGroupCounter_{ 0 }, iNextInGroup_{ 0 }, dist_(), bSilent_(false)
 {
 }
 void StringPermutationGenerator::assignRegex(const string& strRegex, bool bExclusionRegex) noexcept {
@@ -41,16 +41,8 @@ void StringPermutationGenerator::setGroupSize(size_t iGroupSize) noexcept {
 	}
 
 	iGroupSize_ = iGroupSize;
-	try {
-		auto iSeed = std::random_device{}();
-		randGen_.seed(iSeed);
-	}
-	catch (...) {
-		auto iSeed = std::chrono::system_clock::now().time_since_epoch().count();
-		randGen_.seed(iSeed);
-	}
 	dist_.param(std::uniform_int_distribution<size_t>::param_type(1, iGroupSize));
-	iNextInGroup_ = dist_(randGen_);
+	iNextInGroup_ = dist_(_randNumGen);
 }
 void StringPermutationGenerator::setSilent() noexcept {
 	bSilent_ = true;
@@ -101,7 +93,7 @@ void StringPermutationGenerator::process_(const vector<char>& permutation) {
 			bSkip = false;
 
 		if (iIntraGroupCounter_ == iGroupSize_) {
-			iNextInGroup_ = dist_(randGen_);
+			iNextInGroup_ = dist_(_randNumGen);
 			iIntraGroupCounter_ = 0;
 		}
 
