@@ -19,9 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\cli_parser_base.cpp" />
     <ClCompile Include="..\..\str_perm_gen_b.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\cli_parser_base.hpp" />
     <ClInclude Include="..\..\perm_gen_base.hpp" />
   </ItemGroup>
   <ItemGroup>

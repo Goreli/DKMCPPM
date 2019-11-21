@@ -15,8 +15,10 @@ str-perm-gen: \
 str-perm-gen-b: \
 	str_perm_gen_b.cpp \
 	perm_gen_base.hpp \
-	perm_gen_base.inl
-	clang++ -O3 -std=c++17 str_perm_gen_b.cpp -o str-perm-gen-b
+	perm_gen_base.inl \
+	cli_parser_base.hpp \
+	cli_parser_base.cpp
+	clang++ -O3 -std=c++17 str_perm_gen_b.cpp cli_parser_base.cpp -o str-perm-gen-b
 
 clean:
 	rm -f str-perm-gen
@@ -28,7 +30,7 @@ test: str-perm-gen
 	./str-perm-gen Car
 
 benchmark: str-perm-gen-b
-	./str-perm-gen-b "Hello World" 10
+	./str-perm-gen-b "Hello World" -t 10
 
 release: ../../elf/release/str-perm-gen	\
 	../../elf/release/str-perm-gen-b
