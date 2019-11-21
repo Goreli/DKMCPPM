@@ -47,7 +47,10 @@ namespace dk {
 		// The second parameter, if 'true', allows to generate duplicate permutations.
 		// With the second parameter set to 'false' the permutation generator does not
 		// generate duplicate permutations.
-		void generate(const std::vector<T>&, bool);
+		//
+		// The third parameter specifies the id of a random permutation algorithm
+		// to use. 0 - no randomisation.
+		void generate(const std::vector<T>&, bool, size_t);
 
 		// Executes the lexicographic permutation generator.
 		// This function is similar to generate(....). The difference is it
@@ -66,7 +69,7 @@ namespace dk {
 
 	private:
 		void generate_(size_t);
-		void generate_nodups_(size_t);
+		void generate_R2_R3_(size_t);
 
 		// The permutation engine delivers permutations through this function.
 		// Every time a new permutation is generated it is passed into this
@@ -91,6 +94,9 @@ namespace dk {
 
 		// Holds the sequence of input symbols to generate permutations of.
 		std::vector<char> vocabulary_;
+
+		bool bProhibitDups_;
+		bool bDefaultRandomPermAlg_;
 
 	protected:
 		// Random number generator.

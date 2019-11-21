@@ -48,7 +48,7 @@ public:
 
 	bool help() const noexcept;
 
-	//size_t getRandPermEngId() const noexcept;
+	size_t getRandPermAlgId() const noexcept;
 
 private:
 	int argc_;
@@ -80,8 +80,8 @@ private:
 
 	bool bHelp_;
 
-	// Random permutation engine Id.
-	//size_t iRandPermEngId_;
+	// Random permutation algorithm Id.
+	size_t iRandPermAlgId_;
 
 	bool parseSize_t_(char, size_t&);
 };	// class StrPermGenCLI

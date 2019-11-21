@@ -25,7 +25,7 @@ StrPermGenCLIParser::StrPermGenCLIParser()
 	bPresort_{ false }, bPreOrderAscending_{ false }, 
 	bLexicographicOrder_{ false }, bLexOrderAscending_{ false },
 	bAllowDups_{ false }, iGroupSize_ { 0 }, iTaskRepeatCount_ { 1 }, 
-	bDryRun_(false), bHelp_{ false }//, iRandPermEngId_{ 0 }
+	bDryRun_(false), bHelp_{ false }, iRandPermAlgId_{ 0 }
 {
 }
 
@@ -152,9 +152,12 @@ bool StrPermGenCLIParser::parse(int argc, char* argv[]) {
 				bDryRun_ = true;
 				continue;
 			}
-			// The id of the random permutation engine.
-			//if (parseSize_t_('r', iRandPermEngId_))
-			//	continue;
+			// The id of the random permutation algorithm.
+			if (parseSize_t_('r', iRandPermAlgId_)) {
+				if (iRandPermAlgId_ > 3)
+					throw StrPermGenCLIParserException(string("Invalid random permutation algorithm id for CLI option -") + strOption[1] + '.');
+				continue;
+			}
 			// The size of the consecutive groups to randomly pick permutations from.
 			if (parseSize_t_('g', iGroupSize_)) {
 				if (iGroupSize_ == 1)
@@ -164,7 +167,7 @@ bool StrPermGenCLIParser::parse(int argc, char* argv[]) {
 
 			throw StrPermGenCLIParserException(string("Unknown CLI option -") + strOption[1] + '.');
 		}
-		string strErrMsg = "CLI options should start with either + or -. Invalid option #";
+		string strErrMsg = "CLI options should start with either + or -. Invalid argument #";
 		strErrMsg += to_string(inxArg_ + 1) + ": " + strOption + ".";
 		throw StrPermGenCLIParserException(strErrMsg);
 	}	// for
@@ -188,6 +191,10 @@ void StrPermGenCLIParser::printUsage() const noexcept {
 	cout << "  -n        - print permutation numbers;" << '\n';
 	cout << "  -o path   - output file path;" << '\n';
 	cout << "  -p order  - pre-sort the input string in (a)scending or (d)escending order;" << '\n';
+	cout << "  -r id     - random permutation algorithm id:" << '\n';
+	cout << "                1 - default algorithm;" << '\n';
+	cout << "                2 - Richard Durstenfeld (modernised Fisher-Yates);" << '\n';
+	cout << "                3 - Sandra Sattolo." << '\n';
 	cout << "  -t repeat - dry-run 'repeat' times and print average duration." << '\n';
 }
 const string& StrPermGenCLIParser::getInputString() const noexcept {
@@ -238,6 +245,6 @@ bool StrPermGenCLIParser::dryRun() const noexcept {
 bool StrPermGenCLIParser::help() const noexcept {
 	return bHelp_;
 }
-//size_t StrPermGenCLIParser::getRandPermEngId() const noexcept {
-//	return iRandPermEngId_;
-//}
+size_t StrPermGenCLIParser::getRandPermAlgId() const noexcept {
+	return iRandPermAlgId_;
+}
