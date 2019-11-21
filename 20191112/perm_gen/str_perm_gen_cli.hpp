@@ -10,18 +10,12 @@ Modification history:
 #ifndef str_perm_gen_cli_hpp
 #define str_perm_gen_cli_hpp
 
-#include <string>
-#include <stdexcept>
+#include "cli_parser_base.hpp"
 
-class StrPermGenCLIParserException : public std::invalid_argument {
-public: 
-	StrPermGenCLIParserException(const std::string&);
-};
-
-class StrPermGenCLIParser {
+class StrPermGenCLIParser : public dk::CLIParserBase {
 public:
-	StrPermGenCLIParser();
-	bool parse(int argc, char* argv[]);
+	StrPermGenCLIParser(int argc, char* argv[]);
+	bool parse();
 	void printUsage() const noexcept;
 
 	const std::string& getInputString() const noexcept;
@@ -29,32 +23,20 @@ public:
 	size_t getPrintCount() const noexcept;
 	bool printPermutationNumbers() const noexcept;
 	const std::string& getOutFilePathStr() const noexcept;
-
 	bool isExclusionRegex() const noexcept;
 	const std::string& getRegexStr() const noexcept;
-
 	bool presort() const noexcept;
 	bool preOrderAscending() const noexcept;
-
 	bool lexicographic() const noexcept;
 	bool lexOrderAscending() const noexcept;
-
 	bool allowDups() const noexcept;
-
 	size_t getGroupSize() const noexcept;
-
 	size_t getTaskRepeatCount() const noexcept;
 	bool dryRun() const noexcept;
-
 	bool help() const noexcept;
-
 	size_t getRandPermAlgId() const noexcept;
 
 private:
-	int argc_;
-	char** argv_;
-	int inxArg_;
-
 	std::string strInput_;
 	size_t iStartNum_;
 	size_t iPrintCount_;
@@ -82,8 +64,6 @@ private:
 
 	// Random permutation algorithm Id.
 	size_t iRandPermAlgId_;
-
-	bool parseSize_t_(char, size_t&);
-};	// class StrPermGenCLI
+};	// class StrPermGenCLIParser
 
 #endif //	str_perm_gen_cli_hpp

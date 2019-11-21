@@ -1,5 +1,5 @@
 /* str_perm_gen_cli.cpp
-The command line parser of the String Permutation application.
+Command line parser of the String Permutation application.
 
 Copyright(c) 2019 David Krikheli
 
@@ -8,173 +8,107 @@ Modification history:
 */
 
 #include <iostream>
-#include <sstream>
-#include <cctype>
+//#include <sstream>
+//#include <cctype>
 #include "str_perm_gen_cli.hpp"
 
 using namespace std;
+using namespace dk;
 
-StrPermGenCLIParserException::StrPermGenCLIParserException(const string& strWhat)
-: invalid_argument{strWhat} {
-}
-
-StrPermGenCLIParser::StrPermGenCLIParser()
-	: argc_{ 0 }, argv_{ nullptr }, inxArg_{ 0 }, strInput_{ "" },
-	iStartNum_{ 0 }, iPrintCount_{ 0 }, bPrintNumbers_{ false },
-	strOutFile_{ "" }, bExclusionRegex_{ false }, strRegex_{ "" },
-	bPresort_{ false }, bPreOrderAscending_{ false }, 
+StrPermGenCLIParser::StrPermGenCLIParser(int argc, char* argv[])
+	: CLIParserBase(argc, argv), strInput_{ "" }, iStartNum_{ 0 }, iPrintCount_{ 0 },
+	bPrintNumbers_{ false }, strOutFile_{ "" }, bExclusionRegex_{ false },
+	strRegex_{ "" }, bPresort_{ false }, bPreOrderAscending_{ false }, 
 	bLexicographicOrder_{ false }, bLexOrderAscending_{ false },
-	bAllowDups_{ false }, iGroupSize_ { 0 }, iTaskRepeatCount_ { 1 }, 
+	bAllowDups_{ false }, iGroupSize_ { 0 }, iTaskRepeatCount_ { 1 },
 	bDryRun_(false), bHelp_{ false }, iRandPermAlgId_{ 0 }
 {
 }
 
-static size_t str2size_t_(const string& strNum) noexcept {
-	std::istringstream iss(strNum);
-	size_t iNum{ 0 };
-	iss >> iNum;
-	return iNum;
-}
-static size_t str2size_t_(const char* pStrNum) noexcept {
-	std::istringstream iss(pStrNum);
-	size_t iNum{ 0 };
-	iss >> iNum;
-	return iNum;
-}
-bool StrPermGenCLIParser::parseSize_t_(char symbol, size_t& iValue) {
-	if (argv_[inxArg_][1] == symbol) {
-		inxArg_++;
-		if (inxArg_ == argc_)
-			throw StrPermGenCLIParserException(string("Missing numeric argument for CLI option -") + symbol + '.');
-
-		if (!isdigit(argv_[inxArg_][0]))
-			throw StrPermGenCLIParserException(string("Require numeric argument for CLI option -") + symbol + '.');
-
-		iValue = str2size_t_(argv_[inxArg_]);
-		if (iValue == 0)
-			throw StrPermGenCLIParserException(string("Require non-zero argument for CLI option -") + symbol + '.');
-
-		return true;
-	}
-	return false;
-}
-
-bool StrPermGenCLIParser::parse(int argc, char* argv[]) {
-	if (argc < 2)
+bool StrPermGenCLIParser::parse() {
+	if (_argc < 2)
 		return false;
 
-	if (argc > 16)
-		throw StrPermGenCLIParserException(string("Too many CLI options: ") + to_string(argc));
+	if (_argc > 16)
+		throw CLIParserException(string("Too many CLI options: ") + to_string(_argc));
 
-	argc_ = argc;
-	argv_ = argv;
+	strInput_ = string(_argv[1]);
 
-	strInput_ = string(argv_[1]);
-
-	for (inxArg_ = 2; inxArg_ < argc_; inxArg_++) {
-		string strOption = string(argv_[inxArg_]);
+	for (_inxArg = 2; _inxArg < _argc; _inxArg++) {
+		string strOption = string(_argv[_inxArg]);
 
 		// The number of initial permutations to skip.
 		if (strOption[0] == '+') {
-
 			string strNum(strOption.begin() + 1, strOption.end());
 			if (!isdigit(strNum[0]))
-				throw StrPermGenCLIParserException("Require numeric value with CLI argument +.");
-			iStartNum_ = str2size_t_(strNum);
+				throw CLIParserException("Require numeric value in CLI option +.");
+			iStartNum_ = StrPermGenCLIParser::_str2_size_t(strNum);
 			continue;
 		}
 
 		if (strOption[0] == '-') {
-			// Output file.
-			if (strOption[1] == 'o') {
-				if (++inxArg_ == argc_)
-					throw StrPermGenCLIParserException("Missing output file path.");
-				strOutFile_ = string(argv_[inxArg_]);
+			// Presort the input string.
+			if( _fourStateOption('p', bPresort_, 'a', 'd', bPreOrderAscending_) )
 				continue;
-			}
+			// Lexicographic order.
+			if (_fourStateOption('l', bLexicographicOrder_, 'a', 'd', bLexOrderAscending_))
+				continue;
+
+			// Output file.
+			if (_strOption('o', strOutFile_))
+				continue;
 			// Exclusion regex.
-			if (strOption[1] == 'e') {
-				if (++inxArg_ == argc_ || strRegex_.size() > 0)
-					throw StrPermGenCLIParserException(string("Redefinition of regex with CLI option -") + strOption[1] + '.');
+			if (_strOption('e', strRegex_)) {
 				bExclusionRegex_ = true;
-				strRegex_ = string(argv_[inxArg_]);
 				continue;
 			}
 			// Inclusion regex.
-			if (strOption[1] == 'i') {
-				if (++inxArg_ == argc_ || strRegex_.size() > 0)
-					throw StrPermGenCLIParserException(string("Redefinition of regex with CLI option -") + strOption[1] + '.');
+			if (_strOption('i', strRegex_)) {
 				bExclusionRegex_ = false;
-				strRegex_ = string(argv_[inxArg_]);
-				continue;
-			}
-			// Print permutation numbers.
-			if (strOption[1] == 'n') {
-				bPrintNumbers_ = true;
-				continue;
-			}
-			// Duplicates are allowed.
-			if (strOption[1] == 'a') {
-				bAllowDups_ = true;
-				continue;
-			}
-			// Duplicates are allowed.
-			if (strOption[1] == 'h') {
-				bHelp_ = true;
-				continue;
-			}
-			// Presort the input string.
-			if (strOption[1] == 'p') {
-				if (++inxArg_ == argc_)
-					throw StrPermGenCLIParserException(string("Missing sort order for CLI option -") + strOption[1] + '.');
-				if(argv_[inxArg_][0] != 'a' && argv_[inxArg_][0] != 'd')
-					throw StrPermGenCLIParserException(string("Invalid sort order for CLI option -") + strOption[1] + '.');
-				bPresort_ = true;
-				bPreOrderAscending_ = (argv_[inxArg_][0] == 'a') ? true : false;
-				continue;
-			}
-			// Lexicographic order.
-			if (strOption[1] == 'l') {
-				if (++inxArg_ == argc_)
-					throw StrPermGenCLIParserException(string("Missing lexicographic order for CLI option -") + strOption[1] + '.');
-				if (argv_[inxArg_][0] != 'a' && argv_[inxArg_][0] != 'd')
-					throw StrPermGenCLIParserException(string("Invalid lexicographic order for CLI option -") + strOption[1] + '.');
-				bLexicographicOrder_ = true;
-				bLexOrderAscending_ = (argv_[inxArg_][0] == 'a') ? true : false;
 				continue;
 			}
 
+			// Print permutation numbers.
+			if (_boolOption('n', bPrintNumbers_))
+				continue;
+			// Allow duplicates.
+			if (_boolOption('a', bAllowDups_))
+				continue;
+			// Help.
+			if (_boolOption('h', bHelp_))
+				continue;
+
 			// The number of permutations to print.
-			if (parseSize_t_('c', iPrintCount_))
+			if (_uintOption('c', iPrintCount_))
 				continue;
 			// The task repeat count in the dry-run mode.
-			if (parseSize_t_('t', iTaskRepeatCount_)) {
+			if (_uintOption('t', iTaskRepeatCount_)) {
 				bDryRun_ = true;
 				continue;
 			}
 			// The id of the random permutation algorithm.
-			if (parseSize_t_('r', iRandPermAlgId_)) {
+			if (_uintOption('r', iRandPermAlgId_)) {
 				if (iRandPermAlgId_ > 3)
-					throw StrPermGenCLIParserException(string("Invalid random permutation algorithm id for CLI option -") + strOption[1] + '.');
+					throw CLIParserException(string("Invalid random permutation algorithm id in CLI option -") + strOption[1] + '.');
 				continue;
 			}
 			// The size of the consecutive groups to randomly pick permutations from.
-			if (parseSize_t_('g', iGroupSize_)) {
-				if (iGroupSize_ == 1)
-					throw StrPermGenCLIParserException(string("Require value of 2 or more for CLI option -") + 'g' + '.');
+			if (_uintOption('g', iGroupSize_)) {
+				if (iGroupSize_ < 2)
+					throw CLIParserException(string("Require value of 2 or more in CLI option -") + strOption[1] + '.');
 				continue;
 			}
 
-			throw StrPermGenCLIParserException(string("Unknown CLI option -") + strOption[1] + '.');
+			throw CLIParserException(string("Unknown CLI option -") + strOption[1] + '.');
 		}
 		string strErrMsg = "CLI options should start with either + or -. Invalid argument #";
-		strErrMsg += to_string(inxArg_ + 1) + ": " + strOption + ".";
-		throw StrPermGenCLIParserException(strErrMsg);
+		strErrMsg += to_string(_inxArg + 1) + ": " + strOption + ".";
+		throw CLIParserException(strErrMsg);
 	}	// for
 
 	// Validate compatibility of options.
 	if(allowDups() && lexicographic())
-		throw StrPermGenCLIParserException("Options -a and -l are incompatible.");
+		throw CLIParserException("Options -a and -l are incompatible.");
 	
 	return true;
 }

@@ -80,10 +80,10 @@ void forceThousandsSeparators() {
 }
 
 int main (int argc, char* argv[]) {
-	StrPermGenCLIParser parser;
+	StrPermGenCLIParser parser(argc, argv);
 	try { 
 		// Print usage instructions if there is nothing to do or help has been requested.
-		if (!parser.parse(argc, argv) || parser.help()) {
+		if (!parser.parse() || parser.help()) {
 			cout << "String Permutation Generator v1.0" << '\n';
 			cout << "Copyright (c) 2019 David Krikheli" << '\n';
 			cout << "Refer the following link for comprehensive help information:" << '\n';
@@ -92,7 +92,7 @@ int main (int argc, char* argv[]) {
 			return 0;
 		}
 	}
-	catch(const StrPermGenCLIParserException& e)
+	catch(const CLIParserException& e)
 	{
 		// Use ANSI escape characters to print the error message in white on red.
 		cerr << "\033[3;41;37m" << "str-perm-gen error: " << e.what() << "\033[0m" << '\n'	;

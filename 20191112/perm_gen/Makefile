@@ -7,8 +7,10 @@ str-perm-gen: \
 	str_perm_gen_cli.hpp \
 	str_perm_gen_cli.cpp \
 	perm_gen_base.hpp \
-	perm_gen_base.inl
-	clang++ -O3 -std=c++17 str_perm_gen_main.cpp str_perm_gen.cpp str_perm_gen_cli.cpp -o str-perm-gen
+	perm_gen_base.inl \
+	cli_parser_base.hpp \
+	cli_parser_base.cpp
+	clang++ -O3 -std=c++17 str_perm_gen_main.cpp str_perm_gen.cpp str_perm_gen_cli.cpp cli_parser_base.cpp -o str-perm-gen
 
 str-perm-gen-b: \
 	str_perm_gen_b.cpp \
