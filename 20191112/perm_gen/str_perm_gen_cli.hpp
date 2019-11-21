@@ -16,7 +16,7 @@ class StrPermGenCLIParser : public dk::CLIParserBase {
 public:
 	StrPermGenCLIParser(int argc, char* argv[]);
 	bool parse();
-	void printUsage() const noexcept;
+	static void printUsage() noexcept;
 
 	const std::string& getInputString() const noexcept;
 	size_t getStartNumber() const noexcept;

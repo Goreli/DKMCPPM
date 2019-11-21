@@ -117,7 +117,7 @@ int main (int argc, char* argv[]) {
 		cout << "Test run #" << inx+1 << " generated " << iCount << " permutations in " << elapsed.count() << " seconds." << '\n';
 	}
 
-	cout << '\t' << "Average duration per test run in seconds: " << totalElapsed.count() / parser.getTaskRepeatCount() << '\n' << '\n';
+	cout << '\t' << "Average duration: " << totalElapsed.count() / parser.getTaskRepeatCount() << '\n' << '\n';
 
 	return iReturnValue;
 }

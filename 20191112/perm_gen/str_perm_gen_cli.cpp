@@ -112,7 +112,7 @@ bool StrPermGenCLIParser::parse() {
 	
 	return true;
 }
-void StrPermGenCLIParser::printUsage() const noexcept {
+void StrPermGenCLIParser::printUsage() noexcept {
 	cout << "Usage: "<< "str-perm-gen [input_string] [options]" << '\n';
 	cout << "  +number   - start printing at the specified permutation number (1-based);" << '\n';
 	cout << "  -a        - allow duplicates (options -a and -l are incompatible);" << '\n';
