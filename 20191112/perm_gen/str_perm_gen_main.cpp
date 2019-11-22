@@ -69,16 +69,6 @@ int execUserTask(const StrPermGenCLIParser& parser, size_t& iCount)
 	return 0;
 }
 
-// Make sure integrals are printed with thousands separators included.
-struct separate_thousands : std::numpunct<char> {
-	char_type do_thousands_sep() const override { return ','; }  // separate with commas
-	string_type do_grouping() const override { return "\3"; } // groups of 3 digit
-};
-void forceThousandsSeparators() {
-	auto thousands = std::make_unique<separate_thousands>();
-	std::cout.imbue(std::locale(std::cout.getloc(), thousands.release()));
-}
-
 int main (int argc, char* argv[]) {
 	StrPermGenCLIParser parser(argc, argv);
 	try { 
@@ -94,8 +84,7 @@ int main (int argc, char* argv[]) {
 	}
 	catch(const CLIParserException& e)
 	{
-		// Use ANSI escape characters to print the error message in white on red.
-		cerr << "\033[3;41;37m" << "str-perm-gen error: " << e.what() << "\033[0m" << '\n'	;
+		parser.printErrMsg(string("str-perm-gen error: ") + e.what());
 		parser.printUsage();
 		return 1;
     }
@@ -106,7 +95,7 @@ int main (int argc, char* argv[]) {
 
 	int iReturnValue{ 0 };
 	std::chrono::duration<double> totalElapsed(0.0);
-	forceThousandsSeparators();
+	parser.forceThousandsSeparators();
 
 	for (size_t inx = 0; inx < parser.getTaskRepeatCount(); inx++) {
 		auto start = std::chrono::high_resolution_clock::now();

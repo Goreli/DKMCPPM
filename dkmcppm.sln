@@ -31,6 +31,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2d_convex_hull", "2d_convex
 		20191112\2d_convex_hull\readme.md = 20191112\2d_convex_hull\readme.md
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "file-entropy", "20191112\perm_gen\vs_projects\file-entropy\file-entropy.vcxproj", "{ACBE1D58-BD1B-4DBA-8D8C-B144AE6AF052}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -63,6 +65,14 @@ Global
 		{53FB8638-3DA7-406D-8B9D-009ACBDFE093}.Release|x64.Build.0 = Release|x64
 		{53FB8638-3DA7-406D-8B9D-009ACBDFE093}.Release|x86.ActiveCfg = Release|Win32
 		{53FB8638-3DA7-406D-8B9D-009ACBDFE093}.Release|x86.Build.0 = Release|Win32
+		{ACBE1D58-BD1B-4DBA-8D8C-B144AE6AF052}.Debug|x64.ActiveCfg = Debug|x64
+		{ACBE1D58-BD1B-4DBA-8D8C-B144AE6AF052}.Debug|x64.Build.0 = Debug|x64
+		{ACBE1D58-BD1B-4DBA-8D8C-B144AE6AF052}.Debug|x86.ActiveCfg = Debug|Win32
+		{ACBE1D58-BD1B-4DBA-8D8C-B144AE6AF052}.Debug|x86.Build.0 = Debug|Win32
+		{ACBE1D58-BD1B-4DBA-8D8C-B144AE6AF052}.Release|x64.ActiveCfg = Release|x64
+		{ACBE1D58-BD1B-4DBA-8D8C-B144AE6AF052}.Release|x64.Build.0 = Release|x64
+		{ACBE1D58-BD1B-4DBA-8D8C-B144AE6AF052}.Release|x86.ActiveCfg = Release|Win32
+		{ACBE1D58-BD1B-4DBA-8D8C-B144AE6AF052}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -73,6 +83,7 @@ Global
 		{CFE6F37B-438F-468C-915E-2499A9B9896A} = {EA04DCBA-B3C0-4087-AB03-54E652213FB1}
 		{53FB8638-3DA7-406D-8B9D-009ACBDFE093} = {4B57CFA9-BD93-4D39-9FC8-4FC301C3684D}
 		{4B57CFA9-BD93-4D39-9FC8-4FC301C3684D} = {D07650A1-46B7-48CC-AD4F-31F28FCB1089}
+		{ACBE1D58-BD1B-4DBA-8D8C-B144AE6AF052} = {EA04DCBA-B3C0-4087-AB03-54E652213FB1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2BE0949B-3F3C-422A-AE9E-C4775E6F82CD}

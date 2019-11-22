@@ -11,7 +11,6 @@ Modification history:
 #include <string>
 #include <utility>
 #include <chrono>
-#include <locale>
 #include "cli_parser_base.hpp"
 #include "perm_gen_base.hpp"
 
@@ -38,7 +37,7 @@ public:
 					continue;
 				throw CLIParserException(string("Unknown CLI option -") + strOption[1] + '.');
 			}
-			string strErrMsg = "CLI options should start with -. Invalid argument #";
+			string strErrMsg = "CLI options should start with \'-\'. Invalid argument #";
 			strErrMsg += to_string(_inxArg + 1) + ": " + strOption + ".";
 			throw CLIParserException(strErrMsg);
 		}	// for
@@ -70,16 +69,6 @@ private:
 	size_t permutationCounter_{ 0 };
 };
 
-// Make sure integrals are printed with thousands separators included.
-struct separate_thousands : std::numpunct<char> {
-	char_type do_thousands_sep() const override { return ','; }  // separate with commas
-	string_type do_grouping() const override { return "\3"; } // groups of 3 digit
-};
-void forceThousandsSeparators() {
-	auto thousands = std::make_unique<separate_thousands>();
-	std::cout.imbue(std::locale(std::cout.getloc(), thousands.release()));
-}
-
 int main (int argc, char* argv[]) {
 	BCLIParser parser(argc, argv);
 	try {
@@ -97,8 +86,7 @@ int main (int argc, char* argv[]) {
 	}
 	catch (const CLIParserException & e)
 	{
-		// Use ANSI escape characters to print the error message in white on red.
-		cerr << "\033[3;41;37m" << "str-perm-gen-b error: " << e.what() << "\033[0m" << '\n';
+		parser.printErrMsg(string("str-perm-gen-b error: ") + e.what());
 		parser.printUsage();
 		return 1;
 	}
@@ -107,7 +95,7 @@ int main (int argc, char* argv[]) {
 	StringPermutationGenerator spg;
 	std::chrono::duration<double> totalElapsed(0.0);
 
-	forceThousandsSeparators();
+	parser.forceThousandsSeparators();
 
 	for (size_t cycleCounter = 0; cycleCounter < parser.getTaskRepeatCount(); cycleCounter++) {
 		cout << "Test cycle #" << cycleCounter+1 << endl;

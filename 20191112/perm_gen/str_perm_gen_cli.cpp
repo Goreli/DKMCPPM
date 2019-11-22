@@ -101,7 +101,7 @@ bool StrPermGenCLIParser::parse() {
 
 			throw CLIParserException(string("Unknown CLI option -") + strOption[1] + '.');
 		}
-		string strErrMsg = "CLI options should start with either + or -. Invalid argument #";
+		string strErrMsg = "CLI options should start with either \'+\' or \'-\'. Invalid argument #";
 		strErrMsg += to_string(_inxArg + 1) + ": " + strOption + ".";
 		throw CLIParserException(strErrMsg);
 	}	// for

@@ -24,13 +24,20 @@ namespace dk {
 		CLIParserBase(int argc, char* argv[]);
 		virtual ~CLIParserBase();
 
+		// Color printing on Linux.
+		static void printErrMsg(const std::string&);
+
+		static void forceThousandsSeparators();
+
 	protected:
 		void _advanceAndCheckMissingValue();
 		bool _strOption(char, std::string&);
 		bool _uintOption(char, size_t&);
+		bool _doubleOption(char, double&);
 		bool _boolOption(char, bool&) noexcept;
 		bool _fourStateOption(char sym1, bool& bFirst, char sym2, char sym3, bool& bSecond);
 		static size_t _str2_size_t(const std::string&) noexcept;
+		static double _str2_double(const std::string&) noexcept;
 
 		int _argc;
 		char** _argv;
