@@ -20,12 +20,12 @@ using namespace dk;
 int execUserTask(const StrPermGenCLIParser& parser, size_t& iCount)
 {
 	const string& inputString = parser.getInputString();
-	std::vector<char> vocabulary(inputString.begin(), inputString.end());
+	std::vector<char> symbolPool(inputString.begin(), inputString.end());
 	if (parser.presort()) {
 		if (parser.preOrderAscending())
-			sort(vocabulary.begin(), vocabulary.end());
+			sort(symbolPool.begin(), symbolPool.end());
 		else
-			sort(vocabulary.rbegin(), vocabulary.rend());
+			sort(symbolPool.rbegin(), symbolPool.rend());
 	}
 
 	ofstream fout;
@@ -54,9 +54,9 @@ int execUserTask(const StrPermGenCLIParser& parser, size_t& iCount)
 
 	try {
 		if (parser.lexicographic())
-			spg.generate_l(vocabulary, parser.lexOrderAscending());
+			spg.generate_l(symbolPool, parser.lexOrderAscending());
 		else
-			spg.generate(vocabulary, parser.allowDups(), parser.getRandPermAlgId());
+			spg.generate(symbolPool, parser.allowDups(), parser.getRandPermAlgId());
 	}
 	catch (const PermutationGeneratorStopSignal&) {
 		// The user defined override of process_(....) must have requested

@@ -27,9 +27,9 @@ namespace dk {
 	PermutationGeneratorBase<T>::~PermutationGeneratorBase() {
 	}
 	template <class T>
-	void PermutationGeneratorBase<T>::generate(const std::vector<T>& vocabulary, bool bAllowDups, size_t iRandPermAlgId) {
-		permutation_.resize(vocabulary.size());
-		vocabulary_ = vocabulary;
+	void PermutationGeneratorBase<T>::generate(const std::vector<T>& symbolPool, bool bAllowDups, size_t iRandPermAlgId) {
+		permutation_.resize(symbolPool.size());
+		symbolPool_ = symbolPool;
 		bProhibitDups_ = !bAllowDups;
 		switch (iRandPermAlgId) {
 		case 0:
@@ -50,18 +50,18 @@ namespace dk {
 	}
 	template <class T>
 	void PermutationGeneratorBase<T>::generate_(size_t iPos) {
-		size_t vocSize = vocabulary_.size();
+		size_t vocSize = symbolPool_.size();
 
 		std::uniform_int_distribution<size_t> dist(0, vocSize-1);
 
 		size_t inx_{ 0 };
-		for (size_t inx = 0; inx < vocabulary_.size(); inx++)
+		for (size_t inx = 0; inx < symbolPool_.size(); inx++)
 		{
 			inx_ = bDefaultRandomPermAlg_ ? dist(_randNumGen) : inx;
 
-			auto it = vocabulary_.begin() + inx_;
+			auto it = symbolPool_.begin() + inx_;
 			if (!bDefaultRandomPermAlg_ && bProhibitDups_) {
-				auto findIt = std::find(vocabulary_.begin(), it, *it);
+				auto findIt = std::find(symbolPool_.begin(), it, *it);
 				if (findIt != it)
 					continue;
 			}
@@ -75,24 +75,24 @@ namespace dk {
 				process_(permutation_);
 			else
 			{
-				vocabulary_.erase(it);
+				symbolPool_.erase(it);
 				generate_(iPos + 1);
-				vocabulary_.insert(vocabulary_.begin() + inx_, permutation_[iPos]);
+				symbolPool_.insert(symbolPool_.begin() + inx_, permutation_[iPos]);
 
 				// The following piece of code ran perfectly ok when compiled with clang++
 				// on the Ubuntu subsystem of Windows 10. It crashed when compiled with
 				// VS 2019 on Windows 10.
 				/*
-					it = vocabulary_.erase(it);
+					it = symbolPool_.erase(it);
 					generate_nodups_(iPos + 1);
-					vocabulary_.insert(it, permutation_[iPos]);
+					symbolPool_.insert(it, permutation_[iPos]);
 				*/
 			}
 		}
 	}
 	template <class T>
-	void PermutationGeneratorBase<T>::generate_l(const std::vector<T>& vocabulary, bool bAscending) {
-		permutation_ = vocabulary;
+	void PermutationGeneratorBase<T>::generate_l(const std::vector<T>& symbolPool, bool bAscending) {
+		permutation_ = symbolPool;
 
 		if (bAscending)
 			do process_(permutation_);
@@ -103,8 +103,8 @@ namespace dk {
 	}
 	template <class T>
 	void PermutationGeneratorBase<T>::generate_R2_R3_(size_t iOffset) {
-		size_t vocSize = vocabulary_.size();
-		permutation_ = vocabulary_;
+		size_t vocSize = symbolPool_.size();
+		permutation_ = symbolPool_;
 		size_t j{ 0 };
 		while (true) {
 			for (size_t i = 0; i < vocSize - 1; i++) {

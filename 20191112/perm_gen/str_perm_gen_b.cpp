@@ -91,7 +91,7 @@ int main (int argc, char* argv[]) {
 		return 1;
 	}
 
-	std::vector<char> vocabulary(parser.getInputString().begin(), parser.getInputString().end());
+	std::vector<char> symbolPool(parser.getInputString().begin(), parser.getInputString().end());
 	StringPermutationGenerator spg;
 	std::chrono::duration<double> totalElapsed(0.0);
 
@@ -103,7 +103,7 @@ int main (int argc, char* argv[]) {
 		cout << "\tRunning the permutation generator for \"" << parser.getInputString() << "\"." << '\n';
 		spg.resetPermutationCounter();
 		auto start = std::chrono::high_resolution_clock::now();
-		spg.generate(vocabulary, true, 0);
+		spg.generate(symbolPool, true, 0);
 		auto finish = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<double> elapsed = finish - start;
 		cout << "\t" << spg.getPermutationCounter() << " permutations generated in " << elapsed.count() << " seconds." << '\n';

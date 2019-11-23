@@ -93,7 +93,7 @@ namespace dk {
 		std::vector<char> permutation_;
 
 		// Holds the sequence of input symbols to generate permutations of.
-		std::vector<char> vocabulary_;
+		std::vector<char> symbolPool_;
 
 		bool bProhibitDups_;
 		bool bDefaultRandomPermAlg_;
