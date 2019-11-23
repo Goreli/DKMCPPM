@@ -17,7 +17,7 @@ This directory contains C++ source code written to address the String Permutatio
 
 Application **str-perm-gen** generates and prints permutations of an input string specified on the command line. Also, it exposes various convenience functions via respective command line options.
 
-It may take long time to print all possible permutations of a long string. The combinatorial nature of the domain causes severe performance impacts whereby a slight increase of the input can cause a huge increase of the output. The application accepts command line arguments that help limit the number of permutations generated in order to keep performance within acceptable boundaries. A Regular Expressions (regex) syntax based filter is also available. The user can improve performance of the program by saving the output in a disk file instead of printing it on the screen. 
+It may take long time to print all possible permutations of a long string. The combinatorial nature of the domain causes severe performance impacts whereby a slight increase of the input can cause a huge increase of the output. The application accepts command line arguments that help limit the number of permutations generated in order to keep performance within acceptable boundaries. A Regular Expressions (regex) syntax based filter is also available. Another way to improve performance is to write the output to a disk file instead of printing it on the screen. 
 
 The application can be executed in a timing mode where it prints performance stats instead of printing permutations generated. This mode helps assess performance impacts of various convenience functions specified on the command line.
 
@@ -67,12 +67,12 @@ The input_string parameter specifies a string to generate permutations of. The f
  * **-g size**  - creates preliminary output of permutations as consecutive groups of the specified size without printing them. It then randomly picks one permutation from each consecutive group and prints it;
  * **-h**  - prints help information. This option overrides all other options. It allows to quickly request help information without deleting any of the other options that the user may have already typed on the command line;
  * **-i regex**  - including regex. Only prints permutations that match the regular expression;
- * **-l order**    - generates permutations arranged lexicographically in an ascending (a) or descending (d) order. This option is not compatible with option **-a**;
+ * **-l order**    - generates permutations arranged lexicographically in an ascending (literal **a**) or descending (literal **d**) order. This option is not compatible with option **-a**;
  * **-n** - prints permutation numbers (1 based numbers, not 0 based indices) at the start of each line. By default no permutation numbers are printed;
  * **-o path** - specifies the output file path. By default the output is printed on the screen. If this option is specified then the output is not printed on the screen and is written to the output file instead;
- * **-p order** - pre-sorts the input string in ascending (**a**) or descending (**d**) order. By default the input string is not pre-sorted;
- * **-r id** - specifies the id of the random permutation algorithm to use. The following algorithms are supported: 1 - default algorithm, 2 - Richard Durstenfeld (modernised Fisher-Yates), 3 - Sandra Sattolo. In this mode the application does not prohibit duplicate permutations. Algorithms 2 and 3 don't stop generating random permutations unless the user explicitly specifies the maximum count of permutations with the **-c count** command line option or presses the _Ctrl-C_ key combination. Algorithm 1 stops in M! (M factorial) steps;
- * **-t repeat**  - times the application. The application follows all directives specified on the command line, but it doesn't actually output any permutations. It just dry-runs the user defined task several times and outputs the average duration. The repeat parameter specifies how many times the process should be executed before calculating the average duration. This option has no utility other than performance tuning.
+ * **-p order** - pre-sorts the input string in ascending (literal **a**) or descending (literal **d**) order. By default the input string is not pre-sorted;
+ * **-r id** - specifies the id of the random permutation algorithm to use. The following algorithms are supported: **1** - default algorithm, **2** - Richard Durstenfeld (modernised Fisher-Yates), **3** - Sandra Sattolo. In this mode the application does not prohibit duplicate permutations. Algorithms **2** and **3** don't stop generating random permutations unless the user explicitly specifies the maximum count of permutations with the **-c count** command line option or presses the _Ctrl-C_ key combination. Algorithm **1** stops in M! (M factorial) steps;
+ * **-t repeat**  - times the application. The application follows all directives specified on the command line, but it doesn't actually output any permutations. It just dry-runs the user defined task several times and outputs the average duration. The **repeat** parameter specifies how many times the process should be executed before calculating the average duration. This option has no utility other than performance tuning.
 
 The **-e** and **-i** options are mutually exclusive. They provide light-weight support for regular expression based filtering and are expected to comply with the ECMAScript standard. The specification of the ECMAScript standard can be found here: http://www.cplusplus.com/reference/regex/ECMAScript/.
 
@@ -134,7 +134,7 @@ file-entropy [file_path] [options]
 
 The file_path parameter specifies an input file to calculate entropy of. The following options are supported:
  * **-b**  - binary mode. Process non-printable bytes as well as printable ones. By default the application only processes printable bytes (text mode);
- * **-f param**  - print the constituent byte frequency table as well. Set **param** to an **n** to print the constituent bytes in a numeric format. Set **param** to a **t** to print the constituent bytes as printable characters. By default the application does not print the frequency table;
+ * **-f param**  - prints the constituent byte frequency table as well. Set **param** to a literal **n** to print the constituent bytes in a numeric format. Set **param** to a literal **t** to print the constituent bytes as printable characters. By default the application does not print the frequency table;
  * **-h**  - prints help information. This option overrides all other options. It allows to quickly request help information without deleting any of the other options that the user may have already typed on the command line;
  * **-l base**  - by default the logarithm base used in the calculation equals the count of distinct bytes in the input file. This ensures the entropy value is normalised in the [0, 1] range. The **-l base** command line option allows to specify an alternative value for the logarithm base that helps to rescale entropy accordingly with a particular information measurement unit at use.
 
@@ -149,8 +149,8 @@ The project provides build artefacts for two platforms. There is a Makefile in t
 Navigate to the [perm_gen](https://github.com/Goreli/DKMCPPM/tree/master/20191112/perm_gen) directory and type "make [Enter]" to build binary executables on the Linux platform. Type "make test [Enter]" and "make benchmark [Enter]" to test-run the applications. Here is a summary of the Linux Makefile targets:
 
  * make all [Enter] (same as make [Enter]) - build all the three applications in the project directory;
- * make str-perm-gen-b [Enter] - build str-perm-gen-b;
  * make str-perm-gen [Enter] - build str-perm-gen;
+ * make str-perm-gen-b [Enter] - build str-perm-gen-b;
  * make file-entropy [Enter] - build file-entropy;
  * make clean [Enter] - remove all the three applications from the project directory;
  * make test [Enter] - prints permutations of the string "Car";
