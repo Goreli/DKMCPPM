@@ -63,7 +63,7 @@ public:
 	}
 	static void printUsage() noexcept {
 		cout << "Usage: file-entropy [file_path] [options]" << '\n';
-		cout << "  -b        - binary. Count non-printable characters as well;" << '\n';
+		cout << "  -b        - binary. Process non-printable bytes as well;" << '\n';
 		cout << "  -f param  - frequency table; param: (n)umeric or (t)ext format;" << '\n';
 		cout << "  -h        - print help information. Overrides all other options;" << '\n';
 		cout << "  -l base   - log base. Default - the number of distinct characters." << '\n';
@@ -89,7 +89,7 @@ int main (int argc, char* argv[]) {
 	try {
 		// Print usage instructions if there is nothing to do or help has been requested.
 		if (!parser.parse() || parser.help()) {
-			cout << "File Byte-wise Entropy Calculator v1.0" << '\n';
+			cout << "File Bytewise Entropy Calculator v1.0" << '\n';
 			cout << "Prints entropy of a specified file. Optionally prints the byte frequency table." << '\n';
 			cout << "Copyright (c) 2019 David Krikheli" << '\n';
 			cout << "Refer the following link for comprehensive help information:" << '\n';

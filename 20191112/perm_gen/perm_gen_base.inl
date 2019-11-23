@@ -60,7 +60,7 @@ namespace dk {
 			inx_ = bDefaultRandomPermAlg_ ? dist(_randNumGen) : inx;
 
 			auto it = vocabulary_.begin() + inx_;
-			if (bProhibitDups_) {
+			if (!bDefaultRandomPermAlg_ && bProhibitDups_) {
 				auto findIt = std::find(vocabulary_.begin(), it, *it);
 				if (findIt != it)
 					continue;
