@@ -31,9 +31,9 @@ public:
 			string strOption = string(_argv[_inxArg]);
 
 			if (strOption[0] == '-') {
-				if (_uintOption('t', iTaskRepeatCount_))
+				if (_uintOption("t", iTaskRepeatCount_))
 					continue;
-				if (_boolOption('h', bHelp_))
+				if (_boolOption("h", bHelp_))
 					continue;
 				throw CLIParserException(string("Unknown CLI option -") + strOption[1] + '.');
 			}

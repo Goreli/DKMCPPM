@@ -38,13 +38,13 @@ public:
 			string strOption = string(_argv[_inxArg]);
 
 			if (strOption[0] == '-') {
-				if (_boolOption('b', bBinary_))
+				if (_boolOption("b", bBinary_))
 					continue;
-				if (_threeStateOption('f', bFrequencyTable_, 'n', 't', bNumericFormat_))
+				if (_threeStateOption("f", bFrequencyTable_, "n", "t", bNumericFormat_))
 					continue;
-				if (_boolOption('h', bHelp_))
+				if (_boolOption("h", bHelp_))
 					continue;
-				if (_doubleOption('l', dblLogBase_)) {
+				if (_doubleOption("l", dblLogBase_)) {
 					if(dblLogBase_ == 1.0)
 						throw CLIParserException(string("Unacceptable log base in CLI option -") + strOption[1] + '.');
 					continue;

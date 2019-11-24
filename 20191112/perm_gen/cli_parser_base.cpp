@@ -38,7 +38,6 @@ void CLIParserBase::printErrMsg(const string& strErrMsg) {
 #endif
 	cerr << "\033[41;37m" << strErrMsg << "\033[0m" << '\n';
 }
-
 // Make sure integrals are printed with thousands separators included.
 struct separate_thousands : std::numpunct<char> {
 	char_type do_thousands_sep() const override { return ','; }  // separate with commas
@@ -48,11 +47,23 @@ void CLIParserBase::forceThousandsSeparators() {
 	auto thousands = std::make_unique<separate_thousands>();
 	std::cout.imbue(std::locale(std::cout.getloc(), thousands.release()));
 }
+size_t CLIParserBase::_stringto_size_t(const string& strNum) noexcept {
+	std::istringstream iss(strNum);
+	size_t iNum{ 0 };
+	iss >> iNum;
+	return iNum;
+}
+double CLIParserBase::_stringto_double(const string& strNum) noexcept {
+	std::istringstream iss(strNum);
+	double dNum{ 0.0 };
+	iss >> dNum;
+	return dNum;
+}
+
 
 CLIParserException::CLIParserException(const string& strWhat)
 : invalid_argument{strWhat} {
 }
-
 CLIParserBase::CLIParserBase(int argc, char* argv[])
 	: _argc{ argc }, _argv{ argv }, _inxArg{0}
 {
@@ -60,77 +71,65 @@ CLIParserBase::CLIParserBase(int argc, char* argv[])
 CLIParserBase::~CLIParserBase()
 {
 }
-size_t CLIParserBase::_str2_size_t(const string& strNum) noexcept {
-	std::istringstream iss(strNum);
-	size_t iNum{ 0 };
-	iss >> iNum;
-	return iNum;
-}
-double CLIParserBase::_str2_double(const string& strNum) noexcept {
-	std::istringstream iss(strNum);
-	double dNum{ 0.0 };
-	iss >> dNum;
-	return dNum;
-}
 void CLIParserBase::_advanceAndCheckMissingValue() {
 	char option = _argv[_inxArg][1];
 	_inxArg++;
 	if (_inxArg == _argc)
 		throw CLIParserException(string("Missing value in CLI option -") + option + '.');
 }
-bool CLIParserBase::_uintOption(char symbol, size_t& iValue) {
-	if (_argv[_inxArg][1] == symbol) {
+bool CLIParserBase::_uintOption(const string& strOption, size_t& iValue) {
+	if (string(_argv[_inxArg]+1) == strOption) {
 		_advanceAndCheckMissingValue();
 
 		if (!isdigit(_argv[_inxArg][0]))
-			throw CLIParserException(string("Require numeric argument in CLI option -") + symbol + '.');
+			throw CLIParserException(string("Require numeric argument in CLI option -") + strOption + '.');
 
-		iValue = CLIParserBase::_str2_size_t(_argv[_inxArg]);
+		iValue = CLIParserBase::_stringto_size_t(_argv[_inxArg]);
 		if (iValue == 0)
-			throw CLIParserException(string("Require non-zero argument in CLI option -") + symbol + '.');
+			throw CLIParserException(string("Require non-zero argument in CLI option -") + strOption + '.');
 
 		return true;
 	}
 	return false;
 }
-bool CLIParserBase::_doubleOption(char symbol, double& dValue) {
-	if (_argv[_inxArg][1] == symbol) {
+bool CLIParserBase::_doubleOption(const string& strOption, double& dValue) {
+	if (string(_argv[_inxArg]+1) == strOption) {
 		_advanceAndCheckMissingValue();
 
 		if (!isdigit(_argv[_inxArg][0]))
-			throw CLIParserException(string("Require numeric argument in CLI option -") + symbol + '.');
+			throw CLIParserException(string("Require numeric argument in CLI option -") + strOption + '.');
 
-		dValue = CLIParserBase::_str2_double(_argv[_inxArg]);
+		dValue = CLIParserBase::_stringto_double(_argv[_inxArg]);
 		if (dValue == 0.0)
-			throw CLIParserException(string("Require non-zero argument in CLI option -") + symbol + '.');
+			throw CLIParserException(string("Require non-zero argument in CLI option -") + strOption + '.');
 
 		return true;
 	}
 	return false;
 }
-bool CLIParserBase::_boolOption(char symbol, bool& bValue) noexcept {
-	if (_argv[_inxArg][1] == symbol) {
+bool CLIParserBase::_boolOption(const string& strOption, bool& bValue) noexcept {
+	if (string(_argv[_inxArg]+1) == strOption) {
 		bValue = true;
 		return true;
 	}
 	return false;
 }
-bool CLIParserBase::_strOption(char symbol, string& strValue) {
-	if (_argv[_inxArg][1] == symbol) {
+bool CLIParserBase::_strOption(const string& strOption, string& strValue) {
+	if (string(_argv[_inxArg]+1) == strOption) {
 		_advanceAndCheckMissingValue();
 		if (strValue.size() > 0)
-			throw CLIParserException(string("Redefinition of string value in CLI option -") + symbol + '.');
+			throw CLIParserException(string("Redefinition of string value in CLI option -") + strOption + '.');
 		strValue = string(_argv[_inxArg]);
 		return true;
 	}
 	return false;
 }
-bool CLIParserBase::_threeStateOption(char sym1, bool& bFirst, char sym2, char sym3, bool& bSecond) {
-	if (_boolOption(sym1, bFirst)) {
+bool CLIParserBase::_threeStateOption(const string& strOption, bool& bOption, const string& strVal1, const string& strVal2, bool& bVal) {
+	if (_boolOption(strOption, bOption)) {
 		_advanceAndCheckMissingValue();
-		if (_argv[_inxArg][0] != sym2 && _argv[_inxArg][0] != sym3)
-			throw CLIParserException(string("Invalid value in CLI option -") + sym1 + '.');
-		bSecond = (_argv[_inxArg][0] == sym2) ? true : false;
+		if (string(_argv[_inxArg]+0) != strVal1 && string(_argv[_inxArg]+0) != strVal2)
+			throw CLIParserException(string("Invalid value in CLI option -") + strOption + '.');
+		bVal = (string(_argv[_inxArg]+0) == strVal1) ? true : false;
 		return true;
 	}
 	return false;

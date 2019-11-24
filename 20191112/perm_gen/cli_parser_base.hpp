@@ -24,20 +24,20 @@ namespace dk {
 		CLIParserBase(int argc, char* argv[]);
 		virtual ~CLIParserBase();
 
-		// Color printing on Linux.
+		// Color coded error message.
 		static void printErrMsg(const std::string&);
-
 		static void forceThousandsSeparators();
 
 	protected:
 		void _advanceAndCheckMissingValue();
-		bool _strOption(char, std::string&);
-		bool _uintOption(char, size_t&);
-		bool _doubleOption(char, double&);
-		bool _boolOption(char, bool&) noexcept;
-		bool _threeStateOption(char sym1, bool& bFirst, char sym2, char sym3, bool& bSecond);
-		static size_t _str2_size_t(const std::string&) noexcept;
-		static double _str2_double(const std::string&) noexcept;
+		bool _strOption(const std::string&, std::string&);
+		bool _uintOption(const std::string&, size_t&);
+		bool _doubleOption(const std::string&, double&);
+		bool _boolOption(const std::string&, bool&) noexcept;
+		bool _threeStateOption(const std::string&, bool& bFirst, const std::string&, const std::string&, bool& bSecond);
+
+		static size_t _stringto_size_t(const std::string&) noexcept;
+		static double _stringto_double(const std::string&) noexcept;
 
 		int _argc;
 		char** _argv;

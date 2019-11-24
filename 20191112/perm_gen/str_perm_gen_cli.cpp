@@ -42,58 +42,58 @@ bool StrPermGenCLIParser::parse() {
 			string strNum(strOption.begin() + 1, strOption.end());
 			if (!isdigit(strNum[0]))
 				throw CLIParserException("Require numeric value in CLI option +.");
-			iStartNum_ = StrPermGenCLIParser::_str2_size_t(strNum);
+			iStartNum_ = StrPermGenCLIParser::_stringto_size_t(strNum);
 			continue;
 		}
 
 		if (strOption[0] == '-') {
 			// Presort the input string.
-			if(_threeStateOption('p', bPresort_, 'a', 'd', bPreOrderAscending_) )
+			if(_threeStateOption("p", bPresort_, "a", "d", bPreOrderAscending_) )
 				continue;
 			// Lexicographic order.
-			if (_threeStateOption('l', bLexicographicOrder_, 'a', 'd', bLexOrderAscending_))
+			if (_threeStateOption("l", bLexicographicOrder_, "a", "d", bLexOrderAscending_))
 				continue;
 
 			// Output file.
-			if (_strOption('o', strOutFile_))
+			if (_strOption("o", strOutFile_))
 				continue;
 			// Exclusion regex.
-			if (_strOption('e', strRegex_)) {
+			if (_strOption("e", strRegex_)) {
 				bExclusionRegex_ = true;
 				continue;
 			}
 			// Inclusion regex.
-			if (_strOption('i', strRegex_)) {
+			if (_strOption("i", strRegex_)) {
 				bExclusionRegex_ = false;
 				continue;
 			}
 
 			// Print permutation numbers.
-			if (_boolOption('n', bPrintNumbers_))
+			if (_boolOption("n", bPrintNumbers_))
 				continue;
 			// Exclude duplicates.
-			if (_boolOption('x', bExcludeDups_))
+			if (_boolOption("x", bExcludeDups_))
 				continue;
 			// Help.
-			if (_boolOption('h', bHelp_))
+			if (_boolOption("h", bHelp_))
 				continue;
 
 			// The number of permutations to print.
-			if (_uintOption('c', iPrintCount_))
+			if (_uintOption("c", iPrintCount_))
 				continue;
 			// The task repeat count in the dry-run mode.
-			if (_uintOption('t', iTaskRepeatCount_)) {
+			if (_uintOption("t", iTaskRepeatCount_)) {
 				bDryRun_ = true;
 				continue;
 			}
 			// The id of the random permutation algorithm.
-			if (_uintOption('r', iRandPermAlgId_)) {
+			if (_uintOption("r", iRandPermAlgId_)) {
 				if (iRandPermAlgId_ > 3)
 					throw CLIParserException(string("Invalid random permutation algorithm id in CLI option -") + strOption[1] + '.');
 				continue;
 			}
 			// The size of the consecutive groups to randomly pick permutations from.
-			if (_uintOption('g', iGroupSize_)) {
+			if (_uintOption("g", iGroupSize_)) {
 				if (iGroupSize_ < 2)
 					throw CLIParserException(string("Require value of 2 or more in CLI option -") + strOption[1] + '.');
 				continue;
