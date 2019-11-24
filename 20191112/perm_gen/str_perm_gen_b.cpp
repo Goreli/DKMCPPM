@@ -103,7 +103,7 @@ int main (int argc, char* argv[]) {
 		cout << "\tRunning the permutation generator for \"" << parser.getInputString() << "\"." << '\n';
 		spg.resetPermutationCounter();
 		auto start = std::chrono::high_resolution_clock::now();
-		spg.generate(symbolPool, true, 0);
+		spg.generate(symbolPool, false, 0);
 		auto finish = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<double> elapsed = finish - start;
 		cout << "\t" << spg.getPermutationCounter() << " permutations generated in " << elapsed.count() << " seconds." << '\n';

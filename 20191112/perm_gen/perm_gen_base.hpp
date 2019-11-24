@@ -95,8 +95,8 @@ namespace dk {
 		// Holds the sequence of input symbols to generate permutations of.
 		std::vector<char> symbolPool_;
 
-		bool bProhibitDups_;
-		bool bDefaultRandomPermAlg_;
+		bool bExcludeDups_;
+		bool bRandom_;
 
 	protected:
 		// Random number generator.

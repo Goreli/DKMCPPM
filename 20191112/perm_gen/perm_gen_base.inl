@@ -13,7 +13,7 @@ namespace dk {
 
 	template <class T>
 	PermutationGeneratorBase<T>::PermutationGeneratorBase()
-		: bProhibitDups_{ true }, bDefaultRandomPermAlg_{ false } {
+		: bExcludeDups_{ false }, bRandom_{ false } {
 		try {
 			auto iSeed = std::random_device{}();
 			_randNumGen.seed(iSeed);
@@ -27,23 +27,26 @@ namespace dk {
 	PermutationGeneratorBase<T>::~PermutationGeneratorBase() {
 	}
 	template <class T>
-	void PermutationGeneratorBase<T>::generate(const std::vector<T>& symbolPool, bool bAllowDups, size_t iRandPermAlgId) {
+	void PermutationGeneratorBase<T>::generate(const std::vector<T>& symbolPool, bool bExcludeDups, size_t iRandPermAlgId) {
 		permutation_.resize(symbolPool.size());
 		symbolPool_ = symbolPool;
-		bProhibitDups_ = !bAllowDups;
 		switch (iRandPermAlgId) {
 		case 0:
-			bDefaultRandomPermAlg_ = false;
+			bExcludeDups_ = bExcludeDups;
+			bRandom_ = false;
 			generate_(0);
 			break;
 		case 1:
-			bDefaultRandomPermAlg_ = true;
+			bExcludeDups_ = bExcludeDups;
+			bRandom_ = true;
 			generate_(0);
 			break;
 		case 2:
+			// bExcludeDups_ and bRandom_ have no effect on generate_R2_R3_(....).
 			generate_R2_R3_(0);
 			break;
 		case 3:
+			// bExcludeDups_ and bRandom_ have no effect on generate_R2_R3_(....).
 			generate_R2_R3_(1);
 			break;
 		}
@@ -54,19 +57,22 @@ namespace dk {
 
 		std::uniform_int_distribution<size_t> dist(0, vocSize-1);
 
-		size_t inx_{ 0 };
-		for (size_t inx = 0; inx < symbolPool_.size(); inx++)
+		size_t inx{ 0 };
+		for (size_t _inx_ = 0; _inx_ < symbolPool_.size(); _inx_++)
 		{
-			inx_ = bDefaultRandomPermAlg_ ? dist(_randNumGen) : inx;
-
-			auto it = symbolPool_.begin() + inx_;
-			if (!bDefaultRandomPermAlg_ && bProhibitDups_) {
-				auto findIt = std::find(symbolPool_.begin(), it, *it);
-				if (findIt != it)
-					continue;
+			if(bRandom_)
+				inx = dist(_randNumGen);
+			else {
+				inx = _inx_;
+				if (bExcludeDups_) {
+					auto it = symbolPool_.begin() + inx;
+					auto findIt = std::find(symbolPool_.begin(), it, *it);
+					if (findIt != it)
+						continue;
+				}
 			}
 
-			permutation_[iPos] = *it;
+			permutation_[iPos] = symbolPool_[inx];
 
 			// If the call stack has hit the bottom of recursion tree then
 			// process the permutation and move on to the next recursion cycle.
@@ -75,9 +81,9 @@ namespace dk {
 				process_(permutation_);
 			else
 			{
-				symbolPool_.erase(it);
+				symbolPool_.erase(symbolPool_.begin() + inx);
 				generate_(iPos + 1);
-				symbolPool_.insert(symbolPool_.begin() + inx_, permutation_[iPos]);
+				symbolPool_.insert(symbolPool_.begin() + inx, permutation_[iPos]);
 
 				// The following piece of code ran perfectly ok when compiled with clang++
 				// on the Ubuntu subsystem of Windows 10. It crashed when compiled with

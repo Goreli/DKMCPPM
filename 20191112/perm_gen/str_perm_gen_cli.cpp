@@ -20,7 +20,7 @@ StrPermGenCLIParser::StrPermGenCLIParser(int argc, char* argv[])
 	bPrintNumbers_{ false }, strOutFile_{ "" }, bExclusionRegex_{ false },
 	strRegex_{ "" }, bPresort_{ false }, bPreOrderAscending_{ false }, 
 	bLexicographicOrder_{ false }, bLexOrderAscending_{ false },
-	bAllowDups_{ false }, iGroupSize_ { 0 }, iTaskRepeatCount_ { 1 },
+	bExcludeDups_{ false }, iGroupSize_ { 0 }, iTaskRepeatCount_ { 1 },
 	bDryRun_(false), bHelp_{ false }, iRandPermAlgId_{ 0 }
 {
 }
@@ -71,8 +71,8 @@ bool StrPermGenCLIParser::parse() {
 			// Print permutation numbers.
 			if (_boolOption('n', bPrintNumbers_))
 				continue;
-			// Allow duplicates.
-			if (_boolOption('a', bAllowDups_))
+			// Exclude duplicates.
+			if (_boolOption('x', bExcludeDups_))
 				continue;
 			// Help.
 			if (_boolOption('h', bHelp_))
@@ -106,16 +106,11 @@ bool StrPermGenCLIParser::parse() {
 		throw CLIParserException(strErrMsg);
 	}	// for
 
-	// Validate compatibility of options.
-	if(allowDups() && lexicographic())
-		throw CLIParserException("Options -a and -l are incompatible.");
-	
 	return true;
 }
 void StrPermGenCLIParser::printUsage() noexcept {
 	cout << "Usage: "<< "str-perm-gen [input_string] [options]" << '\n';
 	cout << "  +number   - start printing at the specified permutation number (1-based);" << '\n';
-	cout << "  -a        - allow duplicates (options -a and -l are incompatible);" << '\n';
 	cout << "  -c count  - the 'count' number of permutations to print;" << '\n';
 	cout << "  -e regex  - exclusion regex (options -e and -i are incompatible);" << '\n';
 	cout << "  -g size   - randomly pick one permutation per consecutive group;" << '\n';
@@ -129,7 +124,8 @@ void StrPermGenCLIParser::printUsage() noexcept {
 	cout << "                1 - default algorithm;" << '\n';
 	cout << "                2 - Richard Durstenfeld (modernised Fisher-Yates);" << '\n';
 	cout << "                3 - Sandra Sattolo." << '\n';
-	cout << "  -t repeat - dry-run 'repeat' times and print average duration." << '\n';
+	cout << "  -t repeat - dry-run 'repeat' times and print average duration;" << '\n';
+	cout << "  -x        - exclude duplicate permutations (options -x and -r are incompatible)." << '\n';
 }
 const string& StrPermGenCLIParser::getInputString() const noexcept {
 	return strInput_;
@@ -164,8 +160,8 @@ bool StrPermGenCLIParser::lexicographic() const noexcept {
 bool StrPermGenCLIParser::lexOrderAscending() const noexcept {
 	return bLexOrderAscending_;
 }
-bool StrPermGenCLIParser::allowDups() const noexcept {
-	return bAllowDups_;
+bool StrPermGenCLIParser::excludeDups() const noexcept {
+	return bExcludeDups_;
 }
 size_t StrPermGenCLIParser::getGroupSize() const noexcept {
 	return iGroupSize_;

@@ -29,7 +29,7 @@ public:
 	bool preOrderAscending() const noexcept;
 	bool lexicographic() const noexcept;
 	bool lexOrderAscending() const noexcept;
-	bool allowDups() const noexcept;
+	bool excludeDups() const noexcept;
 	size_t getGroupSize() const noexcept;
 	size_t getTaskRepeatCount() const noexcept;
 	bool dryRun() const noexcept;
@@ -53,7 +53,7 @@ private:
 	bool bLexicographicOrder_;
 	bool bLexOrderAscending_;
 
-	bool bAllowDups_;
+	bool bExcludeDups_;
 
 	size_t iGroupSize_;
 

@@ -56,7 +56,7 @@ int execUserTask(const StrPermGenCLIParser& parser, size_t& iCount)
 		if (parser.lexicographic())
 			spg.generate_l(symbolPool, parser.lexOrderAscending());
 		else
-			spg.generate(symbolPool, parser.allowDups(), parser.getRandPermAlgId());
+			spg.generate(symbolPool, parser.excludeDups(), parser.getRandPermAlgId());
 	}
 	catch (const PermutationGeneratorStopSignal&) {
 		// The user defined override of process_(....) must have requested
