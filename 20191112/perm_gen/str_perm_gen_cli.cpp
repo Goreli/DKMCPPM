@@ -48,10 +48,10 @@ bool StrPermGenCLIParser::parse() {
 
 		if (strOption[0] == '-') {
 			// Presort the input string.
-			if( _fourStateOption('p', bPresort_, 'a', 'd', bPreOrderAscending_) )
+			if(_threeStateOption('p', bPresort_, 'a', 'd', bPreOrderAscending_) )
 				continue;
 			// Lexicographic order.
-			if (_fourStateOption('l', bLexicographicOrder_, 'a', 'd', bLexOrderAscending_))
+			if (_threeStateOption('l', bLexicographicOrder_, 'a', 'd', bLexOrderAscending_))
 				continue;
 
 			// Output file.

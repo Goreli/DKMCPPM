@@ -40,7 +40,7 @@ public:
 			if (strOption[0] == '-') {
 				if (_boolOption('b', bBinary_))
 					continue;
-				if (_fourStateOption('f', bFrequencyTable_, 'n', 't', bNumericFormat_))
+				if (_threeStateOption('f', bFrequencyTable_, 'n', 't', bNumericFormat_))
 					continue;
 				if (_boolOption('h', bHelp_))
 					continue;

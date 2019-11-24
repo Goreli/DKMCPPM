@@ -7,6 +7,13 @@ Modification history:
     22/Nov/2019 - David Krikheli created the module.
 */
 
+#ifdef _CONSOLE
+// Enable ANSI escape sequences on Windows 10.
+#include <windows.h>
+#define ENABLE_VIRTUAL_TERMINAL_PROCESSING 0x0004
+#define DISABLE_NEWLINE_AUTO_RETURN  0x0008
+#endif
+
 #include <sstream>
 #include <iostream>
 #include <locale>
@@ -14,6 +21,33 @@ Modification history:
 
 using namespace std;
 using namespace dk;
+
+void CLIParserBase::printErrMsg(const string& strErrMsg) {
+#ifdef _CONSOLE
+	// If this is Windows 10 then use a singleton pattern to execute
+	// the ANSI escape sequence enablement code only once.
+	static HANDLE hStdout{ nullptr };
+	if (!hStdout) {
+		hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+		DWORD l_mode;
+		GetConsoleMode(hStdout, &l_mode);
+		SetConsoleMode(hStdout, l_mode | 
+			ENABLE_VIRTUAL_TERMINAL_PROCESSING |
+			DISABLE_NEWLINE_AUTO_RETURN);
+	}
+#endif
+	cerr << "\033[41;37m" << strErrMsg << "\033[0m" << '\n';
+}
+
+// Make sure integrals are printed with thousands separators included.
+struct separate_thousands : std::numpunct<char> {
+	char_type do_thousands_sep() const override { return ','; }  // separate with commas
+	string_type do_grouping() const override { return "\3"; } // groups of 3 digit
+};
+void CLIParserBase::forceThousandsSeparators() {
+	auto thousands = std::make_unique<separate_thousands>();
+	std::cout.imbue(std::locale(std::cout.getloc(), thousands.release()));
+}
 
 CLIParserException::CLIParserException(const string& strWhat)
 : invalid_argument{strWhat} {
@@ -91,7 +125,7 @@ bool CLIParserBase::_strOption(char symbol, string& strValue) {
 	}
 	return false;
 }
-bool CLIParserBase::_fourStateOption(char sym1, bool& bFirst, char sym2, char sym3, bool& bSecond) {
+bool CLIParserBase::_threeStateOption(char sym1, bool& bFirst, char sym2, char sym3, bool& bSecond) {
 	if (_boolOption(sym1, bFirst)) {
 		_advanceAndCheckMissingValue();
 		if (_argv[_inxArg][0] != sym2 && _argv[_inxArg][0] != sym3)
@@ -100,25 +134,4 @@ bool CLIParserBase::_fourStateOption(char sym1, bool& bFirst, char sym2, char sy
 		return true;
 	}
 	return false;
-}
-void CLIParserBase::printErrMsg(const string& strErrMsg) {
-#ifdef _CONSOLE
-	// As of 24/Nov/2019 Windows 10 console still doesn't seem to understand
-	// ANSI escape characters, so let's use ordinary printing here.
-	cerr << strErrMsg << '\n';
-#else
-	// If on Linux then use ANSI escape characters to print the error message
-	// in white on red.
-	cout << "\033[41;37m" << strErrMsg << "\033[0m" << '\n';
-#endif
-}
-
-// Make sure integrals are printed with thousands separators included.
-struct separate_thousands : std::numpunct<char> {
-	char_type do_thousands_sep() const override { return ','; }  // separate with commas
-	string_type do_grouping() const override { return "\3"; } // groups of 3 digit
-};
-void CLIParserBase::forceThousandsSeparators() {
-	auto thousands = std::make_unique<separate_thousands>();
-	std::cout.imbue(std::locale(std::cout.getloc(), thousands.release()));
 }

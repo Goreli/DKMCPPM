@@ -35,7 +35,7 @@ namespace dk {
 		bool _uintOption(char, size_t&);
 		bool _doubleOption(char, double&);
 		bool _boolOption(char, bool&) noexcept;
-		bool _fourStateOption(char sym1, bool& bFirst, char sym2, char sym3, bool& bSecond);
+		bool _threeStateOption(char sym1, bool& bFirst, char sym2, char sym3, bool& bSecond);
 		static size_t _str2_size_t(const std::string&) noexcept;
 		static double _str2_double(const std::string&) noexcept;
 
