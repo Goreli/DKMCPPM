@@ -106,16 +106,19 @@ bool StrPermGenCLIParser::parse() {
 		throw CLIParserException(strErrMsg);
 	}	// for
 
+	if(getRandPermAlgId() > 0 && excludeDups())
+		throw CLIParserException("Incompatible options -r and -x.");
+
 	return true;
 }
 void StrPermGenCLIParser::printUsage() noexcept {
 	cout << "Usage: "<< "str-perm-gen [input_string] [options]" << '\n';
 	cout << "  +number   - start printing at the specified permutation number (1-based);" << '\n';
 	cout << "  -c count  - the 'count' number of permutations to print;" << '\n';
-	cout << "  -e regex  - exclusion regex (options -e and -i are incompatible);" << '\n';
+	cout << "  -e regex  - exclusion regex (-e and -i are incompatible);" << '\n';
 	cout << "  -g size   - randomly pick one permutation per consecutive group;" << '\n';
 	cout << "  -h        - print help information. Overrides all other options;" << '\n';
-	cout << "  -i regex  - inclusion regex (options -i and -e are incompatible);" << '\n';
+	cout << "  -i regex  - inclusion regex (-i and -e are incompatible);" << '\n';
 	cout << "  -l order  - (a)scending or (d)escending lexicographic order;" << '\n';
 	cout << "  -n        - print permutation numbers;" << '\n';
 	cout << "  -o path   - output file path;" << '\n';
@@ -125,7 +128,7 @@ void StrPermGenCLIParser::printUsage() noexcept {
 	cout << "                2 - Richard Durstenfeld (modernised Fisher-Yates);" << '\n';
 	cout << "                3 - Sandra Sattolo." << '\n';
 	cout << "  -t repeat - dry-run 'repeat' times and print average duration;" << '\n';
-	cout << "  -x        - exclude duplicate permutations (options -x and -r are incompatible)." << '\n';
+	cout << "  -x        - exclude duplicate permutations (-x and -r are incompatible)." << '\n';
 }
 const string& StrPermGenCLIParser::getInputString() const noexcept {
 	return strInput_;

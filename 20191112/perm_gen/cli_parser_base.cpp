@@ -103,13 +103,13 @@ bool CLIParserBase::_fourStateOption(char sym1, bool& bFirst, char sym2, char sy
 }
 void CLIParserBase::printErrMsg(const string& strErrMsg) {
 #ifdef _CONSOLE
-	// Windows console doesn't seem to understand ANSI escape characters,
-	// so let's use ordinary printing here.
+	// As of 24/Nov/2019 Windows 10 console still doesn't seem to understand
+	// ANSI escape characters, so let's use ordinary printing here.
 	cerr << strErrMsg << '\n';
 #else
 	// If on Linux then use ANSI escape characters to print the error message
 	// in white on red.
-	cerr << "\033[3;41;37m" << strErrMsg << "\033[0m" << '\n';
+	cout << "\033[41;37m" << strErrMsg << "\033[0m" << '\n';
 #endif
 }
 
