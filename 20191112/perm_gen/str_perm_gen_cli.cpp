@@ -8,8 +8,6 @@ Modification history:
 */
 
 #include <iostream>
-//#include <sstream>
-//#include <cctype>
 #include "str_perm_gen_cli.hpp"
 
 using namespace std;

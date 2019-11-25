@@ -13,7 +13,6 @@ Modification history:
 #include <regex>
 #include <chrono>
 #include "str_perm_gen.hpp"
-#include "str_perm_gen_cli.hpp"
 
 using namespace std;
 using namespace dk;
