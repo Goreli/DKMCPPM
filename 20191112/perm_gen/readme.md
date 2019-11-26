@@ -53,8 +53,7 @@ The project source code consists of the following components located in the [per
  * **str_perm_gen_cli.hpp** - declares the command line parser class for the str-perm-gen application. Utilises the CLIParserBase base class described above;
  * **str_perm_gen_cli.cpp** - defines the command line parser class for the str-perm-gen application;
  * **str_perm_gen_b.cpp** - this is the main entry (and only) module of the str-perm-gen-b application. It implements a string type specialisation of the generic permutation generator along with a dedicated command line interface. The purpose is to benchmark performance of the string permutation process;
- * **file_entropy.cpp** - this is the main entry (and only) module of the file-entropy application;
- * **time-hello-world.sh** - Bash script that times the following command and saves the output on a disk: ./str-perm-gen "Hello World"
+ * **file_entropy.cpp** - this is the main entry (and only) module of the file-entropy application.
   
 ## Command Line Interface
  
@@ -150,20 +149,41 @@ In the example below the logarithm base has been explicitly set to a 2 in order 
 
 ## Build Notes
 
-The project provides build artefacts for two platforms. There is a Makefile in the [perm_gen](https://github.com/Goreli/DKMCPPM/tree/master/20191112/perm_gen) directory that compiles the source code on the Linux platform using the clang++ compiler. There are also Visual Studio 2019 project files in the [vs_projects](https://github.com/Goreli/DKMCPPM/tree/master/20191112/perm_gen/vs_projects) subdirectory.
+The project provides build system artefacts for two platforms. There is a CMakeLists.txt file in the [perm_gen](https://github.com/Goreli/DKMCPPM/tree/master/20191112/perm_gen) directory that can be processed with CMake to create build system artefacts on the Linux platform. There are also Visual Studio 2019 project files in the [vs_projects](https://github.com/Goreli/DKMCPPM/tree/master/20191112/perm_gen/vs_projects) subdirectory that build Windows executables.
 
-Navigate to the [perm_gen](https://github.com/Goreli/DKMCPPM/tree/master/20191112/perm_gen) directory and type "make [Enter]" to build binary executables on the Linux platform. Type "make test [Enter]" and "make benchmark [Enter]" to test-run the applications. Here is a summary of the Linux Makefile targets:
+There is a bash script called cmake-build.sh located in the util directory under the root directory of the repository. This script automates the processing of the CMakeLists.txt file with CMake. Particularly, it accepts the toolchain name and target build type as command line arguments and creates respective subdirectories populated with build system artefacts. The Gnu and Clang toolchains are supported combined with the following build types: Release, Debug, RelWithDebInfo and MinSizeRel. Navigate to the [perm_gen](https://github.com/Goreli/DKMCPPM/tree/master/20191112/perm_gen) source directory and execute cmake-build.sh with proper command line arguments to create the required build system artefacts. Examples follow.
 
- * make all [Enter] (same as make [Enter]) - build all the three applications in the project directory;
+1. Clang, Release
+
+Navigate to the source directory, create build system artefacts for the Clang compiler to create Release type binaries, then build the binaries.
+```
+/..../dkmcppm/20191112/perm_gen$ ../../util/cmake-build.sh Clang Release
+/..../dkmcppm/20191112/perm_gen$ cd ClangRelease
+/..../dkmcppm/20191112/perm_gen/ClangRelease$ make
+```
+
+2. Gnu, Debug
+
+Navigate to the source directory, create build system artefacts for the Gnu compiler to create Debug type binaries, then build the binaries.
+```
+/..../dkmcppm/20191112/perm_gen$ ../../util/cmake-build.sh Gnu Debug
+/..../dkmcppm/20191112/perm_gen$ cd GnuDebug
+/..../dkmcppm/20191112/perm_gen/GnuDebug$ make
+```
+
+
+Here is a summary of Linux Makefile targets supported:
+
+ * make all [Enter] (same as make [Enter]) - build all the three applications in the build subdirectory;
  * make str-perm-gen [Enter] - build str-perm-gen;
  * make str-perm-gen-b [Enter] - build str-perm-gen-b;
  * make file-entropy [Enter] - build file-entropy;
  * make clean [Enter] - remove all the three applications from the project directory;
- * make test [Enter] - prints permutations of the string "Car";
- * make benchmark [Enter] - benchmarks the permutation generator using the string "Hello World";
- * make release [Enter] - builds all the three applications and copies them to the ../../elf/release directory.
+ * make permutations [Enter] - tests str-perm-gen by printing 10 permutations of "Hello World";
+ * make benchmark [Enter] - benchmarks the permutation generator by feeding the string "Hello World" into str-perm-gen-b;
+ * make entropy [Enter] - generates 10 random permutations of "Hello World" and calculates entropy of the dataset generated.
 
-To build Windows executables open the dkmccpm.sln solution file located in the root directory of the original repository and navigate to this project in the VS 2019 Solution Explorer panel. The actual binaries are created in ../../x64.
+To build Windows executables open the dkmccpm.sln solution file located in the root directory of the repository and navigate to this project in the VS 2019 Solution Explorer panel. The actual binaries are created in ../../x64.
 
 Alternatively, add the project file(s) located in the [vs_projects](https://github.com/Goreli/DKMCPPM/tree/master/20191112/perm_gen/vs_projects) subdirectory to your existing VS 2019 solution.
 
@@ -171,7 +191,7 @@ Here is the Visual Studio project configuration log:
 1. Set the language standard to c++17;
 2. Let the c++ compiler know the locations of include areas: ../..
 3. Switch precompiled headers off;
-4. Set the Command Line Arguments in the Debugging section to "Hello World!". Make sure to include the double quoting marks.
+4. Set the Command Line Arguments in the Debugging section to "Hello World". Make sure to include the double quoting marks.
 
 ## Roadmap
 

@@ -17,6 +17,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "str-perm-gen", "20191112\pe
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "perm_gen", "perm_gen", "{EA04DCBA-B3C0-4087-AB03-54E652213FB1}"
 	ProjectSection(SolutionItems) = preProject
+		20191112\perm_gen\cmake-clang-build.sh = 20191112\perm_gen\cmake-clang-build.sh
 		CMakeLists.txt = CMakeLists.txt
 		20191112\perm_gen\Makefile = 20191112\perm_gen\Makefile
 		20191112\perm_gen\readme.md = 20191112\perm_gen\readme.md
