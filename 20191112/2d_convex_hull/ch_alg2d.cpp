@@ -13,7 +13,6 @@ Modification history:
 using namespace std;
 using namespace dk;
 
-const double constPi = 3.141592653589793238463;
 const double impossiblyLargeAngle = 7.0;
 
 static DataPoint2D getTipOfLongestVector(const DataContainer& container) noexcept {

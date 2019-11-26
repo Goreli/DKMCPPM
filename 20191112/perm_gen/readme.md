@@ -151,11 +151,11 @@ In the example below the logarithm base has been explicitly set to a 2 in order 
 
 The project provides build system artefacts for two platforms. There is a CMakeLists.txt file in the [perm_gen](https://github.com/Goreli/DKMCPPM/tree/master/20191112/perm_gen) directory that can be processed with CMake to create build system artefacts on the Linux platform. There are also Visual Studio 2019 project files in the [vs_projects](https://github.com/Goreli/DKMCPPM/tree/master/20191112/perm_gen/vs_projects) subdirectory that build Windows executables.
 
-There is a bash script called cmake-build.sh located in the util directory under the root directory of the repository. This script automates the processing of the CMakeLists.txt file with CMake. Particularly, it accepts the toolchain name and target build type as command line arguments and creates respective subdirectories populated with build system artefacts. The Gnu and Clang toolchains are supported combined with the following build types: Release, Debug, RelWithDebInfo and MinSizeRel. Navigate to the [perm_gen](https://github.com/Goreli/DKMCPPM/tree/master/20191112/perm_gen) source directory and execute cmake-build.sh with proper command line arguments to create the required build system artefacts. Examples follow.
+There is a bash script called cmake-build.sh in the util subdirectory located under the root directory of the repository. This script automates the processing of the CMakeLists.txt file. Particularly, it accepts the toolchain name and target build type as command line arguments and creates respective subdirectories populated with build system artefacts. The Gnu and Clang toolchains are supported combined with the following build types: Release, Debug, RelWithDebInfo and MinSizeRel. Navigate to the [perm_gen](https://github.com/Goreli/DKMCPPM/tree/master/20191112/perm_gen) source directory and execute cmake-build.sh with proper command line arguments to create the required build system artefacts. Examples follow.
 
 1. Clang, Release
 
-Navigate to the source directory, create build system artefacts for the Clang compiler to create Release type binaries, then build the binaries.
+Navigate to the source directory and create build system artefacts that will use the Clang compiler to create Release type binaries, then build the binaries.
 ```
 /..../dkmcppm/20191112/perm_gen$ ../../util/cmake-build.sh Clang Release
 /..../dkmcppm/20191112/perm_gen$ cd ClangRelease
@@ -164,13 +164,12 @@ Navigate to the source directory, create build system artefacts for the Clang co
 
 2. Gnu, Debug
 
-Navigate to the source directory, create build system artefacts for the Gnu compiler to create Debug type binaries, then build the binaries.
+Navigate to the source directory and create build system artefacts that will use the Gnu compiler to create Debug type binaries, then build the binaries.
 ```
 /..../dkmcppm/20191112/perm_gen$ ../../util/cmake-build.sh Gnu Debug
 /..../dkmcppm/20191112/perm_gen$ cd GnuDebug
 /..../dkmcppm/20191112/perm_gen/GnuDebug$ make
 ```
-
 
 Here is a summary of Linux Makefile targets supported:
 
@@ -179,7 +178,7 @@ Here is a summary of Linux Makefile targets supported:
  * make str-perm-gen-b [Enter] - build str-perm-gen-b;
  * make file-entropy [Enter] - build file-entropy;
  * make clean [Enter] - remove all the three applications from the project directory;
- * make permutations [Enter] - tests str-perm-gen by printing 10 permutations of "Hello World";
+ * make test_run [Enter] - tests str-perm-gen by printing 10 permutations of "Hello World";
  * make benchmark [Enter] - benchmarks the permutation generator by feeding the string "Hello World" into str-perm-gen-b;
  * make entropy [Enter] - generates 10 random permutations of "Hello World" and calculates entropy of the dataset generated.
 

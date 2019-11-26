@@ -17,9 +17,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "str-perm-gen", "20191112\pe
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "perm_gen", "perm_gen", "{EA04DCBA-B3C0-4087-AB03-54E652213FB1}"
 	ProjectSection(SolutionItems) = preProject
-		20191112\perm_gen\cmake-clang-build.sh = 20191112\perm_gen\cmake-clang-build.sh
-		CMakeLists.txt = CMakeLists.txt
-		20191112\perm_gen\Makefile = 20191112\perm_gen\Makefile
+		20191112\perm_gen\CMakeLists.txt = 20191112\perm_gen\CMakeLists.txt
 		20191112\perm_gen\readme.md = 20191112\perm_gen\readme.md
 	EndProjectSection
 EndProject
@@ -29,11 +27,17 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ch2d", "20191112\2d_convex_
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2d_convex_hull", "2d_convex_hull", "{4B57CFA9-BD93-4D39-9FC8-4FC301C3684D}"
 	ProjectSection(SolutionItems) = preProject
-		20191112\2d_convex_hull\Makefile = 20191112\2d_convex_hull\Makefile
+		20191112\2d_convex_hull\CMakeLists.txt = 20191112\2d_convex_hull\CMakeLists.txt
 		20191112\2d_convex_hull\readme.md = 20191112\2d_convex_hull\readme.md
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "file-entropy", "20191112\perm_gen\vs_projects\file-entropy\file-entropy.vcxproj", "{ACBE1D58-BD1B-4DBA-8D8C-B144AE6AF052}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "util", "util", "{5DCCFB92-831F-418B-B093-A9EA24826768}"
+	ProjectSection(SolutionItems) = preProject
+		util\cmake-build.sh = util\cmake-build.sh
+		util\CMakeClangOverrides.txt = util\CMakeClangOverrides.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -86,6 +90,7 @@ Global
 		{53FB8638-3DA7-406D-8B9D-009ACBDFE093} = {4B57CFA9-BD93-4D39-9FC8-4FC301C3684D}
 		{4B57CFA9-BD93-4D39-9FC8-4FC301C3684D} = {D07650A1-46B7-48CC-AD4F-31F28FCB1089}
 		{ACBE1D58-BD1B-4DBA-8D8C-B144AE6AF052} = {EA04DCBA-B3C0-4087-AB03-54E652213FB1}
+		{5DCCFB92-831F-418B-B093-A9EA24826768} = {CD1D24E3-6FCD-41DF-BC55-8815F1B322AE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2BE0949B-3F3C-422A-AE9E-C4775E6F82CD}
