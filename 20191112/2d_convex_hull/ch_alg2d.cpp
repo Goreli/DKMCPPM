@@ -73,7 +73,8 @@ void dk::prepareData(DataContainer& dataStore, DataPoint2D& centroid) noexcept {
     dataStore.push_back(dataStore[0]);
 }
 
-/*
+/*  void dk::calcConvexHull2D(...)
+
     Executes multiple passes through the set of input points.
     By virtue of pre-sorting the very first point is good, so the first
     pass saves the first point.
@@ -92,119 +93,16 @@ void dk::prepareData(DataContainer& dataStore, DataPoint2D& centroid) noexcept {
     If there are any points in the input sequence remaining after the last good
     point saved then for each of them:
         2.1 Calculate a respective vector relative to the centroid;
-        2.2 Calculate a delta vector between the result of step 2.1 and last
-            known good vector;
+        2.2 Calculate a delta vector by subtracting the last known good vector
+            from the result of step 2.1;
         2.3 Calculate an angle between the delta vector and last known good
             vector;
         2.4 Assess the angle. If it's smaller than any of the previous
             angles calculated in this pass than treat the current point as
             a suitable candidate;
         2.5 Move on to the next point until the end of the input dataset has
-            been reached. The last suitable candidate identified is to be
-            saved at the beginning of the next pass.
-*/
-/*
-void dk::calcConvexHull2D(DataContainer& convexHull2D, const DataContainer& dataStore, const DataPoint2D& centroid) noexcept {
-    DataPoint2D lastGoodPoint;
-    DataPoint2D lastGoodVector;
-
-    size_t insertionIndex = 0;
-    bool bKeepGoing = true;
-
-    // Remember - the first point and last point are the same because
-    // we are trying to identify points that form a closed loop of lines.
-    // So make sure the algo doesn't hit the last point during the first pass
-    // because it will show zero angle relative to the first point and,
-    // therefore cause to discard any good non-zero angle case identified.
-    size_t offset = 1;
-
-    while(bKeepGoing) {
-        //lastVertexPoint = dataStore[insertionIndex];
-
-        // Save the good point identified in the previous run.
-        // Also, calculate its respective vector relative to the centroid.
-        lastGoodPoint = dataStore[insertionIndex];
-        convexHull2D.push_back(lastGoodPoint);
-        lastGoodVector = lastGoodPoint - centroid;
-        bKeepGoing = false;
-
-        double minAngle{impossiblyLargeAngle};
-        for(size_t inx = insertionIndex+1; inx < dataStore.size()-offset; inx++) {
-            DataPoint2D vertexPoint = dataStore[inx];
-            DataPoint2D vertexVector = vertexPoint - centroid;
-
-            // Evaluate the delta between this vector and last saved vector.
-            DataPoint2D deltaVector = vertexVector - lastGoodVector;
-            double angle = DataPoint2D::calcAngle(deltaVector, lastGoodVector);
-
-            // A smaller angle will indicate a better alignment of the delta
-            // vector with the last saved vector. 
-            // So let's examine the angle and register it along with the
-            // respective point if the value of the angle is smaller than
-            // before.
-            if(angle < minAngle) {
-                minAngle = angle;
-                insertionIndex = inx;
-                bKeepGoing = true;
-            }
-        }
-        offset = 0;
-    }
-}
-*/
-/*
-void dk::calcConvexHull2D(DataContainer& convexHull2D, const DataContainer& dataStore, const DataPoint2D& centroid) noexcept {
-    DataPoint2D lastGoodPoint;
-    DataPoint2D lastGoodVector;
-
-    size_t insertionIndex = 0;
-    bool bKeepGoing = true;
-
-    // Remember - the first point and last point are the same because
-    // we are trying to identify points that form a closed loop of lines.
-    // So make sure the algo doesn't hit the last point during the first pass
-    // because it will show zero angle relative to the first point and,
-    // therefore cause to discard any good non-zero angle case identified.
-    size_t offset = 1;
-
-    while(bKeepGoing) {
-        //lastVertexPoint = dataStore[insertionIndex];
-
-        // Save the good point identified in the previous run.
-        // Also, calculate its respective vector relative to the centroid.
-        lastGoodPoint = dataStore[insertionIndex];
-        convexHull2D.push_back(lastGoodPoint);
-        lastGoodVector = lastGoodPoint - centroid;
-        bKeepGoing = false;
-
-        double minAngle{impossiblyLargeAngle};
-        for_each(
-            dataStore.begin() + insertionIndex + 1, 
-            dataStore.end()-offset, 
-            [&centroid, &lastGoodVector, &minAngle, &dataStore, &insertionIndex, &bKeepGoing]
-                (const auto& vertexPoint)
-        {
-            DataPoint2D vertexVector = vertexPoint - centroid;
-
-            // Evaluate the delta between this vector and last saved vector.
-            DataPoint2D deltaVector = vertexVector - lastGoodVector;
-            double angle = DataPoint2D::calcAngle(deltaVector, lastGoodVector);
-
-            // A smaller angle will indicate a better alignment of the delta
-            // vector with the last saved vector. 
-            // So let's examine the angle and register it along with the
-            // respective point if the value of the angle is smaller than
-            // before.
-            if(angle < minAngle) {
-                minAngle = angle;
-                insertionIndex = &vertexPoint - &dataStore[0];
-                bKeepGoing = true;
-            }
-        });
-
-        offset = 0;
-    }
-}
+            been reached. The last suitable candidate identified needs to be
+            saved. Save it at the beginning of the next pass.
 */
 void dk::calcConvexHull2D(DataContainer& convexHull2D, const DataContainer& dataStore, const DataPoint2D& centroid) noexcept {
     // Remember - the last point is the same as first point because we are
@@ -218,18 +116,18 @@ void dk::calcConvexHull2D(DataContainer& convexHull2D, const DataContainer& data
     size_t offset = 1;
 
     auto candidatePointIt = dataStore.begin();
-    bool bKeepGoing = true;
+    bool bDoAnotherPass = true;
 
     DataPoint2D lastGoodPoint;
     DataPoint2D lastGoodVector;
 
-    while(bKeepGoing) {
+    while(bDoAnotherPass) {
         // Save the good point identified in the previous run.
         // Also, calculate its respective vector relative to the centroid.
         lastGoodPoint = *candidatePointIt;
         convexHull2D.push_back(lastGoodPoint);
         lastGoodVector = lastGoodPoint - centroid;
-        bKeepGoing = false;
+        bDoAnotherPass = false;
 
         double minAngle{impossiblyLargeAngle};
         for(auto it = candidatePointIt + 1; it != dataStore.end() - offset; it++) 
@@ -237,19 +135,21 @@ void dk::calcConvexHull2D(DataContainer& convexHull2D, const DataContainer& data
             // Evaluate the delta between this vector and last saved vector.
             DataPoint2D deltaVector = *it - centroid - lastGoodVector;
             double angle = DataPoint2D::calcAngle(deltaVector, lastGoodVector);
+            // angle is in the [0, 2*Pi) range. The left boundary is inclusive
+            // and the right boundary is exclusive. 
+            // An angle between a vector and itself equals 0.
 
-            // A smaller angle will indicate a better alignment of the delta
-            // vector with the last saved vector. 
+            // A smaller angle will indicate a better directional alignment
+            // of the delta vector with the last saved vector. 
             // So let's examine the angle and register it along with the
             // respective point if the value of the angle is smaller than
             // before.
             if(angle < minAngle) {
                 minAngle = angle;
                 candidatePointIt = it;
-                bKeepGoing = true;
+                bDoAnotherPass = true;
             }
         }
-
         offset = 0;
     }
 }

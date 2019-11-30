@@ -22,21 +22,23 @@ namespace dk {
         
         // Angle between the following two vectors:
         //  - A vector with the tip at this point and origin at the centroid;
-        //  - The longest vector in the input space of vectors relative to the centroid.
+        //  - The longest vector in the input space of vectors relative to the
+        //    centroid.
         double alpha {0};
-        // Squared length of a vector with the tip at this point and origin at the centroid.
+        // Squared length of a vector with the tip at this point and origin
+        // at the centroid.
         double lengthSqr {0};
 
-        // Parses a comma separated list of x and y values and populates x and y.
-        // Does not impact any other members.
+        // Parses comma separated x and y values and populates x and y
+        // respectively. Does not impact any other members.
         void parse(const std::string&) noexcept;
 
         // Updates x and y in (*this) object.
         // Does not impact any other members.
         DataPoint2D& operator += (const DataPoint2D& point) noexcept;
 
-        // Divides x and y by the scalar. Helps to find a centroid of a cluster of points.
-        // Does not impact any other members.
+        // Divides x and y by the scalar. Helps to find a centroid of a cluster
+        // of points. Does not impact any other members.
         DataPoint2D& operator /= (size_t integralScalar);
 
         // Populates lengthSqr with distance between (*this)
@@ -56,6 +58,9 @@ namespace dk {
 
         // Calculates an angle between the first and second vector represented
         // by the function arguments.
+        // The angle is in the [0, 2*Pi) domain. The left boundary is inclusive
+        // of zero and the right boundary is exclusive of 2*Pi.
+        // An angle between a vector and itself equals 0.
         static double calcAngle(const DataPoint2D&, const DataPoint2D&) noexcept;
     };
 

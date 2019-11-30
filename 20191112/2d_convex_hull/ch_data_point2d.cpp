@@ -78,7 +78,7 @@ double DataPoint2D::calcAngle(const DataPoint2D& v1, const DataPoint2D& v2) noex
     double determinant = v2.x * v1.y - v2.y * v1.x;
     double angle = atan2(determinant, dotProduct);
 
-    // Make the angle vary in the [0, 2*Pi] domain to preclude interruption of continuity
+    // Make the angle vary in the [0, 2*Pi) domain to preclude interruption of continuity
     // at the Pi boundary point past which it would otherwise abruptly become negative.
     // This is because in this implementation we need continuity around Pi, not around
     // 0 (zero).
