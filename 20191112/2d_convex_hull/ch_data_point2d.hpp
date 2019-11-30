@@ -25,9 +25,6 @@ namespace dk {
         //  - The longest vector in the input space of vectors relative to the
         //    centroid.
         double alpha {0};
-        // Squared length of a vector with the tip at this point and origin
-        // at the centroid.
-        double lengthSqr {0};
 
         // Parses comma separated x and y values and populates x and y
         // respectively. Does not impact any other members.
@@ -41,10 +38,9 @@ namespace dk {
         // of points. Does not impact any other members.
         DataPoint2D& operator /= (size_t integralScalar);
 
-        // Populates lengthSqr with distance between (*this)
-        // and point represented by the argument squared.
-        // Does not impact any other members.
-        void calcLenSqr(const DataPoint2D&) noexcept;
+        // Calculates the squared distance between (*this) and point
+        // represented by the argument.
+        double calcDistSqr(const DataPoint2D&) const noexcept;
 
         // Returns a result of subtraction of the point represented
         // by the argument from (*this) point. Only calculates x and y.

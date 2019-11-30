@@ -30,11 +30,6 @@ bool readInpFile(const string& inpFileName, DataContainer& container) noexcept {
     else
         return false;
 }
-void debugOutput(const DataContainer& container, const DataPoint2D& centroid) {
-    for(const auto& point: container)
-        cout << point.x << "," << point.y << "," << point.alpha << "," << point.lengthSqr << '\n';
-    cout << "Centroid: " << centroid.x << " " << centroid.y << '\n';
-}
 
 int main (int argc, char* argv[]) {
     if(argc <= 1) {
@@ -54,8 +49,6 @@ int main (int argc, char* argv[]) {
     DataPoint2D centroid;
     calculateCentroid(dataStore, centroid);
     prepareData(dataStore, centroid);
-
-    //debugOutput(dataStore, centroid);
 
     DataContainer convexHull2D;
     if(dataStore.size() <= 4)

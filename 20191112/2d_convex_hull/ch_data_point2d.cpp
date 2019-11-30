@@ -56,10 +56,10 @@ DataPoint2D& DataPoint2D::operator /= (size_t integralScalar)
     y /= decltype(y)(integralScalar);
     return *this;
 }
-void DataPoint2D::calcLenSqr(const DataPoint2D& point) noexcept {
+double DataPoint2D::calcDistSqr(const DataPoint2D& point) const noexcept {
     double dX = x - point.x;
     double dY = y - point.y;
-    lengthSqr = dX*dX + dY*dY;
+    return dX*dX + dY*dY;
 }
 DataPoint2D  DataPoint2D::operator - (const DataPoint2D& p) const noexcept {
     DataPoint2D result;

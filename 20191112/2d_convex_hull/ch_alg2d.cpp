@@ -16,12 +16,15 @@ using namespace dk;
 // This needs to be anything greater than 2*Pi.
 const double impossiblyLargeAngle = 7.0;
 
-static DataPoint2D getTipOfLongestVector(const DataContainer& container) noexcept {
+static DataPoint2D getTipOfLongestVector(const DataContainer& container,
+        const DataPoint2D& centroid) noexcept {
+    double distanceSqr {0.0};
     double maxDistanceSqr {0.0};
-    DataPoint2D tip = container[0];
+    DataPoint2D tip;
     for(const auto& point: container) {
-        if(point.lengthSqr > maxDistanceSqr) {
-            maxDistanceSqr = point.lengthSqr;
+        distanceSqr = point.calcDistSqr(centroid);
+        if(distanceSqr > maxDistanceSqr) {
+            maxDistanceSqr = distanceSqr;
             tip = point;
         }
     }
@@ -30,24 +33,16 @@ static DataPoint2D getTipOfLongestVector(const DataContainer& container) noexcep
 static bool compFunc4Sort(const DataPoint2D& p1, const DataPoint2D& p2) {
     if(p1.alpha < p2.alpha)
         return true;
-    if(p1.alpha > p2.alpha)
-        return false;
-    return (p1.lengthSqr > p2.lengthSqr);
+    return false;
 }
-static bool compFunc4Unique(const DataPoint2D& p1, const DataPoint2D& p2) {
-    return p1.alpha == p2.alpha;
-}
-static void removeExtraPointsWithEqualAngles(DataContainer& dataStore) {
-    auto it = unique(dataStore.begin(), dataStore.end(), compFunc4Unique);
-    dataStore.resize(distance(dataStore.begin(), it));
-}
-
 // Public interface functions.
-void dk::calculateCentroid(const DataContainer& dataStore, DataPoint2D& centroid, const size_t subSampleSize) noexcept {
+void dk::calculateCentroid(const DataContainer& dataStore,
+        DataPoint2D& centroid, const size_t subSampleSize) noexcept {
     centroid.x = 0.0;
     centroid.y = 0.0;
 
-    size_t effectvSubSampleSize = subSampleSize? min(subSampleSize, dataStore.size()) : dataStore.size();
+    size_t effectvSubSampleSize = subSampleSize? 
+        min(subSampleSize, dataStore.size()) : dataStore.size();
     size_t inx { 0 };
     
     while(inx < effectvSubSampleSize)
@@ -55,18 +50,13 @@ void dk::calculateCentroid(const DataContainer& dataStore, DataPoint2D& centroid
     centroid /= inx;
 }
 void dk::prepareData(DataContainer& dataStore, DataPoint2D& centroid) noexcept {
-    // Calculate lengths of the vectors relative to the centroid.
-    // We don't really need the actual lengths. Squared lenghts
-    // will suffice as that will save us some compute time.
-    for(auto& point: dataStore)
-        point.calcLenSqr(centroid);
-
-    DataPoint2D tipOfLongestVector = getTipOfLongestVector(dataStore);
+    // For each vector calculate the angle between that vector and the longest
+    // vector in the dataset.
+    DataPoint2D tipOfLongestVector = getTipOfLongestVector(dataStore, centroid);
     for(auto& point: dataStore)
         point.calcAlpha(tipOfLongestVector, centroid);
 
     sort(dataStore.begin(), dataStore.end(), compFunc4Sort);
-    removeExtraPointsWithEqualAngles(dataStore);
 
     // Put a copy of the first point at the end of the sequence
     // to make sure the algorithm delivers a closed line loop.
@@ -97,14 +87,17 @@ void dk::prepareData(DataContainer& dataStore, DataPoint2D& centroid) noexcept {
             from the result of step 2.1;
         2.3 Calculate an angle between the delta vector and last known good
             vector;
-        2.4 Assess the angle. If it's smaller than any of the previous
-            angles calculated in this pass than treat the current point as
-            a suitable candidate;
+        2.4 Assess the angle. A smaller angle will indicate a better
+            directional alignment of the delta vector with the last known good
+            vector. So if the angle is smaller than any of the previous angles
+            calculated in this pass then treat the current point as a suitable
+            candidate;
         2.5 Move on to the next point until the end of the input dataset has
             been reached. The last suitable candidate identified needs to be
             saved. Save it at the beginning of the next pass.
 */
-void dk::calcConvexHull2D(DataContainer& convexHull2D, const DataContainer& dataStore, const DataPoint2D& centroid) noexcept {
+void dk::calcConvexHull2D(DataContainer& convexHull2D,
+        const DataContainer& dataStore, const DataPoint2D& centroid) noexcept {
     // Remember - the last point is the same as first point because we are
     // trying to identify points that form a closed loop of lines.
     // So make sure the algo doesn't compare the last point with the first one
@@ -116,38 +109,34 @@ void dk::calcConvexHull2D(DataContainer& convexHull2D, const DataContainer& data
     size_t offset = 1;
 
     auto candidatePointIt = dataStore.begin();
-    bool bDoAnotherPass = true;
+    bool bEnableAnotherPass = true;
 
     DataPoint2D lastGoodPoint;
     DataPoint2D lastGoodVector;
 
-    while(bDoAnotherPass) {
+    while(bEnableAnotherPass) {
         // Save the good point identified in the previous run.
         // Also, calculate its respective vector relative to the centroid.
         lastGoodPoint = *candidatePointIt;
         convexHull2D.push_back(lastGoodPoint);
         lastGoodVector = lastGoodPoint - centroid;
-        bDoAnotherPass = false;
 
+        bEnableAnotherPass = false;
         double minAngle{impossiblyLargeAngle};
-        for(auto it = candidatePointIt + 1; it != dataStore.end() - offset; it++) 
+
+        for(auto it = candidatePointIt + 1;
+            it != dataStore.end() - offset;
+            it++) 
         {
             // Evaluate the delta between this vector and last saved vector.
             DataPoint2D deltaVector = *it - centroid - lastGoodVector;
             double angle = DataPoint2D::calcAngle(deltaVector, lastGoodVector);
-            // angle is in the [0, 2*Pi) range. The left boundary is inclusive
-            // and the right boundary is exclusive. 
-            // An angle between a vector and itself equals 0.
-
-            // A smaller angle will indicate a better directional alignment
-            // of the delta vector with the last saved vector. 
-            // So let's examine the angle and register it along with the
-            // respective point if the value of the angle is smaller than
-            // before.
             if(angle < minAngle) {
                 minAngle = angle;
                 candidatePointIt = it;
-                bDoAnotherPass = true;
+                // We've got a potential candidate point to save. Facilitate
+                // this by enabling another pass.
+                bEnableAnotherPass = true;
             }
         }
         offset = 0;
