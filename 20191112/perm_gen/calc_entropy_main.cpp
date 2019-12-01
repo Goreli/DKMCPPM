@@ -7,9 +7,12 @@ Modification history:
     22/Nov/2019 - David Krikheli created the module.
 */
 
+#include <chrono>
+#include <map>
+#include <vector>
+
 #include <iostream>
 #include <fstream>
-#include <map>
 #include <utility>
 #include <numeric>
 #include <cmath>
@@ -20,14 +23,20 @@ Modification history:
 using namespace std;
 using namespace dk;
 
-static void processData(const ECCLIParser& parser, const std::map<unsigned char, size_t>& counter) noexcept {
+typedef std::vector<size_t> CECounterType;
+
+static void processData(const ECCLIParser& parser, const CECounterType& counter) noexcept {
+
 	// Ascertain the total size of the dataset.
 	size_t iTotalSize{ 0 };
 	iTotalSize = std::accumulate(counter.begin(), counter.end(), size_t(0),
-		[](const size_t previous, const auto& element) { return previous + element.second; });
+		[](const size_t previous, const auto& element) { return previous + element; });
 
 	// Ascertain the log base.
-	size_t iDistinctCount = counter.size();
+	size_t iDistinctCount{ 0 };
+	for (auto elem : counter)
+		if (elem)
+			iDistinctCount++;
 	double dblLogBase = parser.logBase();
 	if (dblLogBase == 0.0)
 		dblLogBase = double(iDistinctCount);
@@ -39,7 +48,10 @@ static void processData(const ECCLIParser& parser, const std::map<unsigned char,
 		double p{ 0.0 };
 		double logP{ 0.0 };
 		for (auto elem : counter) {
-			p = double(elem.second) / dblTotalSize;
+			if (elem == 0)
+				continue;
+			p = double(elem) / dblTotalSize;
+
 			logP = log2(p);
 			// Convert the log base if the user requested to do so.
 			if (dblLogBase != 2.0)
@@ -57,35 +69,48 @@ static void processData(const ECCLIParser& parser, const std::map<unsigned char,
 	if (parser.frequencyTable()) {
 		// Get the max frequency.
 		auto best = std::max_element(counter.begin(), counter.end(),
-			[](const auto& a, const auto& b)->bool { return a.second < b.second; });
-		size_t iMax{ best->second };
+			[](const auto& a, const auto& b)->bool { return a < b; });
+
+		size_t iMax{ *best };
 		int iMaxNumDigits = int(ceil(log10(iMax)));
 
 		std::cout << '\t' << "---------------" << '\n';
 		std::cout << '\t' << "Frequency Table" << '\n';
 		std::cout << '\t' << "---------------" << '\n';
-		if (parser.binary() || parser.numericFormat())
-			for (const auto& [k, v] : counter)
-				std::cout << '\t' << setw(3) << int(k) << " - " << setw(iMaxNumDigits) << v << '\n';
-		else
-			for (const auto& [k, v] : counter)
-				std::cout << '\t' << setw(3) << k << " - " << setw(iMaxNumDigits) << v << '\n';
+		if (parser.binary() || parser.numericFormat()) {
+			for (const auto& elem : counter)
+				if (elem)
+					std::cout << '\t' << setw(3) << int(&elem - &counter[0]) << " - " << setw(iMaxNumDigits) << elem << '\n';
+		}
+		else {
+			for (const auto& elem : counter)
+				if (elem)
+					std::cout << '\t' << setw(3) << static_cast<unsigned char>(&elem - &counter[0]) << " - " << setw(iMaxNumDigits) << elem << '\n';
+		}
 	}
 }
 
 static void readDataFromFile(ifstream& inputFile, const ECCLIParser& parser,
-							std::map<unsigned char, size_t>& counter) {
+							CECounterType& counter) {
+
 	// Count the characters in the input file.
 	char inputBuffer[8192];
 	while (inputFile) {
 		inputFile.read(inputBuffer, sizeof(inputBuffer));
 		size_t iInputSize = inputFile.gcount();
+
 		unsigned char symbol{ 0 };
-		for (size_t inx = 0; inx < iInputSize; inx++) {
-			symbol = static_cast<unsigned char>(inputBuffer[inx]);
-			if (parser.binary() || isprint(symbol))
+		if(parser.binary())
+			for (size_t inx = 0; inx < iInputSize; inx++) {
+				symbol = static_cast<unsigned char>(inputBuffer[inx]);
 				counter[symbol] ++;
-		}
+			}
+		else
+			for (size_t inx = 0; inx < iInputSize; inx++) {
+				symbol = static_cast<unsigned char>(inputBuffer[inx]);
+				if (isprint(symbol))
+					counter[symbol] ++;
+			}
 	}
 }
 
@@ -108,6 +133,8 @@ int main (int argc, char* argv[]) {
 		return 0;
 	}
 
+	parser.forceThousandsSeparators(cout);
+
 	if (parser.getFilePath().size()) {
 		ifstream inputFile;
 		inputFile.open(parser.getFilePath(), ios::binary);
@@ -119,7 +146,7 @@ int main (int argc, char* argv[]) {
 			return 2;
 		}
 
-		std::map<unsigned char, size_t> counter;
+		CECounterType counter(256);
 		readDataFromFile(inputFile, parser, counter);
 		processData(parser, counter);
 		inputFile.close();
@@ -129,9 +156,9 @@ int main (int argc, char* argv[]) {
 			string inputString;
 			getline(cin, inputString);
 			if (inputString.size() > 0) {
-				std::map<unsigned char, size_t> counter;
+				CECounterType counter(256);
 				for (auto symbol : inputString)
-					counter[symbol] ++;
+					counter[static_cast<unsigned char>(symbol)] ++;
 				processData(parser, counter);
 			}
 		}
