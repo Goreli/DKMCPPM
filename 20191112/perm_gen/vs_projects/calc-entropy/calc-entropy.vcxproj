@@ -19,21 +19,19 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\calc_entropy_cli.cpp" />
     <ClCompile Include="..\..\cli_parser_base.cpp" />
-    <ClCompile Include="..\..\str_perm_gen_b.cpp" />
+    <ClCompile Include="..\..\calc_entropy_main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\calc_entropy_cli.hpp" />
     <ClInclude Include="..\..\cli_parser_base.hpp" />
-    <ClInclude Include="..\..\perm_gen_base.hpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\perm_gen_base.inl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
-    <ProjectGuid>{CFE6F37B-438F-468C-915E-2499A9B9896A}</ProjectGuid>
+    <ProjectGuid>{ACBE1D58-BD1B-4DBA-8D8C-B144AE6AF052}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>strpermgenb</RootNamespace>
+    <RootNamespace>calcentropy</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -153,9 +151,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp17</LanguageStandard>
       <AdditionalIncludeDirectories>../..</AdditionalIncludeDirectories>
-      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

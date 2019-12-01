@@ -32,7 +32,7 @@ public:
 	void setGroupSize(size_t iGroupSize) noexcept;
 
 	// Only generate. Don't output.
-	void setSilent() noexcept;
+	void setSilent(bool bSilent) noexcept;
 
 	// The count of permutations intended for output.
 	size_t getPermutationCount() noexcept;

@@ -12,6 +12,7 @@ Modification history:
 
 #include <string>
 #include <stdexcept>
+#include <iostream>
 
 namespace dk {
 	class CLIParserException : public std::invalid_argument {
@@ -21,12 +22,12 @@ namespace dk {
 
 	class CLIParserBase {
 	public:
-		CLIParserBase(int argc, char* argv[]);
+		CLIParserBase(int, char**);
 		virtual ~CLIParserBase();
 
 		// Color coded error message.
 		static void printErrMsg(const std::string&);
-		static void forceThousandsSeparators();
+		static void forceThousandsSeparators(std::ostream& os);
 
 	protected:
 		void _advanceAndCheckMissingValue();

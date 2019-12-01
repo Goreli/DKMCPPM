@@ -14,8 +14,8 @@ Modification history:
 
 class StrPermGenCLIParser : public dk::CLIParserBase {
 public:
-	StrPermGenCLIParser(int argc, char* argv[]);
-	bool parse();
+	StrPermGenCLIParser(int, char**);
+	void parse();
 	static void printUsage() noexcept;
 
 	const std::string& getInputString() const noexcept;
@@ -26,7 +26,7 @@ public:
 	bool isExclusionRegex() const noexcept;
 	const std::string& getRegexStr() const noexcept;
 	bool presort() const noexcept;
-	bool preOrderAscending() const noexcept;
+	bool presortAscending() const noexcept;
 	bool lexicographic() const noexcept;
 	bool lexOrderAscending() const noexcept;
 	bool excludeDups() const noexcept;
@@ -48,7 +48,7 @@ private:
 	std::string strRegex_;
 
 	bool bPresort_;
-	bool bPreOrderAscending_;
+	bool bPresortAscending_;
 
 	bool bLexicographicOrder_;
 	bool bLexOrderAscending_;

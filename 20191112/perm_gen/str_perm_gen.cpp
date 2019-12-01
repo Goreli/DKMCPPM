@@ -43,8 +43,8 @@ void StringPermutationGenerator::setGroupSize(size_t iGroupSize) noexcept {
 	dist_.param(std::uniform_int_distribution<size_t>::param_type(1, iGroupSize));
 	iNextInGroup_ = dist_(_randNumGen);
 }
-void StringPermutationGenerator::setSilent() noexcept {
-	bSilent_ = true;
+void StringPermutationGenerator::setSilent(bool bSilent) noexcept {
+	bSilent_ = bSilent;
 }
 inline bool StringPermutationGenerator::checkWithRegex_(const string& strPermutation) noexcept {
 	bool bMatched = regex_search(strPermutation, objRegex_, regex_constants::match_any);

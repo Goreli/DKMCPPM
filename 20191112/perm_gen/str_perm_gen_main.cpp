@@ -17,40 +17,28 @@ Modification history:
 using namespace std;
 using namespace dk;
 
-int execUserTask(const StrPermGenCLIParser& parser, size_t& iCount)
+void doExecUserTask(const StrPermGenCLIParser& parser, const string& inputString, ostream& outStream, size_t& iPermCount)
 {
-	const string& inputString = parser.getInputString();
+	// An input string is available. Let's process it.
 	std::vector<char> symbolPool(inputString.begin(), inputString.end());
 	if (parser.presort()) {
-		if (parser.preOrderAscending())
+		if (parser.presortAscending())
 			sort(symbolPool.begin(), symbolPool.end());
 		else
 			sort(symbolPool.rbegin(), symbolPool.rend());
-	}
-
-	ofstream fout;
-	bool bUseOutputFile = parser.getOutFilePathStr().size() ? true : false;
-	if (bUseOutputFile)
-	{
-		fout.open(parser.getOutFilePathStr());
-		if (!fout) {
-			cerr << "Error: unable to open the output file. Exiting with error code 1." << '\n';
-			return 10;
-		}
 	}
 
 	StringPermutationGenerator spg(
 		parser.getStartNumber(),
 		parser.getPrintCount(),
 		parser.printPermutationNumbers(),
-		bUseOutputFile ? fout : cout
+		outStream
 	);
 
+	spg.setSilent(parser.dryRun());
+	spg.setGroupSize(parser.getGroupSize());
 	if (parser.getRegexStr().size())
 		spg.assignRegex(parser.getRegexStr(), parser.isExclusionRegex());
-	if (parser.dryRun())
-		spg.setSilent();
-	spg.setGroupSize(parser.getGroupSize());
 
 	try {
 		if (parser.lexicographic())
@@ -62,25 +50,34 @@ int execUserTask(const StrPermGenCLIParser& parser, size_t& iCount)
 		// The user defined override of process_(....) must have requested
 		// to stop the permutation generator. All good. Do nothing.
 	}
-	iCount = spg.getPermutationCount();
+	iPermCount = spg.getPermutationCount();
+}
 
-	if (bUseOutputFile)
-	fout.close();
-	return 0;
+
+void execUserTask(const StrPermGenCLIParser& parser, const string& inputString, ostream& outStream) {
+	size_t iPermCount{ 0 };
+
+	if (parser.dryRun()) {
+		std::chrono::duration<double> totalElapsed(0.0);
+		for (size_t inx = 0; inx < parser.getTaskRepeatCount(); inx++) {
+			auto start = std::chrono::high_resolution_clock::now();
+			doExecUserTask(parser, inputString, outStream, iPermCount);
+			auto finish = std::chrono::high_resolution_clock::now();
+			std::chrono::duration<double> elapsed = finish - start;
+			totalElapsed += elapsed;
+			outStream << "Test run #" << inx + 1 << " generated " << iPermCount << " permutations in " << elapsed.count() << " seconds." << '\n';
+		}
+
+		outStream << '\t' << "Average duration: " << totalElapsed.count() / parser.getTaskRepeatCount() << '\n' << '\n';
+	}
+	else
+		doExecUserTask(parser, inputString, outStream, iPermCount);
 }
 
 int main (int argc, char* argv[]) {
 	StrPermGenCLIParser parser(argc, argv);
 	try { 
-		// Print usage instructions if there is nothing to do or help has been requested.
-		if (!parser.parse() || parser.help()) {
-			cout << "String Permutation Generator v1.0" << '\n';
-			cout << "Copyright (c) 2019 David Krikheli" << '\n';
-			cout << "Refer the following link for comprehensive help information:" << '\n';
-			cout << "  " << "https://github.com/Goreli/DKMCPPM/blob/master/20191112/perm_gen/readme.md" << '\n';
-			parser.printUsage();
-			return 0;
-		}
+		parser.parse();
 	}
 	catch(const CLIParserException& e)
 	{
@@ -89,24 +86,39 @@ int main (int argc, char* argv[]) {
 		return 1;
     }
 
-	size_t iCount;
-	if(!parser.dryRun())
-		return execUserTask(parser, iCount);
-
-	int iReturnValue{ 0 };
-	std::chrono::duration<double> totalElapsed(0.0);
-	parser.forceThousandsSeparators();
-
-	for (size_t inx = 0; inx < parser.getTaskRepeatCount(); inx++) {
-		auto start = std::chrono::high_resolution_clock::now();
-		iReturnValue = execUserTask(parser, iCount);
-		auto finish = std::chrono::high_resolution_clock::now();
-		std::chrono::duration<double> elapsed = finish - start;
-		totalElapsed += elapsed;
-		cout << "Test run #" << inx+1 << " generated " << iCount << " permutations in " << elapsed.count() << " seconds." << '\n';
+	// Print usage instructions and exit if help has been requested
+	// or there is nothing to do.
+	if (parser.help()) {
+		parser.printUsage();
+		return 0;
 	}
 
-	cout << '\t' << "Average duration: " << totalElapsed.count() / parser.getTaskRepeatCount() << '\n' << '\n';
+	ofstream fout;
+	bool bUseOutputFile = (parser.getOutFilePathStr().size() > 0);
+	if (bUseOutputFile) {
+		fout.open(parser.getOutFilePathStr());
+		if (!fout) {
+			parser.printErrMsg("str-perm-gen error: unable to open the output file " + parser.getOutFilePathStr() + ".");
+			parser.printUsage();
+			return 2;
+		}
+	}
 
-	return iReturnValue;
+	if (parser.dryRun())
+		parser.forceThousandsSeparators(bUseOutputFile ? fout : cout);
+
+	if(parser.getInputString().size() > 0)
+		execUserTask(parser, parser.getInputString(), bUseOutputFile ? fout : cout);
+	else {
+		while (!cin.eof()) {
+			string inputString;
+			getline(cin, inputString);
+			if(inputString.size()>0)
+				execUserTask(parser, inputString, bUseOutputFile ? fout : cout);
+		}
+	}
+
+	if (bUseOutputFile)
+		fout.close();
+	return 0;
 }

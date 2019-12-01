@@ -15,7 +15,6 @@ Modification history:
 #endif
 
 #include <sstream>
-#include <iostream>
 #include <locale>
 #include "cli_parser_base.hpp"
 
@@ -43,9 +42,9 @@ struct separate_thousands : std::numpunct<char> {
 	char_type do_thousands_sep() const override { return ','; }  // separate with commas
 	string_type do_grouping() const override { return "\3"; } // groups of 3 digit
 };
-void CLIParserBase::forceThousandsSeparators() {
+void CLIParserBase::forceThousandsSeparators(std::ostream& os) {
 	auto thousands = std::make_unique<separate_thousands>();
-	std::cout.imbue(std::locale(std::cout.getloc(), thousands.release()));
+	os.imbue(std::locale(std::cout.getloc(), thousands.release()));
 }
 size_t CLIParserBase::_stringto_size_t(const string& strNum) noexcept {
 	std::istringstream iss(strNum);
@@ -64,7 +63,7 @@ double CLIParserBase::_stringto_double(const string& strNum) noexcept {
 CLIParserException::CLIParserException(const string& strWhat)
 : invalid_argument{strWhat} {
 }
-CLIParserBase::CLIParserBase(int argc, char* argv[])
+CLIParserBase::CLIParserBase(int argc, char** argv)
 	: _argc{ argc }, _argv{ argv }, _inxArg{0}
 {
 }
@@ -72,10 +71,10 @@ CLIParserBase::~CLIParserBase()
 {
 }
 void CLIParserBase::_advanceAndCheckMissingValue() {
-	char option = _argv[_inxArg][1];
+	char* pOption = _argv[_inxArg];
 	_inxArg++;
 	if (_inxArg == _argc)
-		throw CLIParserException(string("Missing value in CLI option -") + option + '.');
+		throw CLIParserException(string("Missing value in CLI option ") + pOption + '.');
 }
 bool CLIParserBase::_uintOption(const string& strOption, size_t& iValue) {
 	if (string(_argv[_inxArg]+1) == strOption) {

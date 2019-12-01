@@ -32,7 +32,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\perm_gen_base.inl" />
-    <None Include="..\..\time-hello-world.sh" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

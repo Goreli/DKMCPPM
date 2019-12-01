@@ -18,12 +18,18 @@
     <ClCompile Include="..\..\cli_parser_base.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\file_entropy.cpp">
+    <ClCompile Include="..\..\calc_entropy_cli.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\calc_entropy_main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\cli_parser_base.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\calc_entropy_cli.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

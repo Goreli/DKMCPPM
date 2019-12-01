@@ -46,6 +46,5 @@
     <None Include="..\..\perm_gen_base.inl">
       <Filter>Header Files</Filter>
     </None>
-    <None Include="..\..\time-hello-world.sh" />
   </ItemGroup>
 </Project>
