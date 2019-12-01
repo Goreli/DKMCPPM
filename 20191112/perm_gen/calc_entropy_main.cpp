@@ -20,7 +20,7 @@ Modification history:
 using namespace std;
 using namespace dk;
 
-static void processData(const ECCLIParser& parser, const std::map<char, size_t>& counter) noexcept {
+static void processData(const ECCLIParser& parser, const std::map<unsigned char, size_t>& counter) noexcept {
 	// Ascertain the total size of the dataset.
 	size_t iTotalSize{ 0 };
 	iTotalSize = std::accumulate(counter.begin(), counter.end(), size_t(0),
@@ -74,15 +74,15 @@ static void processData(const ECCLIParser& parser, const std::map<char, size_t>&
 }
 
 static void readDataFromFile(ifstream& inputFile, const ECCLIParser& parser,
-							std::map<char, size_t>& counter) {
+							std::map<unsigned char, size_t>& counter) {
 	// Count the characters in the input file.
 	char inputBuffer[8192];
 	while (inputFile) {
 		inputFile.read(inputBuffer, sizeof(inputBuffer));
 		size_t iInputSize = inputFile.gcount();
-		char symbol{ 0 };
+		unsigned char symbol{ 0 };
 		for (size_t inx = 0; inx < iInputSize; inx++) {
-			symbol = inputBuffer[inx];
+			symbol = static_cast<unsigned char>(inputBuffer[inx]);
 			if (parser.binary() || isprint(symbol))
 				counter[symbol] ++;
 		}
@@ -119,7 +119,7 @@ int main (int argc, char* argv[]) {
 			return 2;
 		}
 
-		std::map<char, size_t> counter;
+		std::map<unsigned char, size_t> counter;
 		readDataFromFile(inputFile, parser, counter);
 		processData(parser, counter);
 		inputFile.close();
@@ -129,7 +129,7 @@ int main (int argc, char* argv[]) {
 			string inputString;
 			getline(cin, inputString);
 			if (inputString.size() > 0) {
-				std::map<char, size_t> counter;
+				std::map<unsigned char, size_t> counter;
 				for (auto symbol : inputString)
 					counter[symbol] ++;
 				processData(parser, counter);
