@@ -7,9 +7,11 @@ Modification history:
     22/Nov/2019 - David Krikheli created the module.
 */
 
-#include <chrono>
-#include <map>
+//#include <chrono>
+//#include <map>
 #include <vector>
+#include <atomic>
+#include <thread>
 
 #include <iostream>
 #include <fstream>
@@ -90,28 +92,72 @@ static void processData(const ECCLIParser& parser, const CECounterType& counter)
 	}
 }
 
-static void readDataFromFile(ifstream& inputFile, const ECCLIParser& parser,
-							CECounterType& counter) {
+const size_t iInputDataBufferSize{ 8192 };
+struct InputDataBuffer {
+	char cBuffer[iInputDataBufferSize];
 
-	// Count the characters in the input file.
-	char inputBuffer[8192];
-	while (inputFile) {
-		inputFile.read(inputBuffer, sizeof(inputBuffer));
-		size_t iInputSize = inputFile.gcount();
+	std::atomic<size_t> iInputSize{ 0 };
+	std::atomic<bool> bNotEOF{ true };
+};
+const size_t iNumBuffers{ 2 };
+InputDataBuffer buffers[iNumBuffers];
 
+void countBytes(bool bBinary, CECounterType* pCounter) {
+	size_t inxBuffer{ 0 };
+	bool bNotEOF{ true };
+
+	while (bNotEOF) {
+		InputDataBuffer& buffer = buffers[inxBuffer];
+		while (buffer.iInputSize == size_t(0))
+			std::this_thread::yield();
+
+		bNotEOF = buffer.bNotEOF;
+		size_t iInputSize = buffer.iInputSize.load();
+
+		char* cBuffer = buffer.cBuffer;
 		unsigned char symbol{ 0 };
-		if(parser.binary())
+
+		if (bBinary)
 			for (size_t inx = 0; inx < iInputSize; inx++) {
-				symbol = static_cast<unsigned char>(inputBuffer[inx]);
-				counter[symbol] ++;
+				symbol = static_cast<unsigned char>(cBuffer[inx]);
+				(*pCounter)[symbol] ++;
 			}
 		else
 			for (size_t inx = 0; inx < iInputSize; inx++) {
-				symbol = static_cast<unsigned char>(inputBuffer[inx]);
+				symbol = static_cast<unsigned char>(cBuffer[inx]);
 				if (isprint(symbol))
-					counter[symbol] ++;
+					(*pCounter)[symbol] ++;
 			}
+
+		buffer.iInputSize.store(size_t(0));
+
+		inxBuffer++;
+		if (inxBuffer == iNumBuffers)
+			inxBuffer = 0;
 	}
+}
+static void readDataFromFile(ifstream& inputFile, bool bBinary,
+							CECounterType& counter) {
+
+	thread thr(countBytes, bBinary, &counter);
+
+	size_t inxBuffer{ 0 };
+	while (inputFile) {
+		InputDataBuffer& buffer = buffers[inxBuffer];
+		while (buffer.iInputSize != size_t(0))
+			std::this_thread::yield();
+
+		inputFile.read(buffer.cBuffer, iInputDataBufferSize);
+
+		buffer.bNotEOF.store(bool(inputFile));
+		buffer.iInputSize.store(size_t(inputFile.gcount()));
+
+		inxBuffer++;
+		if (inxBuffer == iNumBuffers)
+			inxBuffer = 0;
+	}
+
+	thr.join();
 }
 
 int main (int argc, char* argv[]) {
@@ -147,7 +193,7 @@ int main (int argc, char* argv[]) {
 		}
 
 		CECounterType counter(256);
-		readDataFromFile(inputFile, parser, counter);
+		readDataFromFile(inputFile, parser.binary(), counter);
 		processData(parser, counter);
 		inputFile.close();
 	}
