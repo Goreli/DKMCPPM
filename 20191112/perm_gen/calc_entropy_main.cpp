@@ -96,8 +96,10 @@ const size_t iInputDataBufferSize{ 8192 };
 struct InputDataBuffer {
 	char cBuffer[iInputDataBufferSize];
 
-	std::atomic<size_t> iInputSize{ 0 };
-	std::atomic<bool> bNotEOF{ true };
+	size_t iInputSize{ 0 };
+	bool bNotEOF{ true };
+
+	std::atomic<bool> abBufferReady{ false };
 };
 const size_t iNumBuffers{ 2 };
 InputDataBuffer buffers[iNumBuffers];
@@ -108,13 +110,13 @@ void countBytes(bool bBinary, CECounterType* pCounter) {
 
 	while (bNotEOF) {
 		InputDataBuffer& buffer = buffers[inxBuffer];
-		while (buffer.iInputSize == size_t(0))
+		while (!bool(buffer.abBufferReady))
 			std::this_thread::yield();
 
 		bNotEOF = buffer.bNotEOF;
-		size_t iInputSize = buffer.iInputSize.load();
-
+		size_t iInputSize = buffer.iInputSize;
 		char* cBuffer = buffer.cBuffer;
+
 		unsigned char symbol{ 0 };
 
 		if (bBinary)
@@ -129,7 +131,7 @@ void countBytes(bool bBinary, CECounterType* pCounter) {
 					(*pCounter)[symbol] ++;
 			}
 
-		buffer.iInputSize.store(size_t(0));
+		buffer.abBufferReady.store(false);
 
 		inxBuffer++;
 		if (inxBuffer == iNumBuffers)
@@ -144,13 +146,14 @@ static void readDataFromFile(ifstream& inputFile, bool bBinary,
 	size_t inxBuffer{ 0 };
 	while (inputFile) {
 		InputDataBuffer& buffer = buffers[inxBuffer];
-		while (buffer.iInputSize != size_t(0))
+		while (bool(buffer.abBufferReady))
 			std::this_thread::yield();
 
 		inputFile.read(buffer.cBuffer, iInputDataBufferSize);
 
-		buffer.bNotEOF.store(bool(inputFile));
-		buffer.iInputSize.store(size_t(inputFile.gcount()));
+		buffer.bNotEOF = bool(inputFile);
+		buffer.iInputSize = inputFile.gcount();
+		buffer.abBufferReady.store(true);
 
 		inxBuffer++;
 		if (inxBuffer == iNumBuffers)
