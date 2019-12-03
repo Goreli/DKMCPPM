@@ -1,31 +1,22 @@
-/* calc_entropy.cpp
+
+/* calc_entropy_main.cpp
 The main entry point of the entropy calculator application.
 
 Copyright(c) 2019 David Krikheli
 
 Modification history:
-    22/Nov/2019 - David Krikheli created the module.
+	22/Nov/2019 - David Krikheli created the module.
 */
 
-//#include <chrono>
-//#include <map>
-#include <vector>
-#include <atomic>
-#include <thread>
-
-#include <iostream>
-#include <fstream>
-#include <utility>
 #include <numeric>
 #include <cmath>
 #include <iomanip>
 #include <algorithm>
 #include "calc_entropy_cli.hpp"
+#include "calc_entropy_read.hpp"
 
 using namespace std;
 using namespace dk;
-
-typedef std::vector<size_t> CECounterType;
 
 static void processData(const ECCLIParser& parser, const CECounterType& counter) noexcept {
 
@@ -92,78 +83,7 @@ static void processData(const ECCLIParser& parser, const CECounterType& counter)
 	}
 }
 
-const size_t iInputDataBufferSize{ 8192 };
-struct InputDataBuffer {
-	char cBuffer[iInputDataBufferSize];
-
-	size_t iInputSize{ 0 };
-	bool bNotEOF{ true };
-
-	std::atomic<bool> abBufferReady{ false };
-};
-const size_t iNumBuffers{ 2 };
-InputDataBuffer buffers[iNumBuffers];
-
-void countBytes(bool bBinary, CECounterType* pCounter) {
-	size_t inxBuffer{ 0 };
-	bool bNotEOF{ true };
-
-	while (bNotEOF) {
-		InputDataBuffer& buffer = buffers[inxBuffer];
-		while (!bool(buffer.abBufferReady))
-			std::this_thread::yield();
-
-		bNotEOF = buffer.bNotEOF;
-		size_t iInputSize = buffer.iInputSize;
-		char* cBuffer = buffer.cBuffer;
-
-		unsigned char symbol{ 0 };
-
-		if (bBinary)
-			for (size_t inx = 0; inx < iInputSize; inx++) {
-				symbol = static_cast<unsigned char>(cBuffer[inx]);
-				(*pCounter)[symbol] ++;
-			}
-		else
-			for (size_t inx = 0; inx < iInputSize; inx++) {
-				symbol = static_cast<unsigned char>(cBuffer[inx]);
-				if (isprint(symbol))
-					(*pCounter)[symbol] ++;
-			}
-
-		buffer.abBufferReady.store(false);
-
-		inxBuffer++;
-		if (inxBuffer == iNumBuffers)
-			inxBuffer = 0;
-	}
-}
-static void readDataFromFile(ifstream& inputFile, bool bBinary,
-							CECounterType& counter) {
-
-	thread thr(countBytes, bBinary, &counter);
-
-	size_t inxBuffer{ 0 };
-	while (inputFile) {
-		InputDataBuffer& buffer = buffers[inxBuffer];
-		while (bool(buffer.abBufferReady))
-			std::this_thread::yield();
-
-		inputFile.read(buffer.cBuffer, iInputDataBufferSize);
-
-		buffer.bNotEOF = bool(inputFile);
-		buffer.iInputSize = inputFile.gcount();
-		buffer.abBufferReady.store(true);
-
-		inxBuffer++;
-		if (inxBuffer == iNumBuffers)
-			inxBuffer = 0;
-	}
-
-	thr.join();
-}
-
-int main (int argc, char* argv[]) {
+int main(int argc, char* argv[]) {
 	ECCLIParser parser(argc, argv);
 	try {
 		parser.parse();
@@ -213,5 +133,5 @@ int main (int argc, char* argv[]) {
 		}
 	}
 
-    return 0;
+	return 0;
 }

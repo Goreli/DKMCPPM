@@ -19,6 +19,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "perm_gen", "perm_gen", "{EA
 	ProjectSection(SolutionItems) = preProject
 		20191112\perm_gen\CMakeLists.txt = 20191112\perm_gen\CMakeLists.txt
 		20191112\perm_gen\readme.md = 20191112\perm_gen\readme.md
+		20191112\perm_gen\time-calc-entropy.sh = 20191112\perm_gen\time-calc-entropy.sh
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ch2d", "20191112\2d_convex_hull\vs_projects\ch2d\ch2d.vcxproj", "{53FB8638-3DA7-406D-8B9D-009ACBDFE093}"

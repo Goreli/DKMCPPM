@@ -14,7 +14,7 @@ add_custom_target(test_run
 	)
 
 find_package( Threads )
-add_executable(calc-entropy calc_entropy_main.cpp calc_entropy_cli.cpp cli_parser_base.cpp)
+add_executable(calc-entropy calc_entropy_main.cpp calc_entropy_read.cpp calc_entropy_cli.cpp cli_parser_base.cpp)
 target_compile_features(calc-entropy PUBLIC cxx_std_17)
 target_link_libraries(calc-entropy ${CMAKE_THREAD_LIBS_INIT})
 

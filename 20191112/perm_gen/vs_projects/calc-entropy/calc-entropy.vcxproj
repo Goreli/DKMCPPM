@@ -20,11 +20,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\calc_entropy_cli.cpp" />
+    <ClCompile Include="..\..\calc_entropy_read.cpp" />
     <ClCompile Include="..\..\cli_parser_base.cpp" />
     <ClCompile Include="..\..\calc_entropy_main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\calc_entropy_cli.hpp" />
+    <ClInclude Include="..\..\calc_entropy_read.hpp" />
     <ClInclude Include="..\..\cli_parser_base.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
