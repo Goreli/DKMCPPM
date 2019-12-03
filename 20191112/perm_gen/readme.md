@@ -54,7 +54,9 @@ The project source code consists of the following components located in the [per
  * **calc_entropy_main.cpp** - this is the main entry module of the calc-entropy application;
  * **calc_entropy_cli.hpp** - declares the command line parser class for the calc-entropy application. Utilises the CLIParserBase base class described above;
  * **calc_entropy_cli.cpp** - defines the command line parser class for the calc-entropy application.
-  
+ * **calc_entropy_read.hpp** - declares a file reading function. This function has been implemented in a separate module because its performance has been optimised using a multibuffer/multithreaded approach;
+ * **calc_entropy_read.cpp** - implements a function that reads calc-entropy input files using an optimised approach. The main thread reads the input file and populates a circular series of buffers with the data. There is an additional thread that interprets the data and feeds it into the application in parallel. Benchmarking has shown a 50% improvement compared to the trivial "single buffer/single thread" approach. Refer [this spreadsheet](https://github.com/Goreli/DKMCPPM/blob/master/20191112/perm_gen/data/MultiBufferMultiThreadedPerformanceBenchmarks.xlsx) for the benchmark detail. 
+
 ## Command Line Interface
  
 ### CLI for str-perm-gen
