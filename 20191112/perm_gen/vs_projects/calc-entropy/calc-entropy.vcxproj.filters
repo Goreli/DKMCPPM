@@ -27,6 +27,9 @@
     <ClCompile Include="..\..\calc_entropy_read.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\cli_misc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\cli_parser_base.hpp">
@@ -36,6 +39,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\calc_entropy_read.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\cli_misc.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

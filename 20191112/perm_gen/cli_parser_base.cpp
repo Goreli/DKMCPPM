@@ -7,13 +7,6 @@ Modification history:
     22/Nov/2019 - David Krikheli created the module.
 */
 
-#ifdef _CONSOLE
-// Enable ANSI escape sequences on Windows 10.
-#include <windows.h>
-#define ENABLE_VIRTUAL_TERMINAL_PROCESSING 0x0004
-#define DISABLE_NEWLINE_AUTO_RETURN  0x0008
-#endif
-
 #include <sstream>
 #include <locale>
 #include "cli_parser_base.hpp"
@@ -21,31 +14,6 @@ Modification history:
 using namespace std;
 using namespace dk;
 
-void CLIParserBase::printErrMsg(const string& strErrMsg) {
-#ifdef _CONSOLE
-	// If this is Windows 10 then use a singleton pattern to execute
-	// the ANSI escape sequence enablement code only once.
-	static HANDLE hStdout{ nullptr };
-	if (!hStdout) {
-		hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
-		DWORD l_mode;
-		GetConsoleMode(hStdout, &l_mode);
-		SetConsoleMode(hStdout, l_mode | 
-			ENABLE_VIRTUAL_TERMINAL_PROCESSING |
-			DISABLE_NEWLINE_AUTO_RETURN);
-	}
-#endif
-	cerr << "\033[41;37m" << strErrMsg << "\033[0m" << '\n';
-}
-// Make sure integrals are printed with thousands separators included.
-struct separate_thousands : std::numpunct<char> {
-	char_type do_thousands_sep() const override { return ','; }  // separate with commas
-	string_type do_grouping() const override { return "\3"; } // groups of 3 digit
-};
-void CLIParserBase::forceThousandsSeparators(std::ostream& os) {
-	auto thousands = std::make_unique<separate_thousands>();
-	os.imbue(std::locale(std::cout.getloc(), thousands.release()));
-}
 size_t CLIParserBase::_stringto_size_t(const string& strNum) noexcept {
 	std::istringstream iss(strNum);
 	size_t iNum{ 0 };
@@ -58,7 +26,6 @@ double CLIParserBase::_stringto_double(const string& strNum) noexcept {
 	iss >> dNum;
 	return dNum;
 }
-
 
 CLIParserException::CLIParserException(const string& strWhat)
 : invalid_argument{strWhat} {

@@ -14,6 +14,7 @@ Modification history:
 #include <algorithm>
 #include "calc_entropy_cli.hpp"
 #include "calc_entropy_read.hpp"
+#include "cli_misc.hpp"
 
 using namespace std;
 using namespace dk;
@@ -84,13 +85,14 @@ static void processData(const ECCLIParser& parser, const CECounterType& counter)
 }
 
 int main(int argc, char* argv[]) {
+	enableEscapeSequences();
 	ECCLIParser parser(argc, argv);
 	try {
 		parser.parse();
 	}
 	catch (const CLIParserException & e)
 	{
-		parser.printErrMsg(string("calc-entropy error: ") + e.what());
+		cerr << "\033[41;37m" << string("calc-entropy error: ") + e.what() << "\033[0m" << '\n';
 		parser.printUsage();
 		return 1;
 	}
@@ -102,15 +104,15 @@ int main(int argc, char* argv[]) {
 		return 0;
 	}
 
-	parser.forceThousandsSeparators(cout);
+	forceThousandsSeparators(cout);
 
 	if (parser.getFilePath().size()) {
 		ifstream inputFile;
 		inputFile.open(parser.getFilePath(), ios::binary);
 		if (!inputFile) {
 			string strErrMsg = "file-entropy error: unable to open the input file \""
-				+ parser.getFilePath() + "\"";
-			parser.printErrMsg(strErrMsg);
+				+ parser.getFilePath() + "\".";
+			cerr << "\033[41;37m" << strErrMsg << "\033[0m" << '\n';
 			parser.printUsage();
 			return 2;
 		}

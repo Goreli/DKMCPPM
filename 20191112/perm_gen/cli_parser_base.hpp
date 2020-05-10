@@ -25,10 +25,6 @@ namespace dk {
 		CLIParserBase(int, char**);
 		virtual ~CLIParserBase();
 
-		// Color coded error message.
-		static void printErrMsg(const std::string&);
-		static void forceThousandsSeparators(std::ostream& os);
-
 	protected:
 		void _advanceAndCheckMissingValue();
 		bool _strOption(const std::string&, std::string&);

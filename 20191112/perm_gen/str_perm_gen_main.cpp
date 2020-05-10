@@ -13,6 +13,7 @@ Modification history:
 #include <chrono>
 #include "str_perm_gen.hpp"
 #include "str_perm_gen_cli.hpp"
+#include "cli_misc.hpp"
 
 using namespace std;
 using namespace dk;
@@ -75,13 +76,14 @@ void execUserTask(const StrPermGenCLIParser& parser, const string& inputString, 
 }
 
 int main (int argc, char* argv[]) {
+	enableEscapeSequences();
 	StrPermGenCLIParser parser(argc, argv);
 	try { 
 		parser.parse();
 	}
 	catch(const CLIParserException& e)
 	{
-		parser.printErrMsg(string("str-perm-gen error: ") + e.what());
+		cerr << "\033[41;37m" << string("str-perm-gen error: ") + e.what() << "\033[0m" << '\n';
 		parser.printUsage();
 		return 1;
     }
@@ -98,14 +100,16 @@ int main (int argc, char* argv[]) {
 	if (bUseOutputFile) {
 		fout.open(parser.getOutFilePathStr());
 		if (!fout) {
-			parser.printErrMsg("str-perm-gen error: unable to open the output file " + parser.getOutFilePathStr() + ".");
+			string strErrMsg = "str-perm-gen error: unable to open the output file \""
+				+ parser.getOutFilePathStr() + "\".";
+			cerr << "\033[41;37m" << strErrMsg << "\033[0m" << '\n';
 			parser.printUsage();
 			return 2;
 		}
 	}
 
 	if (parser.dryRun())
-		parser.forceThousandsSeparators(bUseOutputFile ? fout : cout);
+		forceThousandsSeparators(bUseOutputFile ? fout : cout);
 
 	if(parser.getInputString().size() > 0)
 		execUserTask(parser, parser.getInputString(), bUseOutputFile ? fout : cout);

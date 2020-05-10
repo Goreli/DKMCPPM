@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 3.8)
 
 project("Generic Permutation Generator" LANGUAGES CXX)
 
-add_executable(str-perm-gen str_perm_gen_main.cpp str_perm_gen.cpp cli_parser_base.cpp str_perm_gen_cli.cpp)
+add_executable(str-perm-gen str_perm_gen_main.cpp str_perm_gen.cpp cli_parser_base.cpp str_perm_gen_cli.cpp cli_misc.cpp)
 target_compile_features(str-perm-gen PUBLIC cxx_std_17)
 
 add_custom_target(test_run 
@@ -14,7 +14,7 @@ add_custom_target(test_run
 	)
 
 find_package( Threads )
-add_executable(calc-entropy calc_entropy_main.cpp calc_entropy_read.cpp calc_entropy_cli.cpp cli_parser_base.cpp)
+add_executable(calc-entropy calc_entropy_main.cpp calc_entropy_read.cpp calc_entropy_cli.cpp cli_parser_base.cpp cli_misc.cpp)
 target_compile_features(calc-entropy PUBLIC cxx_std_17)
 target_link_libraries(calc-entropy ${CMAKE_THREAD_LIBS_INIT})
 
